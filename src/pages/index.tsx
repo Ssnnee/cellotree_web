@@ -19,7 +19,7 @@ const Home: NextPage = () => {
 
       <Header />
 
-      <main className="flex min-h-screen items-center bg-primary">
+      <main className="grid grid-cols-sidbar min-h-screen text-white  bg-primary ">
       {/* <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <p className="text-2xl text-white">
             {hello.data ? hello.data.greeting : "Loading tRPC query..."}
@@ -29,6 +29,12 @@ const Home: NextPage = () => {
           </Link>
         </div>
        */}
+       <div className="border-r ">
+         <h1>Sidebar </h1>
+        </div>
+       <div className="">
+         <h1>Main content  </h1>
+        </div>
 
 
 
