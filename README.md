@@ -18,9 +18,26 @@ Users can add family members, create relationships, and view their family tree.
 
 1. Create a [Clerk account](https://dashboard.clerk.dev/sign-up)
 2. Copy `.env.example` and rename to `.env` and add your keys found in the dashboard.
-3. Run `npm install`
-4. npx `npx prisma db push`
-4. Run `npm run dev`
+```
+mv .env.example .env
+```
+3. Run `pnpm install` or `npm install` to install dependencies
+```
+pnpm install
+```
+4. Once installed, ./start-database.sh will start the database
+--NOTE: You should have docker installed.
+```
+./start-database.sh
+```
+5. Initialize the prisma database:
+```
+pnpm db:push
+```
+6. Start the server
+```
+  pnpm dev
+```
 
 ## Technologies
 - [Next.js](https://nextjs.org/)
@@ -35,3 +52,4 @@ Users can add family members, create relationships, and view their family tree.
 - Create relationships
 - View family tree
 - Share family tree
+
