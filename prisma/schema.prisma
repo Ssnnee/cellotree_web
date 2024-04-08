@@ -10,11 +10,69 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model User {
+    id    String @id @default(uuid())
+    name  String
+    email String
 
-    @@index([name])
+    access UserAccess[]
+}
+
+enum AccessLevel {
+    ADMIN
+    WRITER
+    READER
+}
+
+model UserAccess {
+    id    String @id @default(uuid())
+    level AccessLevel
+
+    userId String
+    user User @relation(fields: [userId], references: [id])
+
+    treeId String
+    tree Tree @relation(fields: [treeId], references: [id])
+}
+
+
+enum TypeTree {
+    PUBLIC
+    PRIVATE
+}
+
+model Tree {
+    id   String @id @default(uuid())
+    name String
+    type TypeTree
+    member Member[]
+    userAccess UserAccess[]
+}
+
+model Member {
+    id   String @id @default(uuid())
+    firstname String
+    lastname  String
+    birthday  DateTime
+    placeOfBirth String
+
+    treeId String
+    tree Tree @relation(fields: [treeId], references: [id])
+
+    relation Relation[]
+
+}
+
+enum TypeRelation {
+    FATHER
+    MOTHER
+    SPOUSE
+    CHILDREN
+}
+
+model Relation {
+    id String @id @default(uuid())
+    type TypeRelation[]
+    memberId String
+    member Member @relation(fields: [memberId], references: [id])
 }
