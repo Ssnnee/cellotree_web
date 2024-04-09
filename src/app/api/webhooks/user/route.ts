@@ -48,15 +48,11 @@ export async function POST(req: Request) {
     })
   }
 
-  // Get the ID and type
-  // const { id } = evt.data;
   const eventType = evt.type;
   const prisma = new PrismaClient()
 
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, ...attributes } = evt.data;
-    console.log("Here the id:", id);
-    console.log("Here the attributes:", attributes);
 
     const neededAttributes = {
       externalId: id,
@@ -72,10 +68,6 @@ export async function POST(req: Request) {
     })
 
   }
-
-
-  // console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-  // console.log('Webhook body:', body)
 
   return new Response('', { status: 200 })
 }
