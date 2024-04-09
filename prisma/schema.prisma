@@ -24,9 +24,9 @@ model User {
 }
 
 enum AccessLevel {
-    ADMIN
-    WRITER
-    READER
+    admin
+    writer
+    reader
 }
 
 model UserAccess {
@@ -42,8 +42,8 @@ model UserAccess {
 
 
 enum TypeTree {
-    PUBLIC
-    PRIVATE
+    public
+    private
 }
 
 model Tree {
@@ -69,10 +69,10 @@ model Member {
 }
 
 enum TypeRelation {
-    FATHER
-    MOTHER
-    SPOUSE
-    CHILDREN
+    father
+    mother
+    spouse
+    children
 }
 
 model Relation {
