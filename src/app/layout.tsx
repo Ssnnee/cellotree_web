@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import React from "react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import { Inter } from "next/font/google";
 
@@ -26,22 +27,24 @@ export default function RootLayout({
 }) {
   // const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <html lang="en">
-      <body className={`font-sans ${inter.variable} `}>
-      <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-        <TRPCReactProvider>
-          <main className="flex min-h-screen flex-col items-center justify-center">
-          <NavigationMenu />
-          {children}
-          </main>
-        </TRPCReactProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`font-sans ${inter.variable} `}>
+        <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+          <TRPCReactProvider>
+            <main className="flex min-h-screen flex-col items-center justify-center">
+            <NavigationMenu />
+            {children}
+            </main>
+          </TRPCReactProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
