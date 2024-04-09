@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import NavigationMenu from "~/components/NavigationMenu";
+import { ThemeProvider } from "next-themes";
 
 
 const inter = Inter({
@@ -27,12 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable} `}>
+      <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
         <TRPCReactProvider>
           <main className="flex min-h-screen flex-col items-center justify-center">
           <NavigationMenu />
           {children}
           </main>
         </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
