@@ -5,7 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import NavigationMenu from "~/components/NavigationMenu";
+import NavigationMenu from "~/app/_components/NavigationMenu";
 import { ThemeProvider } from "next-themes";
 
 
@@ -25,7 +25,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const [isOpen, setIsOpen] = React.useState(false);
   return (
     <ClerkProvider>
       <html lang="en">
