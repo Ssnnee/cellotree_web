@@ -30,11 +30,11 @@ enum AccessLevel {
 }
 
 model UserAccess {
-    id    String @id @default(uuid())
+    id    String @id @default(cuid())
     level AccessLevel
 
-    userId String
-    user User @relation(fields: [userId], references: [id])
+    userExternalId String
+    user User @relation(fields: [userExternalId], references: [externalId])
 
     treeId String
     tree Tree @relation(fields: [treeId], references: [id])
@@ -47,7 +47,7 @@ enum TypeTree {
 }
 
 model Tree {
-    id   String @id @default(uuid())
+    id   String @id @default(cuid())
     name String
     type TypeTree
     member Member[]
@@ -55,7 +55,7 @@ model Tree {
 }
 
 model Member {
-    id   String @id @default(uuid())
+    id   String @id @default(cuid())
     firstname String
     lastname  String
     birthday  DateTime
@@ -76,7 +76,7 @@ enum TypeRelation {
 }
 
 model Relation {
-    id String @id @default(uuid())
+    id String @id @default(cuid())
     type TypeRelation[]
     memberId String
     member Member @relation(fields: [memberId], references: [id])

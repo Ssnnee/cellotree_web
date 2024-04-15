@@ -9,6 +9,7 @@ import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { Separator } from "~/components/ui/separator";
 import { CreateTreeButton } from "./CreateTreeButton";
+import Tree from "./Tree";
 
 
 export default function NavigationMenu() {
@@ -47,9 +48,12 @@ export default function NavigationMenu() {
 
           <div className="flex text-xl gap-4 items-center">
             <h2> Creer un nouvel arbre </h2>
-            <CreateTreeButton />
+            <CreateTreeButton  />
           </div>
+
+          <Tree />
         </div>
+
       }
       </div>
     </div>

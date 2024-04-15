@@ -23,6 +23,10 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
+import { useUser } from "@clerk/nextjs";
+import { api } from "~/trpc/react"
+
+
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Le nom de l'arbre doit contenir au moins 2 caractères.",
@@ -37,11 +41,25 @@ export function TreeForm() {
       name: "",
     },
   })
+  const { isSignedIn, user } = useUser()
+
+  const createTree = api.tree.create.useMutation()
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+
+    if (isSignedIn) {
+      createTree.mutate(
+        {
+          name: values.name,
+          type: values.treeType,
+          externalId: user.id,
+        },
+        {
+          onSettled: () => form.reset(),
+        }
+      )
+    }
     console.log(values)
   }
 
