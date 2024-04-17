@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="fr">
         <body className={`font-sans ${inter.variable} `}>
         <ThemeProvider
               attribute="class"
