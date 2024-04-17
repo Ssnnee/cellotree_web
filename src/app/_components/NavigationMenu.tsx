@@ -11,6 +11,9 @@ import { Separator } from "~/components/ui/separator";
 import { CreateTreeButton } from "./CreateTreeButton";
 import Tree from "./Tree";
 
+// left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+// fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+
 
 export default function NavigationMenu() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -34,7 +37,8 @@ export default function NavigationMenu() {
           </div>
         </div>
       </header>
-      <div className={`border-r border w-80 absolute h-full transition-all flex flex-col items-center p-4 shadow-white ${isOpen ? "left-0" : "left-[-100%]"}`}>
+      <div className={`border-r border w-80 bg-background absolute h-full transition-all flex flex-col items-center p-4 shadow-white ${isOpen ? "left-0" : "left-[-100%]"}`}>
+
       {!isSignedIn ?
         <Link href="/sign-in"> Connectez-vous </Link> :
 

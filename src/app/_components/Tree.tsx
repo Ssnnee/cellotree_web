@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
 import { Separator } from "~/components/ui/separator";
+import TreeActions from "./TreeActions";
 
 export default function Tree() {
   const { isSignedIn, user } = useUser()
@@ -25,10 +26,15 @@ export default function Tree() {
   return (
     <div className="">
       {userAccess.data?.map((access, index) => (
-        <div key={access.id} className="flex flex-col">
-          <Link href={`/tree/${access.tree.id}`} className="">
-            <h1>{access.tree.name}</h1>
-          </Link>
+        <div key={access.id} className="flex flex-col p-4">
+          <div className="flex justify-between items-center">
+            <Link href={`/tree/${access.tree.id}`} className="w-full">
+             {access.tree.name}
+            </Link>
+            <div className="cursor-pointer">
+              <TreeActions />
+            </div>
+          </div>
           {index !== userAccess.data?.length -1 && <Separator /> }
         </div>
         ))
@@ -36,5 +42,3 @@ export default function Tree() {
     </div>
   );
 }
-
-
