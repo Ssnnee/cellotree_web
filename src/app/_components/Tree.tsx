@@ -32,7 +32,15 @@ export default function Tree() {
              {access.tree.name}
             </Link>
             <div className="cursor-pointer">
-              <TreeActions />
+              <TreeActions
+               treeInfo={
+                 {
+                   treeId: access.tree.id,
+                   treeName: access.tree.name,
+                   treeType: access.tree.type
+                 }
+               }
+              />
             </div>
           </div>
           {index !== userAccess.data?.length -1 && <Separator /> }
