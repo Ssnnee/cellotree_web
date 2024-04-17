@@ -13,9 +13,12 @@ const updateTreeSchema = z.object({
   name: z.string(),
   type: z.enum(["public", "private"]),
 })
+
+const idSchema = z.object({ id: z.string() });
+
 export const treeRouter = createTRPCRouter({
   getById: publicProcedure
-  .input(z.object({ id: z.string() }))
+  .input(idSchema)
   .query(({ ctx, input }) => {
     return ctx.db.tree.findFirst({
       where: { id: input.id },
@@ -52,7 +55,15 @@ export const treeRouter = createTRPCRouter({
         type: input.type,
       }
     });
-  })
+  }),
+
+  delete: publicProcedure
+  .input(idSchema)
+  .mutation(({ input, ctx }) => {
+    return ctx.db.userAccess.delete({
+      where: { id: input.id },
+    });
+  }),
 
 
 });

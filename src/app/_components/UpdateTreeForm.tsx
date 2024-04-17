@@ -1,5 +1,3 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -26,6 +24,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react"
 import { TreeActionsProps } from "./TreeActions"
+import { TreeRefetchHook } from "./TreeRefetchHook"
 
 
 const formSchema = z.object({
@@ -35,7 +34,11 @@ const formSchema = z.object({
   treeType: z.enum(["public", "private"]),
 })
 
-export function UpdateTreeForm({treeInfo}: TreeActionsProps) {
+interface UpdateTreeFormProps extends TreeActionsProps {
+  setDialogIsOpen: (isOpen: boolean) => void
+}
+
+export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,7 +51,6 @@ export function UpdateTreeForm({treeInfo}: TreeActionsProps) {
 
   const updateTree = api.tree.update.useMutation()
 
-
   function onSubmit(values: z.infer<typeof formSchema>) {
 
     if (isSignedIn) {
@@ -59,12 +61,14 @@ export function UpdateTreeForm({treeInfo}: TreeActionsProps) {
           id: treeInfo.treeId,
         },
         {
-          onSettled: () => form.reset(),
+          onSettled: () => {
+            form.reset(),
+            refetch()
+            setDialogIsOpen(false)
+            }
         }
       )
     }
-    console.log(values)
-    console.log(treeInfo)
   }
 
   return (

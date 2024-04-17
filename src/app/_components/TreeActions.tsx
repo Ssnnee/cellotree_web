@@ -1,12 +1,10 @@
 "use client"
 import { useState } from "react"
-import { z } from "zod"
 import { DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu"
@@ -31,17 +29,31 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog"
 import { UpdateTreeForm } from "./UpdateTreeForm"
+import { api } from "~/trpc/react"
 
 export interface TreeActionsProps {
   treeInfo: {
     treeId: string
     treeName: string
     treeType: "private" | "public"
-  }
+    userAccessId: string
+
+  },
+  refetch: () => void;
 }
-export default function TreeActions({ treeInfo }: TreeActionsProps) {
+export default function TreeActions({ treeInfo, refetch }: TreeActionsProps) {
   const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
+
+  const us = "admin"
+  const isAdmin = us === "admin";
+
+
+  const deleteTree = api.tree.delete.useMutation()
+  const handleDelete = () => {
+    deleteTree.mutate({ id: treeInfo.treeId }),
+    refetch()
+  }
 
   return (
     <>
@@ -64,25 +76,26 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
             <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
             <span onClick={() => setDialogIsOpen(true)}>Modifier l'arbre</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-red-600">
-            <TrashIcon className="mr-2 h-3.5 w-3.5" />
-            <span onClick={() => setAlertDialogIsOpen(true)} >
-                Supprimer l'arbre
-            </span>
-          </DropdownMenuItem>
+           {isAdmin && <DropdownMenuItem className="text-red-600">
+              <TrashIcon className="mr-2 h-3.5 w-3.5" />
+              <span onClick={() => setAlertDialogIsOpen(true)} >
+                  Supprimer l'arbre
+              </span>
+            </DropdownMenuItem>
+          }
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Etes-vous sûr?</AlertDialogTitle>
+            <AlertDialogTitle>Etes-vous sûr de vouloir supprimer cet arbre? </AlertDialogTitle>
             <AlertDialogDescription>
               Cette action ne pourra pas etre annulé
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Annuler</AlertDialogCancel>
-            <AlertDialogAction>Supprimer</AlertDialogAction>
+            <AlertDialogAction onClick={handleDelete}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -93,7 +106,7 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
             <DialogDescription>
               Remplissez les champ ci-dessous pour modifier cet arbre
             </DialogDescription>
-            <UpdateTreeForm treeInfo={treeInfo} />
+            <UpdateTreeForm treeInfo={treeInfo} refetch={refetch} setDialogIsOpen={setDialogIsOpen} />
           </DialogHeader>
         </DialogContent>
     </Dialog>

@@ -25,6 +25,7 @@ import {
 
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react"
+import { TreeRefetchHook } from "./TreeRefetchHook"
 
 
 const formSchema = z.object({
@@ -34,7 +35,11 @@ const formSchema = z.object({
   treeType: z.enum(["public", "private"]),
 })
 
-export function TreeForm() {
+interface TreeFormProps {
+  setDialogIsOpen: (isOpen: boolean) => void
+}
+
+export function TreeForm({setDialogIsOpen}: TreeFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,7 +50,8 @@ export function TreeForm() {
 
   const createTree = api.tree.create.useMutation()
 
-  // 2. Define a submit handler.
+  const { handleRefetch } = TreeRefetchHook()
+
   function onSubmit(values: z.infer<typeof formSchema>) {
 
     if (isSignedIn) {
@@ -56,7 +62,11 @@ export function TreeForm() {
           externalId: user.id,
         },
         {
-          onSettled: () => form.reset(),
+          onSettled: () => {
+            form.reset(),
+            handleRefetch()
+            setDialogIsOpen(false)
+          }
         }
       )
     }

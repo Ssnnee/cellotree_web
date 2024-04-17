@@ -53,3 +53,5 @@ pnpm db:push
 - View family tree
 - Share family tree
 
+## Todos
+ - [ ] Make the list of tree to reload on delete

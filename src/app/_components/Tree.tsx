@@ -1,26 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { api } from "~/trpc/react";
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
 import { Separator } from "~/components/ui/separator";
 import TreeActions from "./TreeActions";
+import { TreeRefetchHook } from "./TreeRefetchHook";
 
 export default function Tree() {
-  const { isSignedIn, user } = useUser()
-  const [userID, setUserID] = useState<string>("");
 
-  useEffect(() => {
-    if (isSignedIn) {
-
-    const userID = user.id
-    setUserID(userID)
-    };
-  }, [isSignedIn]);
-
-  const userAccess = api.access.getByUserId.useQuery({ id: userID });
+  const{ userAccess } = TreeRefetchHook()
 
 
   return (
@@ -37,9 +25,11 @@ export default function Tree() {
                  {
                    treeId: access.tree.id,
                    treeName: access.tree.name,
-                   treeType: access.tree.type
+                   treeType: access.tree.type,
+                   userAccessId: access.id
                  }
                }
+               refetch={userAccess.refetch}
               />
             </div>
           </div>
