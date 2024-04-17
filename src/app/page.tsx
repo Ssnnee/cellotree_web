@@ -5,13 +5,14 @@ import { dark } from "@clerk/themes";
 import { CreatePost } from "~/app/_components/create-post";
 import { api } from "~/trpc/server";
 import Tree from "./_components/Tree";
+import DeleteTreeAlert from "./_components/DeleteTreeAlert";
+import NavigationMenu from "./_components/NavigationMenu";
 
 export default async function Home() {
   // const hello = await api.post.hello({ text: "from tRPC" });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center ">
-
     </main>
   );
 }
