@@ -30,7 +30,7 @@ import { TreeRefetchHook } from "./TreeRefetchHook"
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Le nom de l'arbre doit contenir au moins 2 caractères.",
+    message: "Le nom de l&apos;arbre doit contenir au moins 2 caractères.",
   }),
   treeType: z.enum(["public", "private"]),
 })
@@ -81,7 +81,7 @@ export function TreeForm({setDialogIsOpen}: TreeFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom de l'arbre</FormLabel>
+              <FormLabel>Nom de l&apos;arbre</FormLabel>
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
@@ -101,7 +101,7 @@ export function TreeForm({setDialogIsOpen}: TreeFormProps) {
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selectionner le Type de l'arbre" />
+                      <SelectValue placeholder="Selectionner le Type de l&apos;arbre" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>

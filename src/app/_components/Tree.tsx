@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
 
 import { Separator } from "~/components/ui/separator";
 import TreeActions from "./TreeActions";

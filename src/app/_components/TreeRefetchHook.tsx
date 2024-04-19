@@ -12,9 +12,10 @@ export const TreeRefetchHook = () => {
     const userID = user.id
     setUserID(userID)
     };
-  }, [isSignedIn]);
+  }, [isSignedIn, user]);
+
   const userAccess = api.access.getByUserId.useQuery({ id: userID });
-  const handleRefetch = () => { userAccess.refetch(); };
+  const handleRefetch =() => { userAccess.refetch(); };
 
   return { userAccess, handleRefetch };
 

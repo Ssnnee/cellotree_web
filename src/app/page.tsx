@@ -1,12 +1,11 @@
-import { SignIn, SignedIn } from "@clerk/nextjs";
-import Link from "next/link";
-import { dark } from "@clerk/themes";
-
-import { CreatePost } from "~/app/_components/create-post";
-import { api } from "~/trpc/server";
-import Tree from "./_components/Tree";
-import DeleteTreeAlert from "./_components/DeleteTreeAlert";
-import NavigationMenu from "./_components/NavigationMenu";
+// import { SignIn, SignedIn } from "@clerk/nextjs";
+// import Link from "next/link";
+// import { dark } from "@clerk/themes";
+//
+// import { api } from "~/trpc/server";
+// import Tree from "./_components/Tree";
+// import DeleteTreeAlert from "./_components/DeleteTreeAlert";
+// import NavigationMenu from "./_components/NavigationMenu";
 
 export default async function Home() {
   // const hello = await api.post.hello({ text: "from tRPC" });

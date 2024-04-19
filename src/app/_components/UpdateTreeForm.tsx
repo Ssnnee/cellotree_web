@@ -23,7 +23,7 @@ import {
 
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react"
-import { TreeActionsProps } from "./TreeActions"
+import type { TreeActionsProps } from "./TreeActions"
 import { TreeRefetchHook } from "./TreeRefetchHook"
 
 
@@ -81,7 +81,7 @@ export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps)
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom de l'arbre</FormLabel>
+              <FormLabel>Nom de l&apos;arbre</FormLabel>
               <FormControl>
                 <Input
                   {...field}

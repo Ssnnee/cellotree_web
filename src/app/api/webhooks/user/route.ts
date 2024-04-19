@@ -1,7 +1,7 @@
 import { Webhook } from 'svix'
 import { PrismaClient } from '@prisma/client'
 import { headers } from 'next/headers'
-import { WebhookEvent } from '@clerk/nextjs/server'
+import type { WebhookEvent } from '@clerk/nextjs/server'
 
 export async function POST(req: Request) {
 
@@ -25,16 +25,13 @@ export async function POST(req: Request) {
     })
   }
 
-  // Get the body
   const payload = await req.json()
   const body = JSON.stringify(payload);
 
-  // Create a new Svix instance with your secret.
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent
 
-  // Verify the payload with the headers
   try {
     evt = wh.verify(body, {
       "svix-id": svix_id,
@@ -58,11 +55,11 @@ export async function POST(req: Request) {
       externalId: id,
       firstname: attributes.first_name,
       lastname: attributes.last_name,
-      email: attributes.email_addresses[0]?.email_address || "",
+      email: attributes.email_addresses[0]?.email_address ?? "",
     };
 
     await prisma.user.upsert({
-      where: { externalId: neededAttributes.externalId as string },
+      where: { externalId: neededAttributes.externalId },
       create: neededAttributes,
       update: neededAttributes,
     })

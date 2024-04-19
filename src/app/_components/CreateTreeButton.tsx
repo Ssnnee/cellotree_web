@@ -25,7 +25,7 @@ export function CreateTreeButton() {
       </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Creation d'un nouvel arbre</DialogTitle>
+            <DialogTitle>Creation d&apos;un nouvel arbre</DialogTitle>
             <DialogDescription>
               Remplissez les champ ci-dessous pour creer un nouvel arbre
             </DialogDescription>

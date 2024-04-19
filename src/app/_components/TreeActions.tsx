@@ -71,22 +71,22 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
             <Share1Icon className="mr-2 h-3.5 w-3.5" />
-            <p className="text-sm">Partager l'arbre</p>
+            <p className="text-sm">Partager l&apos;arbre</p>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <EyeOpenIcon className="mr-2 h-3.5 w-3.5" />
-            <p className="text-sm">Visualiser l'arbre</p>
+            <p className="text-sm">Visualiser l&apos;arbre</p>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
-            <span onClick={() => setDialogIsOpen(true)}>Modifier l'arbre</span>
+            <span onClick={() => setDialogIsOpen(true)}>Modifier l&apos;arbre</span>
           </DropdownMenuItem>
            {isAdmin && <DropdownMenuItem className="text-red-600">
               <TrashIcon className="mr-2 h-3.5 w-3.5" />
               <span onClick={() => setAlertDialogIsOpen(true)} >
-                  Supprimer l'arbre
+                  Supprimer l&apos;arbre
               </span>
             </DropdownMenuItem>
           }
@@ -109,7 +109,7 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
     <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Modification de l'arbre</DialogTitle>
+            <DialogTitle>Modification de l&apos;arbre</DialogTitle>
             <DialogDescription>
               Remplissez les champ ci-dessous pour modifier cet arbre
             </DialogDescription>
