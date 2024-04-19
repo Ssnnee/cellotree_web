@@ -30,29 +30,36 @@ import {
 } from "~/components/ui/dialog"
 import { UpdateTreeForm } from "./UpdateTreeForm"
 import { api } from "~/trpc/react"
+import { TreeRefetchHook } from "./TreeRefetchHook"
 
 export interface TreeActionsProps {
   treeInfo: {
     treeId: string
     treeName: string
     treeType: "private" | "public"
-    userAccessId: string
-
   },
-  refetch: () => void;
 }
-export default function TreeActions({ treeInfo, refetch }: TreeActionsProps) {
+export default function TreeActions({ treeInfo }: TreeActionsProps) {
   const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
   const us = "admin"
   const isAdmin = us === "admin";
 
+  const{ handleRefetch } = TreeRefetchHook()
 
   const deleteTree = api.tree.delete.useMutation()
-  const handleDelete = () => {
-    deleteTree.mutate({ id: treeInfo.treeId }),
-    refetch()
+
+  const handleDelete = async () => {
+    deleteTree.mutate(
+      { id: treeInfo.treeId },
+      {
+        onSettled: () => {
+          handleRefetch()
+        }
+      }
+    )
+
   }
 
   return (
@@ -106,7 +113,7 @@ export default function TreeActions({ treeInfo, refetch }: TreeActionsProps) {
             <DialogDescription>
               Remplissez les champ ci-dessous pour modifier cet arbre
             </DialogDescription>
-            <UpdateTreeForm treeInfo={treeInfo} refetch={refetch} setDialogIsOpen={setDialogIsOpen} />
+            <UpdateTreeForm treeInfo={treeInfo}  setDialogIsOpen={setDialogIsOpen} />
           </DialogHeader>
         </DialogContent>
     </Dialog>

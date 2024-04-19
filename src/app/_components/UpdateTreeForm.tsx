@@ -38,7 +38,7 @@ interface UpdateTreeFormProps extends TreeActionsProps {
   setDialogIsOpen: (isOpen: boolean) => void
 }
 
-export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeFormProps) {
+export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,6 +50,8 @@ export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeF
   const { isSignedIn } = useUser()
 
   const updateTree = api.tree.update.useMutation()
+
+  const { handleRefetch } = TreeRefetchHook()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
@@ -63,7 +65,7 @@ export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeF
         {
           onSettled: () => {
             form.reset(),
-            refetch()
+            handleRefetch(),
             setDialogIsOpen(false)
             }
         }
@@ -121,4 +123,3 @@ export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeF
     </Form>
   )
 }
-

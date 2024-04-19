@@ -26,10 +26,8 @@ export default function Tree() {
                    treeId: access.tree.id,
                    treeName: access.tree.name,
                    treeType: access.tree.type,
-                   userAccessId: access.id
                  }
                }
-               refetch={userAccess.refetch}
               />
             </div>
           </div>

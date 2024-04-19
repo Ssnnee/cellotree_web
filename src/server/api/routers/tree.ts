@@ -59,10 +59,20 @@ export const treeRouter = createTRPCRouter({
 
   delete: publicProcedure
   .input(idSchema)
-  .mutation(({ input, ctx }) => {
-    return ctx.db.userAccess.delete({
+  .mutation( async({ input, ctx }) => {
+    await ctx.db.userAccess.deleteMany({
+      where: { treeId: input.id },
+    })
+
+    await ctx.db.member.deleteMany({
+      where: { treeId: input.id },
+    })
+
+    await ctx.db.tree.delete({
       where: { id: input.id },
-    });
+    })
+
+    return { success: true, message: "Tree and associated data deleted successfully" };
   }),
 
 
