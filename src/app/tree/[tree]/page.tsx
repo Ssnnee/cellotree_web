@@ -14,14 +14,13 @@
 //   )
 // }
 
+import { Button } from "~/components/ui/button"
 import { Member, columns } from "./columns"
 import { DataTable } from "./data-table"
+import { PlusIcon } from "@radix-ui/react-icons"
+import { CreateMemberButton } from "~/app/_components/CreateMemberButton"
+import { MemberForm } from "~/app/_components/MemberForm"
 
-interface Params {
-  params: {
-    treeId: string
-  }
-}
 async function getData(): Promise<Member[]> {
   // Fetch data from your API here.
   return [
@@ -164,13 +163,13 @@ async function getData(): Promise<Member[]> {
   ]
 }
 
-export default async function DemoPage( { params }: Params) {
+export default async function DemoPage( { params }: { params: { tree: string } } ) {
   const data = await getData()
 
   return (
     <div className="flex flex-col h-screen justify-center items-center align-middle">
-      <div className="">
-        <h1>Tree {params.treeId}</h1>
+      <div className="w-full flex items-center justify-between">
+        <a href={`/member/addmemberto/${params.tree}`}>Add Member</a>
       </div>
       <br />
       <DataTable columns={columns} data={data} />

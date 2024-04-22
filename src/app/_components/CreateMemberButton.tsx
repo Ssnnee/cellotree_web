@@ -7,12 +7,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog"
+import { MemberForm } from "./MemberForm";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { Button } from "~/components/ui/button";
 
 export function CreateMemberButton() {
 
   return (
     <Dialog>
-      <DialogTrigger >
+      <DialogTrigger>
           <PlusIcon className="" />
       </DialogTrigger>
         <DialogContent>
@@ -21,7 +24,6 @@ export function CreateMemberButton() {
             <DialogDescription>
               Remplissez les champ ci-dessous pour creer un nouvel arbre
             </DialogDescription>
-
           </DialogHeader>
         </DialogContent>
     </Dialog>

@@ -84,7 +84,7 @@ export const columns: ColumnDef<Member>[] = [
   },
   {
     accessorKey: "action",
-    header: ()=> <CreateMemberButton />,
+    header: ()=> <a href="/tree/member" >Create Member</a>,
   },
 ]
 

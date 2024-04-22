@@ -56,10 +56,12 @@ model Tree {
 
 model Member {
     id   String @id @default(cuid())
-    firstname String
+    firstname String ?
     lastname  String
-    birthday  DateTime
-    placeOfBirth String
+    birthday  DateTime ?
+    placeOfBirth String ?
+    avatarURL String ?
+    description String ?
 
     treeId String
     tree Tree @relation(fields: [treeId], references: [id])

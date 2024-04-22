@@ -33,7 +33,7 @@ export default function NavigationMenu() {
           </div>
         </div>
       </header>
-      <div className={`border-r border w-80 bg-background absolute h-full transition-all flex flex-col items-center p-4 shadow-white ${isOpen ? "left-0" : "left-[-100%]"}`}>
+      <div className={`border-r z-40 border w-80 bg-background absolute h-full transition-all flex flex-col items-center p-4 shadow-white ${isOpen ? "left-0" : "left-[-100%]"}`}>
 
       {!isSignedIn ?
         <Link href="/sign-in"> Connectez-vous </Link> :
