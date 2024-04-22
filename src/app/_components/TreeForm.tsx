@@ -39,13 +39,14 @@ interface TreeFormProps {
   setDialogIsOpen: (isOpen: boolean) => void
 }
 
-export function TreeForm({setDialogIsOpen}: TreeFormProps) {
-    const form = useForm<z.infer<typeof formSchema>>({
+export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
     },
   })
+
   const { isSignedIn, user } = useUser()
 
   const createTree = api.tree.create.useMutation()
@@ -64,13 +65,12 @@ export function TreeForm({setDialogIsOpen}: TreeFormProps) {
         {
           onSettled: () => {
             form.reset(),
-            handleRefetch()
+              handleRefetch()
             setDialogIsOpen(false)
           }
         }
       )
     }
-    console.log(values)
   }
 
   return (
@@ -97,21 +97,21 @@ export function TreeForm({setDialogIsOpen}: TreeFormProps) {
           name="treeType"
           render={({ field }) => (
             <FormItem>
-                <FormLabel>Type de votre arbre</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selectionner le Type de l&apos;arbre" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="public">Public</SelectItem>
-                    <SelectItem value="private">Prive</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Vous pouvez choisir de laisser votre arbre être public ou privé. Vous pourrez le modifier plus tard.
-                </FormDescription>
+              <FormLabel>Type de votre arbre</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selectionner le Type de l&apos;arbre" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="public">Public</SelectItem>
+                  <SelectItem value="private">Prive</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Vous pouvez choisir de laisser votre arbre être public ou privé. Vous pourrez le modifier plus tard.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
