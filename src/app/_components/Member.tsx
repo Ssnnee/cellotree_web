@@ -8,14 +8,18 @@ interface MemberProps {
   treeId: string
 }
 
-export default function Member( { treeId } :  MemberProps) {
+export default function MemberDataTable( { treeId } :  MemberProps) {
 
   const { treeMember } = MembrHook(treeId)
   const member = treeMember.data?.member
 
   return (
     <div className="">
-       { member && <DataTable columns={columns} data={member} /> }
+      {member ? (
+        <DataTable columns={columns} data={member} />
+      ) : (
+        <div>Chargement...</div>
+      )}
     </div>
   );
 }

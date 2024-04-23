@@ -1,6 +1,6 @@
 "use client"
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 
 import {
   DropdownMenu,
@@ -14,7 +14,6 @@ import {
 import type { ColumnDef } from "@tanstack/react-table"
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
-
 // const relationSchema = z.object({
 //  id: z.string(),
 //  type: z.array(z.enum(["father", "mother", "spouse", "children"])),
@@ -37,12 +36,34 @@ export type Member = z.infer<typeof memberSchema>;
 
 export const columns: ColumnDef<Member>[] = [
   {
-    accessorKey: "firstname",
-    header: "Prénoms",
+    accessorKey: "lastname",
+    header: ({ column }) => {
+      return (
+        <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="px-0"
+        >
+        Nom
+        <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
-    accessorKey: "lastname",
-    header: "Nom",
+    accessorKey: "firstname",
+    header: ({ column }) => {
+      return (
+        <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="px-0"
+        >
+        Prénom
+        <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "birthdate",
@@ -50,7 +71,15 @@ export const columns: ColumnDef<Member>[] = [
   },
   {
     accessorKey: "placeOfBirth",
-    header: () => <div className="text-center">Lieu de naissance</div>,
+    header: () => <div className="">Lieu de naissance</div>,
+  },
+  {
+    accessorKey: "avatarURL",
+    header: "Image",
+  },
+  {
+    accessorKey: "description",
+    header: () => <div className="text-center">Description </div>,
   },
   {
     id: "actions",
@@ -82,10 +111,6 @@ export const columns: ColumnDef<Member>[] = [
         </div>
       )
     },
-  },
-  {
-    accessorKey: "action",
-    header: ()=> <a href="/tree/member" >Create Member</a>,
   },
 ]
 

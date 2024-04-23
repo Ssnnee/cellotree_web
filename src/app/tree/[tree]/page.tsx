@@ -1,4 +1,5 @@
-import Member from "~/app/_components/Member"
+import MemberDataTable from "~/app/_components/Member"
+import { Button } from "~/components/ui/button"
 
 
 export default function  TreePage( { params }: { params: { tree: string } } ) {
@@ -6,11 +7,13 @@ export default function  TreePage( { params }: { params: { tree: string } } ) {
   return (
     <div className="flex flex-col h-screen justify-center items-center align-middle">
       <div className="w-full flex items-center justify-between">
-        <a href={`/member/addmemberto/${params.tree}`}>Add Member</a>
+        <Button>
+          <a href={`/member/addmemberto/${params.tree}`}>Ajouter un membre</a>
+        </Button>
       </div>
       <br />
 
-      <Member treeId={params.tree}  />
+      <MemberDataTable treeId={params.tree}  />
 
     </div>
   )
