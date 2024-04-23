@@ -1,6 +1,5 @@
 import * as React from "react"
 
-import { Button } from "~/components/ui/button"
 import {
   Card,
   CardContent,
@@ -17,7 +16,7 @@ export default function AddMemberCard({ params }: { params: { tree: string } }) 
     <div className="flex flex-col h-screen justify-center items-center align-middle mx-auto">
       <Card className="">
         <CardHeader>
-          <CardTitle>Ajout d'un membre</CardTitle>
+          <CardTitle>Ajout d&aposun membre</CardTitle>
           <CardDescription>Remplissez les champ ci-dessous.</CardDescription>
         </CardHeader>
         <CardContent>

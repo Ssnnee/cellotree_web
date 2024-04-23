@@ -30,7 +30,7 @@ export const memberRouter = createTRPCRouter({
       data: {
         firstname: input.firstname,
         lastname: input.lastname,
-        birthday: input.birthdate,
+        birthdate: input.birthdate,
         placeOfBirth: input.placeOfBirth,
         avatarURL : input.avatarURL,
         description : input.description,
@@ -40,6 +40,18 @@ export const memberRouter = createTRPCRouter({
         }
       },
     });
+  }),
+
+  getMembersByTreeId: publicProcedure
+  .input(idSchema)
+  .query(({ ctx, input }) => {
+    return ctx.db.tree.findFirst({
+      where: {id: input.id},
+      include: {
+        member: true
+      }
+
+    })
   }),
 
   // update: publicProcedure

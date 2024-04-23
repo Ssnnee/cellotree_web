@@ -58,7 +58,7 @@ model Member {
     id   String @id @default(cuid())
     firstname String ?
     lastname  String
-    birthday  DateTime ?
+    birthdate  DateTime ?
     placeOfBirth String ?
     avatarURL String ?
     description String ?

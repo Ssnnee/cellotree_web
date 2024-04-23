@@ -1,12 +1,12 @@
 "use client"
 
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "~/components/ui/button"
 
 import {
@@ -96,8 +96,8 @@ export function DataTable<TData, TValue>({
         disabled={!table.getCanNextPage()}
       >
         Suivant
-      </Button>
-    </div>
+     </Button>
+      </div>
     </div>
   )
 }

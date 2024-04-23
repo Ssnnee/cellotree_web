@@ -31,7 +31,7 @@ import { toast } from "~/components/ui/use-toast"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { Calendar } from "~/components/ui/calendar"
 import { format } from "date-fns"
-import { useRef, useState } from "react"
+import { useState } from "react"
 
 // const MAX_FILE_SIZE = 5000000;
 // const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -43,7 +43,7 @@ import { useRef, useState } from "react"
   //     "Veuillez uniquement choisir un fichier .jpg, .jpeg, .png and .webp "
   //   )
 
-const formSchema = z.object({
+export const formSchema = z.object({
   firstName: z.string().min(2, {
     message: "Le prénom doit contenir au moins 2 caractères.",
   }),
@@ -54,6 +54,7 @@ const formSchema = z.object({
   placeOfBirth: z.string().min(2, {
     message: "Le lieu de naissance  doit contenir au moins 2 caractères.",
   }),
+
   avatarURL: z
     .string(),
   description: z.string().min(7, {
@@ -73,6 +74,11 @@ export function MemberForm({ treeId }: MemberFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      firstName: "",
+      lastName: "",
+      avatarURL: "",
+      description: "",
+      placeOfBirth: "",
       treeId: treeId
     },
   })
@@ -103,7 +109,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
                <code className="text-white">{JSON.stringify(values, null, 2)}</code>
              </pre>
            ),
-         })
+         }),
          setHidden(true)
        }
      }
@@ -250,10 +256,10 @@ export function MemberForm({ treeId }: MemberFormProps) {
             <Button variant="outline">
               <a href={`/tree/${treeId}`}>Retour</a>
             </Button>
+            {/*  <Button variant={"outline"} onClick={() => form.reset()}>Annuler</Button> */}
             <Button type="submit">Soumettre</Button>
           <h1 className={iShidden ? "" : "hidden"}>Membre ajouté</h1>
       </form>
     </Form>
-)
+  )
 }
-
