@@ -12,7 +12,7 @@ import { CreateTreeButton } from "./CreateTreeButton";
 import Tree from "./Tree";
 
 export default function NavigationMenu() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(true);
   const { isSignedIn, user } = useUser();
 
   return (
