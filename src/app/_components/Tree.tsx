@@ -18,8 +18,8 @@ export default function Tree() {
           <div
             className={`flex justify-between items-center rounded p-2
               hover:bg-accent hover:text-accent-foreground
-              ${isClicked === access.id && "bg-accent text-accent-foreground"}`} // Check if the current div's ID matches isClicked
-            onClick={() => setIsClicked(isClicked === access.id ? null : access.id)} // Toggle the clicked state based on the current ID
+              ${isClicked === access.id && "bg-accent text-accent-foreground"}`}
+            onClick={() => setIsClicked(isClicked === access.id ? null : access.id)}
           >
             <Link href={`/tree/${access.tree.id}`} className="w-full ">
              {access.tree.name}
