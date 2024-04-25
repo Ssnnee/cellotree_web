@@ -31,6 +31,14 @@ import {
 import { UpdateTreeForm } from "./UpdateTreeForm"
 import { api } from "~/trpc/react"
 import { TreeRefetchHook } from "./TreeRefetchHook"
+import {  } from "@radix-ui/react-tooltip"
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent
+} from "~/components/ui/tooltip"
+import { Button } from "~/components/ui/button"
 
 export interface TreeActionsProps {
   treeInfo: {
@@ -66,7 +74,18 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <DotsHorizontalIcon />
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <DotsHorizontalIcon />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Actions</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>

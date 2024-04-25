@@ -17,7 +17,7 @@ export default function NavigationMenu() {
 
   return (
     <div className="w-full">
-      <header className='sticky top-0 z-50 w-full  border-b border-border/60 backdrop-blur'>
+      <header className='sticky top-0 z-50 w-full h-[58px] border-b border backdrop-blur'>
         <div className="container flex h-14 justify-between  items-center">
           <div className='flex gap-5 items-center p-4'>
             <Button variant="outline" size="icon"onClick={() => setIsOpen(!isOpen)}>
