@@ -54,32 +54,34 @@ model Tree {
     userAccess UserAccess[]
 }
 
+enum Sex {
+    male
+    female
+}
+
 model Member {
     id   String @id @default(cuid())
     firstname String ?
     lastname  String
     birthdate  DateTime ?
     placeOfBirth String ?
+    sex Sex
     avatarURL String ?
     description String ?
 
     treeId String
     tree Tree @relation(fields: [treeId], references: [id])
 
-    relation Relation[]
-
+    relation Relation ?
 }
 
-enum TypeRelation {
-    father
-    mother
-    spouse
-    children
-}
 
 model Relation {
-    id String @id @default(cuid())
-    type TypeRelation[]
-    memberId String
+    fatherId String ?
+    motherId String ?
+    spouses String[]
+    children String[]
+
+    memberId String @unique
     member Member @relation(fields: [memberId], references: [id])
 }

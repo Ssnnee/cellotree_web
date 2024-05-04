@@ -32,6 +32,13 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { Calendar } from "~/components/ui/calendar"
 import { format } from "date-fns"
 import { useState } from "react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "~/components/ui/select"
 
 // const MAX_FILE_SIZE = 5000000;
 // const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -54,6 +61,8 @@ export const formSchema = z.object({
   placeOfBirth: z.string().min(2, {
     message: "Le lieu de naissance  doit contenir au moins 2 caractères.",
   }),
+
+  sex: z.enum(["male", "female"]),
 
   avatarURL: z
     .string(),
@@ -93,6 +102,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
        firstname: values.firstName,
        lastname: values.lastName,
        birthdate: values.birthdate,
+       sex: values.sex,
        placeOfBirth: values.placeOfBirth,
        avatarURL: values.avatarURL,
        description: values.description,
@@ -215,6 +225,31 @@ export function MemberForm({ treeId }: MemberFormProps) {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="sex"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Sex</FormLabel>
+                <Select onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selectionner le sex du membre" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="male">Masculin</SelectItem>
+                    <SelectItem value="female">Feminin</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Nous ne concevons pas qu'il est d'autres sex ni genre c'est de la bêtises
+                  et nous ne l'encourageons pas.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+            />
           <FormField
             control={form.control}
             name="avatarURL"

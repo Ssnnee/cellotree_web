@@ -3,6 +3,7 @@ import { treeRouter } from "./routers/tree";
 import { userRouter } from "./routers/user";
 import { accessRouter } from "./routers/access";
 import { memberRouter } from "./routers/member";
+import { relationRouter } from "./routers/relation";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   tree: treeRouter,
   access: accessRouter,
   member: memberRouter,
+  relation: relationRouter,
 });
 
 // export type definition of API

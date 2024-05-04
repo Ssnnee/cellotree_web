@@ -106,7 +106,7 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="public">Public</SelectItem>
-                  <SelectItem value="private">Prive</SelectItem>
+                  <SelectItem value="private">Privé</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
