@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
+import { CheckIcon, ClipboardIcon, DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,6 +39,7 @@ import {
   TooltipContent
 } from "~/components/ui/tooltip"
 import { Button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
 
 export interface TreeActionsProps {
   treeInfo: {
@@ -50,6 +51,8 @@ export interface TreeActionsProps {
 export default function TreeActions({ treeInfo }: TreeActionsProps) {
   const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
+  const [dialogIsOpen1, setDialogIsOpen1] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
 
   const us = "admin"
   const isAdmin = us === "admin";
@@ -57,6 +60,8 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
   const{ handleRefetch } = TreeRefetchHook()
 
   const deleteTree = api.tree.delete.useMutation()
+
+  const treeUrl = `http://localhost:3000/chart/${treeInfo.treeId}`
 
   const handleDelete = async () => {
     deleteTree.mutate(
@@ -67,7 +72,14 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
         }
       }
     )
+  }
 
+  const handleCopy = async () => {
+    navigator.clipboard.writeText(treeUrl)
+    setIsCopied(true)
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
   }
 
   return (
@@ -90,7 +102,7 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
             <Share1Icon className="mr-2 h-3.5 w-3.5" />
-            <p className="text-sm">Partager l&apos;arbre</p>
+            <span className="text-sm" onClick={() => setDialogIsOpen1(true)}>Partager l&apos;arbre</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <EyeOpenIcon className="mr-2 h-3.5 w-3.5" />
@@ -126,7 +138,7 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
         </AlertDialogContent>
       </AlertDialog>
     <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Modification de l&apos;arbre</DialogTitle>
             <DialogDescription>
@@ -136,6 +148,22 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
           </DialogHeader>
         </DialogContent>
     </Dialog>
+        <Dialog open={dialogIsOpen1} onOpenChange={setDialogIsOpen1}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Partage de l'arbre {treeInfo.treeName } </DialogTitle>
+              <DialogDescription>
+                Vous pouvez copiez puis partager le lien dans une plateforme de votre choix
+              </DialogDescription>
+              <div className="flex items-center justify-center gap-4">
+                <Input className="max-w-sm" value={treeUrl} role="note"  />
+                <Button variant="outline" onClick={handleCopy}>
+                { !isCopied ? <ClipboardIcon /> : <CheckIcon /> }
+                </Button>
+              </div>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
     </>
   )
 }
