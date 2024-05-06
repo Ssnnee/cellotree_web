@@ -1,6 +1,13 @@
 "use client"
 
-import { CaretSortIcon, CheckIcon, CheckboxIcon, DotsHorizontalIcon, EyeOpenIcon, Link1Icon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
+import {
+  CaretSortIcon,
+  DotsHorizontalIcon,
+  EyeOpenIcon,
+  Link1Icon,
+  Pencil1Icon,
+  TrashIcon
+} from "@radix-ui/react-icons"
 
 import {
   DropdownMenu,
@@ -191,7 +198,7 @@ export const columns: ColumnDef<Member>[] = [
             </AlertDialogContent>
           </AlertDialog>
           <Dialog open={relationDialogIsOpen} onOpenChange={setRelationDialogIsOpen}>
-            <DialogContent>
+            <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>Ajout d&apos;un d'un parent pour {member.firstname + " " + member.lastname}</DialogTitle>
                 <DialogDescription>
@@ -205,7 +212,7 @@ export const columns: ColumnDef<Member>[] = [
             </DialogContent>
           </Dialog>
           <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
-            <DialogContent>
+            <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>Modification de l&apos;arbre</DialogTitle>
                 <DialogDescription>
