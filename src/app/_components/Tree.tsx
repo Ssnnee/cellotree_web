@@ -41,7 +41,9 @@ export default function Tree() {
           }}
         >
           <Link href={`/tree/${access.tree.id}`} className="w-full ">
-          {access.tree.name}
+            <p className="w-full truncate text-lg">{access.tree.name}</p>
+            {access.tree.type === "public" ?
+            <p className="text-sm">Public</p> : <p className="text-sm">Privé</p>}
           </Link>
           <div className="cursor-pointer">
             <TreeActions
