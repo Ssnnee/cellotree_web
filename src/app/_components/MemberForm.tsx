@@ -31,7 +31,6 @@ import { toast } from "~/components/ui/use-toast"
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { Calendar } from "~/components/ui/calendar"
 import { format } from "date-fns"
-import { useState } from "react"
 import {
   Select,
   SelectContent,
@@ -39,16 +38,11 @@ import {
   SelectTrigger,
   SelectValue
 } from "~/components/ui/select"
+import { MembrHook } from "./MemberHook"
 
-// const MAX_FILE_SIZE = 5000000;
-// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-  // avatarURL: z
-  //   .any()
-  //   .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-  //   .refine(
-  //     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-  //     "Veuillez uniquement choisir un fichier .jpg, .jpeg, .png and .webp "
-  //   )
+
+const MAX_FILE_SIZE = 5000000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 export const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -64,8 +58,14 @@ export const formSchema = z.object({
 
   sex: z.enum(["male", "female"]),
 
-  avatarURL: z
-    .string(),
+  avatar: z.any()
+    .refine((file) => file[0]?.size <= MAX_FILE_SIZE,
+      { message: `Le fichier doit faire moins de 5 Mo.` }
+    )
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file[0]?.type),
+      { message: "Le fichier doit être de type image." },
+    ),
   description: z.string().min(7, {
     message: "La decription doit contenir au moins 7 caractères.",
   }).max(80, {
@@ -85,17 +85,46 @@ export function MemberForm({ treeId }: MemberFormProps) {
     defaultValues: {
       firstName: "",
       lastName: "",
-      avatarURL: "",
       description: "",
       placeOfBirth: "",
       treeId: treeId
     },
   })
 
-  const createMember = api.member.create.useMutation()
-  const  [iShidden, setHidden] = useState(false)
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const createMember = api.member.create.useMutation()
+  const { treeMember } = MembrHook(treeId)
+
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if(!values.avatar) {
+      return;
+    }
+    const file = values.avatar[0];
+    if (!file) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(
+        `/api/upload?filename=${file.name}`,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+      if (response.ok) {
+        console.log("File uploaded successfully");
+        console.log(response);
+      } else {
+        console.error("Failed to upload file:", response.statusText);
+        console.log(response);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
 
     createMember.mutate(
      {
@@ -104,7 +133,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
        birthdate: values.birthdate,
        sex: values.sex,
        placeOfBirth: values.placeOfBirth,
-       avatarURL: values.avatarURL,
+       avatarURL: `/${file.name}`,
        description: values.description,
        treeId: treeId,
 
@@ -120,14 +149,13 @@ export function MemberForm({ treeId }: MemberFormProps) {
              </pre>
            ),
          }),
-         setHidden(true)
+         treeMember.refetch()
        }
      }
    )
     console.log("Form Values:", values);
   }
 
-  // const fileRef = useRef<HTMLInputElement>(null);
 
 
   return (
@@ -252,12 +280,16 @@ export function MemberForm({ treeId }: MemberFormProps) {
             />
           <FormField
             control={form.control}
-            name="avatarURL"
+            name="avatar"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Avatar</FormLabel>
                 <FormControl>
-                  <Input type="file" placeholder="" {...field} />
+                  <Input
+                    type="file"
+                    placeholder=""
+                    onChange={(e) => field.onChange(e.target.files)}
+                  />
                 </FormControl>
                 <FormDescription>
                   Vous pouvez renseigner ici une description bref de la personne.
@@ -288,12 +320,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
               </FormItem>
             )}
           />
-            <Button variant="outline">
-              <a href={`/tree/${treeId}`}>Retour</a>
-            </Button>
-            {/*  <Button variant={"outline"} onClick={() => form.reset()}>Annuler</Button> */}
             <Button type="submit">Soumettre</Button>
-          <h1 className={iShidden ? "" : "hidden"}>Membre ajouté</h1>
       </form>
     </Form>
   )
