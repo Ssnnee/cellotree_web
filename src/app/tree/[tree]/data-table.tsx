@@ -186,15 +186,7 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {cell.column.id === "avatarURL" ? (
-                        <Image
-                          src={cell.getValue() as string}
-                          alt="Avatar"
-                          width={32}
-                          height={32}
-                          className="rounded-full"
-                        />
-                      ): (flexRender(cell.column.columnDef.cell, cell.getContext()))}
+                      { (flexRender(cell.column.columnDef.cell, cell.getContext()))}
                     </TableCell>
                   ))}
                 </TableRow>

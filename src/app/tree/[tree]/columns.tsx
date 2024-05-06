@@ -42,7 +42,8 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
+  DialogTrigger
 } from "~/components/ui/dialog";
 import { useState } from "react";
 import { api } from "~/trpc/react";
@@ -51,6 +52,8 @@ import { MembrHook } from "~/app/_components/Member/MemberHook";
 import { FatherForm } from "~/app/_components/Member/FatherForm"
 import { MotherForm } from "~/app/_components/Member/MotherForm"
 import { toast } from "~/components/ui/use-toast";
+import { format } from "date-fns";
+import Image from "next/image";
 
 
 
@@ -102,6 +105,11 @@ export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "birthdate",
     header: () => <div className="text-center">Date de naissance</div>,
+    cell: ({ row }) => {
+      const birthdate = row.getValue("birthdate") as Date
+
+      return <div className="text-center">{format(new Date(birthdate), "dd MMM yyyy")}</div>
+    }
   },
   {
     accessorKey: "sex",
@@ -114,6 +122,34 @@ export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "avatarURL",
     header: "Image",
+    cell: ({ row }) => {
+      const url = row.getValue("avatarURL") as string
+      const memberName = row.getValue("firstname") as string
+      return (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Image
+                src={url}
+                alt={`Avatar de ${memberName}`}
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+            </DialogTrigger>
+            <DialogContent className="max-w-sm">
+              <DialogHeader>
+              </DialogHeader>
+                <Image
+                  src={url}
+                  alt={`Avatar de ${memberName}`}
+                  width={400}
+                  height={400}
+                  className="rounded-full"
+                />
+            </DialogContent>
+          </Dialog>
+      )
+    }
   },
   {
     accessorKey: "description",
@@ -139,8 +175,8 @@ export const columns: ColumnDef<Member>[] = [
           {
             onSettled: () => {
               toast({
-                title: "Le membre a été supprimé de l'arbre:",
-              })
+                title: "Le membre a été supprimé de l'arbre",
+          })
               treeMember.refetch()
             }
           }
