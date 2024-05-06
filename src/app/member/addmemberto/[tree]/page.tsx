@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
-import { MemberForm } from "~/app/_components/MemberForm"
+import { MemberForm } from "~/app/_components/Member/MemberForm"
 
 
 export default function AddMemberCard({ params }: { params: { tree: string } }) {

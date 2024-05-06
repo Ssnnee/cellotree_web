@@ -28,45 +28,44 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover"
-import { toast } from "~/components/ui/use-toast"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { useState } from "react"
 import { api } from "~/trpc/react"
 
 
 const FormSchema = z.object({
-  fatherId: z.string({
+  motherId: z.string({
     required_error: "Veuillez choisir le parent",
   }),
 })
 
-interface FatherFormProps {
+interface MotherFormProps {
   treeId: string,
   memberId: string,
 }
-export function FatherForm({ treeId, memberId }: FatherFormProps ) {
+export function MotherForm({ treeId, memberId }: MotherFormProps ) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
-  const maleMemberOfTree =  api.member.getMaleMembersByTreeId.useQuery({id: treeId});
-  const maleMember = maleMemberOfTree.data?.member
+  const femaleMemberOfTree =  api.member.getFemaleMembersByTreeId.useQuery({id: treeId});
+  const femaleMember = femaleMemberOfTree.data?.member
 
   const getMember = api.member.getById.useQuery( {id : memberId });
   const member = getMember.data
 
-  const getFather = api.member.getById.useQuery( { id: member?.relation?.fatherId ?? "" } )
-  const father = getFather.data
+  const getMother = api.member.getById.useQuery( { id: member?.relation?.motherId ?? "" } )
+  const mother = getMother.data
 
-  const addOrUpdateFatherMutation = api.relation.addOrUpdateFather.useMutation()
+  const addOrUpdateMotherMutation = api.relation.addOrUpdateMother.useMutation()
 
 
   const [open, setOpen] = useState(false)
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    addOrUpdateFatherMutation.mutate(
+    addOrUpdateMotherMutation.mutate(
       {
-        parentId: data.fatherId,
+        parentId: data.motherId,
         membreId: memberId,
       },
     )
@@ -78,10 +77,10 @@ export function FatherForm({ treeId, memberId }: FatherFormProps ) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="fatherId"
+          name="motherId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Père</FormLabel>
+              <FormLabel>Mère</FormLabel>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -93,16 +92,16 @@ export function FatherForm({ treeId, memberId }: FatherFormProps ) {
                         !field.value && "text-muted-foreground"
                       )}
 
-                      defaultValue={cn(!member?.relation && `${member?.relation?.fatherId}`)}
+                      defaultValue={cn(!member?.relation && `${member?.relation?.motherId}`)}
 
                     >
-                    {father && !field.value ?
-                      father?.lastname + " " + father?.firstname :
+                    {mother && !field.value ?
+                      mother?.lastname + " " + mother?.firstname :
                       field.value
-                        ? maleMember?.find(
-                            (fatherId) => fatherId.id === field.value
+                        ? femaleMember?.find(
+                            (motherId) => motherId.id === field.value
                           )?.lastname
-                        : "Selectionner le père"}
+                        : "Selectionner la mère"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
@@ -110,15 +109,15 @@ export function FatherForm({ treeId, memberId }: FatherFormProps ) {
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
                     <CommandList>
-                    <CommandInput placeholder="Search fatherId..." />
+                    <CommandInput placeholder="Search motherId..." />
                     <CommandEmpty>Aucun membre trouvé.</CommandEmpty>
                         <CommandGroup>
-                          {maleMember?.map((member) => (
+                          {femaleMember?.map((member) => (
                             <CommandItem
                               value={member.id}
                               key={member.id}
                               onSelect={() => {
-                                form.setValue("fatherId", member.id)
+                                form.setValue("motherId", member.id)
                                 setOpen(false)
                               }}
                             >
@@ -139,7 +138,7 @@ export function FatherForm({ treeId, memberId }: FatherFormProps ) {
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                Le membre sélectionné sera le père de ce membre. Après avoir
+                Le membre sélectionné sera la mère de ce membre. Après avoir
                 appuyé sur soumettre.
               </FormDescription>
               <FormMessage />
@@ -152,3 +151,4 @@ export function FatherForm({ treeId, memberId }: FatherFormProps ) {
     </>
   )
 }
+

@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link"
-import { MembrHook } from "~/app/_components/MemberHook"
+import { MembrHook } from "~/app/_components/Member/MemberHook"
 import { Button } from "~/components/ui/button"
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
@@ -8,12 +8,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog"
-import { MemberForm } from "~/app/_components/MemberForm"
+import { MemberForm } from "~/app/_components/Member/MemberForm"
 import { api } from "~/trpc/react"
 
 
@@ -55,4 +54,3 @@ export default function  TreePage( { params }: { params: { tree: string } } ) {
     </div>
   )
 }
-

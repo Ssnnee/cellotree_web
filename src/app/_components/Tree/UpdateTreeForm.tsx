@@ -21,7 +21,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react"
 import type { TreeActionsProps } from "./TreeActions"
 import { TreeRefetchHook } from "./TreeRefetchHook"
@@ -47,7 +46,8 @@ export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps)
 
     },
   })
-  const { isSignedIn } = useUser()
+  // const { isSignedIn } = useUser()
+  const isSignedIn = true
 
   const updateTree = api.tree.update.useMutation()
 

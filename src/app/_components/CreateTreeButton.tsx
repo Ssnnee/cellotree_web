@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog"
 
-import { TreeForm } from "./TreeForm";
+import { TreeForm } from "./Tree/TreeForm";
 import { useState } from "react";
 
 
@@ -23,7 +23,7 @@ export function CreateTreeButton() {
           <PlusIcon className="" />
         </Button>
       </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-w-lg ">
           <DialogHeader>
             <DialogTitle>Creation d&apos;un nouvel arbre</DialogTitle>
             <DialogDescription>

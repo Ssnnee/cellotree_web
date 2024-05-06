@@ -46,10 +46,10 @@ import {
 } from "~/components/ui/dialog";
 import { useState } from "react";
 import { api } from "~/trpc/react";
-import { MembrHook } from "~/app/_components/MemberHook";
+import { MembrHook } from "~/app/_components/Member/MemberHook";
 
-import { FatherForm } from "~/app/_components/FatherForm"
-import { MotherForm } from "~/app/_components/MotherForm"
+import { FatherForm } from "~/app/_components/Member/FatherForm"
+import { MotherForm } from "~/app/_components/Member/MotherForm"
 
 
 

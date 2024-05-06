@@ -69,6 +69,7 @@ export function DataTable<TData, TValue>({
       firstname: "prénom",
       lastname: "nom de famille",
       birthdate: "date de naissance",
+      sex: "sexe",
       placeOfBirth: "lieu de naissance",
       avatarURL: "image",
       description: "description",

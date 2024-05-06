@@ -9,11 +9,12 @@ import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { Separator } from "~/components/ui/separator";
 import { CreateTreeButton } from "./CreateTreeButton";
-import Tree from "./Tree";
+import Tree from "./Tree/Tree";
 
 export default function NavigationMenu() {
   const [isOpen, setIsOpen] = React.useState(true);
-  const { isSignedIn, user } = useUser();
+  // const { isSignedIn, user } = useUser();
+  const isSignedIn = true
 
   return (
     <div className="w-full">
@@ -41,7 +42,7 @@ export default function NavigationMenu() {
         <div className="flex flex-col gap-4">
           <div className="flex text-xl gap-4 items-center">
             <UserButton afterSignOutUrl="/" />
-            <div> {user.fullName} </div>
+            // <div> user.fullName </div>
           </div>
 
           <Separator/>
