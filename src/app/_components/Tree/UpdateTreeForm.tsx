@@ -24,6 +24,7 @@ import {
 import { api } from "~/trpc/react"
 import type { TreeActionsProps } from "./TreeActions"
 import { TreeRefetchHook } from "./TreeRefetchHook"
+import { toast } from "~/components/ui/use-toast"
 
 
 const formSchema = z.object({
@@ -64,6 +65,11 @@ export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps)
         },
         {
           onSettled: () => {
+            toast({
+              title: "L'arbre a été mis à jour",
+              description: "L'arbre devient : " +
+                values.name + " de type " + values.treeType,
+            }),
             form.reset(),
             handleRefetch(),
             setDialogIsOpen(false)

@@ -40,6 +40,7 @@ import {
 } from "~/components/ui/tooltip"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
+import { toast } from "~/components/ui/use-toast"
 
 export interface TreeActionsProps {
   treeInfo: {
@@ -68,6 +69,9 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
       { id: treeInfo.treeId },
       {
         onSettled: () => {
+          toast({
+            title: "L'arbre a été supprimé",
+          })
           handleRefetch()
         }
       }

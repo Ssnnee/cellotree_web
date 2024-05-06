@@ -31,6 +31,7 @@ import {
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { useState } from "react"
 import { api } from "~/trpc/react"
+import { toast } from "~/components/ui/use-toast"
 
 
 const FormSchema = z.object({
@@ -67,6 +68,14 @@ export function MotherForm({ treeId, memberId }: MotherFormProps ) {
       {
         parentId: data.motherId,
         membreId: memberId,
+      },
+      {
+        onSettled: () => {
+          toast({
+            title: "Mère ajoutée",
+            description: "La mère ayant été ajoutée est : " + mother?.lastname + " " + mother?.firstname,
+          })
+        }
       },
     )
   }
@@ -151,4 +160,3 @@ export function MotherForm({ treeId, memberId }: MotherFormProps ) {
     </>
   )
 }
-

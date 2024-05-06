@@ -50,6 +50,7 @@ import { MembrHook } from "~/app/_components/Member/MemberHook";
 
 import { FatherForm } from "~/app/_components/Member/FatherForm"
 import { MotherForm } from "~/app/_components/Member/MotherForm"
+import { toast } from "~/components/ui/use-toast";
 
 
 
@@ -137,6 +138,9 @@ export const columns: ColumnDef<Member>[] = [
           { id: member.id },
           {
             onSettled: () => {
+              toast({
+                title: "Le membre a été supprimé de l'arbre:",
+              })
               treeMember.refetch()
             }
           }

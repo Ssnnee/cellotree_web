@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import NavigationMenu from "~/app/_components/NavigationMenu";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "~/components/ui/toaster"
 
 
 const inter = Inter({
@@ -40,6 +41,7 @@ export default function RootLayout({
             <NavigationMenu />
             {children}
             </main>
+            <Toaster />
           </TRPCReactProvider>
           </ThemeProvider>
         </body>

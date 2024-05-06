@@ -26,6 +26,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react"
 import { TreeRefetchHook } from "./TreeRefetchHook"
+import { toast } from "~/components/ui/use-toast"
 
 
 const formSchema = z.object({
@@ -64,8 +65,13 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
         },
         {
           onSettled: () => {
+            toast({
+              title: "L'arbre a été ajouté",
+              description: "L'arbre ayant été ajouté est : " +
+                values.name + " de type " + values.treeType,
+            }),
             form.reset(),
-              handleRefetch()
+            handleRefetch()
             setDialogIsOpen(false)
           }
         }
