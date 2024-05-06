@@ -1,6 +1,7 @@
 "use client"
 
 import {
+    AvatarIcon,
   CaretSortIcon,
   DotsHorizontalIcon,
   EyeOpenIcon,
@@ -54,6 +55,8 @@ import { MotherForm } from "~/app/_components/Member/MotherForm"
 import { toast } from "~/components/ui/use-toast";
 import { format } from "date-fns";
 import Image from "next/image";
+import { UpdateMemberForm } from "~/app/_components/Member/UpdateMemberForm";
+import { UpdateMemberAvatarForm } from "~/app/_components/Member/UpdateMemberAvatarForm";
 
 
 
@@ -163,6 +166,7 @@ export const columns: ColumnDef<Member>[] = [
 
       const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
       const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
+      const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
       const [relationDialogIsOpen, setRelationDialogIsOpen] = useState(false)
 
       const deleteMember = api.member.delete.useMutation()
@@ -212,6 +216,10 @@ export const columns: ColumnDef<Member>[] = [
 
               <DropdownMenuSeparator />
               <DropdownMenuItem>
+                <AvatarIcon className="mr-2 h-3.5 w-3.5" />
+                <span onClick={() => setEditAvatarDialogIsOpen(true)}>Modifier l&apos;avatar </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
                 <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
                 <span onClick={() => setEditDialogIsOpen(true)}>Modifier les informations </span>
               </DropdownMenuItem>
@@ -252,12 +260,32 @@ export const columns: ColumnDef<Member>[] = [
             </DialogContent>
           </Dialog>
           <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="sm:max-w-2xl">
               <DialogHeader>
-                <DialogTitle>Modification de l&apos;arbre</DialogTitle>
+                <DialogTitle>Modification du membre {member.firstname + " " + member.lastname}</DialogTitle>
                 <DialogDescription>
                   Remplissez les champ ci-dessous pour modifier cet arbre
                 </DialogDescription>
+                <UpdateMemberForm
+                  setDialogIsOpen={setEditDialogIsOpen}
+                  member={member}
+                  treeId={member.treeId}
+                />
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <Dialog open={editAvatarDialogIsOpen} onOpenChange={setEditAvatarDialogIsOpen}>
+            <DialogContent className="max-w-lg">
+              <DialogHeader>
+                <DialogTitle>Modification de l&apos;avatar {member.firstname + " " + member.lastname}</DialogTitle>
+                <DialogDescription>
+                  Veuiller choisir l'image à metrre.
+                </DialogDescription>
+                <UpdateMemberAvatarForm
+                  setDialogIsOpen={setEditAvatarDialogIsOpen}
+                  member={member}
+                  treeId={member.treeId}
+                />
               </DialogHeader>
             </DialogContent>
           </Dialog>

@@ -8,12 +8,14 @@ const memberSchema = z.object({
   birthdate: z.date(),
   sex: z.enum(["male", "female"]),
   placeOfBirth: z.string(),
-  avatarURL: z.string(),
+  avatarURL: z.string().optional(),
   description: z.string(),
   treeId: z.string(),
 })
 
+const updateMemberSchema = memberSchema.extend({ id: z.string() })
 const idSchema = z.object({ id: z.string() });
+const updateAvatarMemberSchema = idSchema.extend({ avatarURL: z.string()})
 
 export const memberRouter = createTRPCRouter({
   getById: publicProcedure
@@ -82,17 +84,32 @@ export const memberRouter = createTRPCRouter({
       })
     }),
 
-  // update: publicProcedure
-  // .input(updateTreeSchema)
-  // .mutation(async ({ ctx, input }) => {
-  //   return ctx.db.tree.update({
-  //     where: { id: input.id },
-  //     data: {
-  //       name: input.name,
-  //       type: input.type,
-  //     }
-  //   });
-  // }),
+  update: publicProcedure
+  .input(updateMemberSchema)
+  .mutation(async ({ ctx, input }) => {
+    return ctx.db.member.update({
+      where: { id: input.id },
+      data: {
+        firstname: input.firstname,
+        lastname: input.lastname,
+        birthdate: input.birthdate,
+        sex: input.sex,
+        placeOfBirth: input.placeOfBirth,
+        description: input.description,
+      }
+    });
+  }),
+
+  updateAvatar: publicProcedure
+  .input(updateAvatarMemberSchema)
+  .mutation(async ({ ctx, input }) => {
+    return ctx.db.member.update({
+      where: { id: input.id },
+      data: {
+          avatarURL: input.avatarURL,
+      }
+    });
+  }),
 
   delete: publicProcedure
     .input(idSchema)
