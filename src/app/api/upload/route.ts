@@ -20,8 +20,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ success: true, message: "File uploaded"})
 }
 
-
-
 export async function DELETE(request: NextRequest) {
   const data = await request.formData()
   const path = data.get('path') as string

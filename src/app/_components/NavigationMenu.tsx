@@ -3,18 +3,17 @@ import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import React from "react";
 import { ModeToggle } from "./ModeToggle";
 import { Button } from "~/components/ui/button";
-
 import Link from "next/link";
-
-import { UserButton, useUser } from "@clerk/nextjs";
 import { Separator } from "~/components/ui/separator";
 import { CreateTreeButton } from "./CreateTreeButton";
 import Tree from "./Tree/Tree";
+import { SignInDialog } from "./User/SignInDialog";
+
 
 export default function NavigationMenu() {
   const [isOpen, setIsOpen] = React.useState(true);
   // const { isSignedIn, user } = useUser();
-  const isSignedIn = true
+  const isSignedIn = false
 
   return (
     <div className="w-full">
@@ -31,6 +30,7 @@ export default function NavigationMenu() {
           <div className="flex w-52 justify-between items-center">
           {/*isSignedIn && <CreateTreeButton /> //>*/}
             <ModeToggle />
+            <SignInDialog />
           </div>
         </div>
       </header>
@@ -41,7 +41,6 @@ export default function NavigationMenu() {
 
         <div className="flex flex-col gap-4">
           <div className="flex text-xl gap-4 items-center">
-            <UserButton afterSignOutUrl="/" />
             // <div> user.fullName </div>
           </div>
 

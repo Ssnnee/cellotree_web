@@ -19,9 +19,9 @@ export function CreateTreeButton() {
   return (
     <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
       <DialogTrigger >
-        <Button variant="outline" className="w-full justify-center">
+        <div className="flex flex-col justify-center items-center h-8 rounded-md px-3 text-xs hover:bg-accent hover:text-accent-foregroundborder-solid border-2 ">
           <PlusIcon className="" />
-        </Button>
+        </div>
       </DialogTrigger>
         <DialogContent className="max-w-lg ">
           <DialogHeader>

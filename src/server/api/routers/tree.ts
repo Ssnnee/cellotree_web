@@ -38,7 +38,7 @@ export const treeRouter = createTRPCRouter({
         userAccess: {
           create: {
             level: "admin",
-            userExternalId: input.externalId,
+            userId: input.externalId,
           }
         }
       },

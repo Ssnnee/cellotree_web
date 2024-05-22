@@ -6,7 +6,7 @@ const memberSchema = z.object({
   firstname: z.string(),
   lastname: z.string(),
   birthdate: z.date(),
-  sex: z.enum(["male", "female"]),
+  sex: z.enum(["masculin", "feminin"]),
   placeOfBirth: z.string(),
   avatarURL: z.string().optional(),
   description: z.string(),
@@ -65,7 +65,7 @@ export const memberRouter = createTRPCRouter({
         where: { id: input.id },
         include: {
           member: {
-            where: { sex: "male" },
+            where: { sex: "masculin" },
           }
         }
       })
@@ -78,7 +78,7 @@ export const memberRouter = createTRPCRouter({
         where: { id: input.id },
         include: {
           member: {
-            where: { sex: "female" },
+            where: { sex: "feminin" },
           }
         }
       })

@@ -7,7 +7,7 @@ export const accessRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.userAccess.findMany({
-        where: { userExternalId: input.id },
+        where: { userId: input.id },
         include: {
           tree: true
         }

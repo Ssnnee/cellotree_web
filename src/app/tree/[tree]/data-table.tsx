@@ -32,7 +32,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-import Image from "next/image"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 
@@ -44,6 +43,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
+import { ArrowLeftIcon, ArrowRightIcon, MixerHorizontalIcon } from "@radix-ui/react-icons"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -130,8 +130,9 @@ export function DataTable<TData, TValue>({
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Masquer certaines colonnes
+            <Button variant="outline" className="ml-auto flex justify-center items-center gap-3">
+              <MixerHorizontalIcon />
+              <span> Masquer certaines colonnes </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -157,7 +158,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -185,7 +186,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-center">
                       { (flexRender(cell.column.columnDef.cell, cell.getContext()))}
                     </TableCell>
                   ))}
@@ -208,7 +209,7 @@ export function DataTable<TData, TValue>({
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        Précédent
+        <ArrowLeftIcon />
       </Button>
       <Button
         variant="outline"
@@ -216,7 +217,7 @@ export function DataTable<TData, TValue>({
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
-        Suivant
+        <ArrowRightIcon />
       </Button>
       </div>
     </div>

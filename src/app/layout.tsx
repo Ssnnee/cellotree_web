@@ -1,6 +1,5 @@
 import "~/styles/globals.css";
 import React from "react";
-import { ClerkProvider } from "@clerk/nextjs";
 
 import { Inter } from "next/font/google";
 
@@ -27,7 +26,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
       <html lang="fr">
         <body className={`font-sans ${inter.variable} `}>
         <ThemeProvider
@@ -46,6 +44,5 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }

@@ -12,15 +12,34 @@ datasource db {
 
 model User {
     id    String @id @default(uuid())
-    externalId String @unique
-    firstname  String ?
-    lastname  String ?
+    username String @unique
     email String
+    hashedPassword String
+
+    profile Profile?
+    sessions Session[]
 
     access UserAccess[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model Profile {
+    id    String @id @default(cuid())
+    firstname String
+    lastname String
+    avatarURL String ?
+
+    userId String @unique
+    user User @relation(fields: [userId], references: [id])
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 enum AccessLevel {
@@ -33,8 +52,8 @@ model UserAccess {
     id    String @id @default(cuid())
     level AccessLevel
 
-    userExternalId String
-    user User @relation(fields: [userExternalId], references: [externalId])
+    userId String
+    user User @relation(fields: [userId], references: [id])
 
     treeId String
     tree Tree @relation(fields: [treeId], references: [id])
@@ -55,8 +74,8 @@ model Tree {
 }
 
 enum Sex {
-    male
-    female
+    masculin
+    feminin
 }
 
 model Member {

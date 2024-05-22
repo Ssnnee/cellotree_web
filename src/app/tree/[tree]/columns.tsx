@@ -82,7 +82,7 @@ export const columns: ColumnDef<Member>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0"
+          className="md:w-[200px] px-0"
         >
           Nom
           <CaretSortIcon className="ml-2 h-4 w-4" />
@@ -97,7 +97,7 @@ export const columns: ColumnDef<Member>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-0"
+          className="md:w-[200px] px-0"
         >
           Prénom
           <CaretSortIcon className="ml-2 h-4 w-4" />
@@ -116,11 +116,11 @@ export const columns: ColumnDef<Member>[] = [
   },
   {
     accessorKey: "sex",
-    header: () => <div className="text-center">Genre</div>,
+    header: () => <div className="text-center md:w-[200px]">Genre</div>,
   },
   {
     accessorKey: "placeOfBirth",
-    header: () => <div className="">Lieu de naissance</div>,
+    header: () => <div className="md:w-[200px]">Lieu de naissance</div>,
   },
   {
     accessorKey: "avatarURL",
@@ -156,7 +156,7 @@ export const columns: ColumnDef<Member>[] = [
   },
   {
     accessorKey: "description",
-    header: () => <div className="text-center">Description </div>,
+    header: () => <div className="text-center md:w-[200px]">Description </div>,
   },
   {
     id: "actions",

@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 
-import { useUser } from "@clerk/nextjs";
 import { api } from "~/trpc/react"
 import { TreeRefetchHook } from "./TreeRefetchHook"
 import { toast } from "~/components/ui/use-toast"
@@ -48,7 +47,8 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
     },
   })
 
-  const { isSignedIn, user } = useUser()
+  // const { isSignedIn, user } = useUser()
+  const isSignedIn = true
 
   const createTree = api.tree.create.useMutation()
 
@@ -61,7 +61,7 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
         {
           name: values.name,
           type: values.treeType,
-          externalId: user.id,
+          externalId: "user_2esAQpNJJFUm0VXfV5NFvVjYcfM",
         },
         {
           onSettled: () => {
