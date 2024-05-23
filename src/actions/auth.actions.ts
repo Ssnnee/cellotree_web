@@ -1,22 +1,21 @@
 "use server"
 
-import { SignUpSchema } from "~/app/_components/User/SignUpForm"
 
 import { z } from "zod"
 // import { SignInSchema, SignUpSchema } from "../types"
 import { generateId } from "lucia"
 import { db } from "~/server/db";
-import { hash } from "@node-rs/argon2";
+import { hash, verify } from "@node-rs/argon2";
 // import { userTable } from "@/lib/database/schema"
 import { lucia } from "~/lib/auth";
 // import { lucia, validateRequest } from "@/lib/lucia"
 import { cookies } from "next/headers"
+import { error } from "console";
+import { SignInSchema, SignUpSchema } from "~/types";
 // import { eq } from "drizzle-orm"
 // import * as argon2 from "argon2"
 
 export const signUp = async (values: z.infer<typeof SignUpSchema>) => {
-  console.log(values)
-
   const hashedPassword = await hash(values.password, {
     memoryCost: 19456,
 		timeCost: 2,
@@ -28,7 +27,7 @@ export const signUp = async (values: z.infer<typeof SignUpSchema>) => {
 
   try {
     await db.user.create({
-      data: {
+      data:{
         id: userId,
         username: values.username,
         email: values.email,
@@ -52,66 +51,70 @@ export const signUp = async (values: z.infer<typeof SignUpSchema>) => {
         userId,
       },
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     return {
-      error: error?.message,
+      error: "Le nom d'utilisateur est  déjà pris. Veuillez en choisir un autre ou connectez-vous.",
     }
   }
 }
 
-// export const signIn = async (values: z.infer<typeof SignInSchema>) => {
-//   try {
-//     SignInSchema.parse(values)
-//   } catch (error: any) {
-//     return {
-//       error: error.message,
-//     }
-//   }
-//
-//   const existingUser = await db.query.userTable.findFirst({
-//     where: (table) => eq(table.username, values.username),
-//   })
-//
-//   if (!existingUser) {
-//     return {
-//       error: "User not found",
-//     }
-//   }
-//
-//   if (!existingUser.hashedPassword) {
-//     return {
-//       error: "User not found",
-//     }
-//   }
-//
-//   const isValidPassword = await argon2.verify(
-//     existingUser.hashedPassword,
-//     values.password
-//   )
-//
-//   if (!isValidPassword) {
-//     return {
-//       error: "Incorrect username or password",
-//     }
-//   }
-//
-//   const session = await lucia.createSession(existingUser.id, {
-//     expiresIn: 60 * 60 * 24 * 30,
-//   })
-//
-//   const sessionCookie = lucia.createSessionCookie(session.id)
-//
-//   cookies().set(
-//     sessionCookie.name,
-//     sessionCookie.value,
-//     sessionCookie.attributes
-//   )
-//
-//   return {
-//     success: "Logged in successfully",
-//   }
-// }
-//
+export const signIn = async (values: z.infer<typeof SignInSchema>) => {
+  console.log(values)
+  try {
+    SignInSchema.parse(values)
+  } catch (error: any) {
+    return {
+      error: error.message,
+    }
+  }
+
+  const existingUser = await db.user.findFirst({
+      where: {
+        OR: [
+          { username: values.username },
+          { email: values.username },
+        ]
+      },
+  })
+
+  if (!existingUser) {
+    return {
+      error: "L'utilisateur n'existe pas, veuillez vous inscrire.",
+    }
+  }
+
+  if (!existingUser.hashedPassword) {
+    return {
+      error: "L'utilisateur n'existe pas, veuillez vous inscrire.",
+    }
+  }
+
+  const isValidPassword = await verify(
+    existingUser.hashedPassword,
+    values.password
+  )
+
+  if (!isValidPassword) {
+    return {
+      error: "Le nom d'utilisateur ou le mot de passe est incorrect",
+    }
+  }
+
+  const session = await lucia.createSession(existingUser.id, {})
+
+  const sessionCookie = lucia.createSessionCookie(session.id)
+
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  )
+
+  return {
+    success: "Vous êtes connecté.",
+  }
+}
+
 // export const signOut = async () => {
 //   try {
 //     const { session } = await validateRequest()

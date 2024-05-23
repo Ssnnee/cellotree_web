@@ -6,7 +6,6 @@ import { Button } from "~/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,24 +13,12 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { toast } from "~/components/ui/use-toast"
-import { useRouter } from "next/navigation"
+import { signIn } from "~/actions/auth.actions"
+import { SignInSchema } from "~/types"
 
-const SignInSchema = z.object({
-  username: z.string()
-   .min(2, {
-    message: "Le nom d'utilisateur doit contenir au moins 2 caractères.",
-  })
-  .max(20, {
-    message: "Le nom d'utilisateur doit contenir moins de 20 caractères.",
-  }),
-  password: z
-    .string()
-    .min(8, { message: "Le mode de passe doit avoir au moins 8 charactères" }),
-})
 
 
 export function SignInForm() {
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -42,20 +29,20 @@ export function SignInForm() {
   })
 
   async function onSubmit(values: z.infer<typeof SignInSchema>) {
-    // const res = await signIn(values)
-    // if (res.error) {
-    //   toast({
-    //     variant: "destructive",
-    //     description: res.error,
-    //   })
-    // } else if (res.success) {
-    //   toast({
-    //     variant: "default",
-    //     description: "Signed in successfully",
-    //   })
-    //
-    //   router.push("/")
-    // }
+    const res = await signIn(values)
+    if (res.error) {
+      toast({
+        variant: "destructive",
+        description: res.error,
+      })
+    } else if (res.success) {
+      toast({
+        variant: "default",
+        description: "Connecton réussie.",
+      })
+
+      form.reset()
+    }
 
   }
   return (
@@ -68,7 +55,7 @@ export function SignInForm() {
             <FormItem>
               <FormLabel></FormLabel>
               <FormControl>
-                <Input placeholder="Nom d'utilisateur" {...field} />
+                <Input placeholder="Nom d'utilisateur ou adresse électronique" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -15,26 +15,7 @@ import {
 import { Input } from "~/components/ui/input"
 import { toast } from "~/components/ui/use-toast"
 import { signUp } from "../../../actions/auth.actions"
-
-export const SignUpSchema = z.object({
-  username: z.string()
-  .min(2, {
-    message: "Le nom d'utilisateur doit contenir au moins 2 caractères.",
-  })
-  .max(20, {
-    message: "Le nom d'utilisateur doit contenir moins de 20 caractères.",
-  }),
-  email: z.string().email({ message: "L'email n'est pas valide" }),
-  password: z.string()
-  .min(8, { message: "Le mode de passe doit avoir au moins 8 charactères" }),
-  confirmPassword: z
-  .string()
-  .min(8, { message: "Le mode de passe doit avoir au moins 8 charactères" }),
-})
-.refine((data) => data.password === data.confirmPassword, {
-  message: "Le mot de passe ne correspond pas",
-  path: ["confirmPassword"],
-})
+import { SignUpSchema } from "~/types"
 
 
 export function SignUpForm() {
@@ -61,11 +42,9 @@ export function SignUpForm() {
         variant: "default",
         description: "Compter créer avec succès",
       })
-
-      // router.push("/")
+      form.reset()
     }
 
-      form.reset()
   }
   return (
     <Form {...form}>
