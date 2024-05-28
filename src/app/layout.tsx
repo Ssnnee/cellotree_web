@@ -4,9 +4,9 @@ import React from "react";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import NavigationMenu from "~/app/_components/NavigationMenu";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "~/components/ui/toaster"
+import { AuthProvider } from "./_components/auth-provider";
 
 
 const inter = Inter({
@@ -26,23 +26,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <AuthProvider>
       <html lang="fr">
-        <body className={`font-sans ${inter.variable} `}>
-        <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
+        <body className={`min-h-screen bg-background font-sans ${inter.variable} `}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
           <TRPCReactProvider>
-            <main className="flex min-h-screen flex-col items-center justify-center ">
-            <NavigationMenu />
-            {children}
+            <main className="relative flex min-h-screen flex-col bg-background">
+              {children}
             </main>
-            <Toaster />
           </TRPCReactProvider>
+          <Toaster />
           </ThemeProvider>
         </body>
       </html>
+    </AuthProvider>
   );
 }
