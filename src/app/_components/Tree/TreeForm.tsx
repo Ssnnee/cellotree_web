@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
 import { Button } from "~/components/ui/button"
 import {
   Form,
@@ -26,6 +25,7 @@ import {
 import { api } from "~/trpc/react"
 import { TreeRefetchHook } from "./TreeRefetchHook"
 import { toast } from "~/components/ui/use-toast"
+import { useUser } from "../auth-provider"
 
 
 const formSchema = z.object({
@@ -47,8 +47,7 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
     },
   })
 
-  // const { isSignedIn, user } = useUser()
-  const isSignedIn = true
+  const { isSignedIn, user } = useUser()
 
   const createTree = api.tree.create.useMutation()
 
@@ -56,12 +55,12 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    if (isSignedIn) {
+    if (isSignedIn && user) {
       createTree.mutate(
         {
           name: values.name,
           type: values.treeType,
-          externalId: "user_2esAQpNJJFUm0VXfV5NFvVjYcfM",
+          id: user.id,
         },
         {
           onSettled: () => {

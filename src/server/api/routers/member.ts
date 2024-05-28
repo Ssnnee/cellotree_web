@@ -27,6 +27,15 @@ export const memberRouter = createTRPCRouter({
       })
     }),
 
+  // getMemberFather: publicProcedure
+  //   .query(({ ctx, input }) => {
+  //     return ctx.db.relation.findFirst({
+  //       where: { id: input.id },
+  //       include: { father: true }
+  //     })
+  //   }),
+
+
   create: publicProcedure
     .input(memberSchema)
     .mutation(async ({ ctx, input }) => {

@@ -1,19 +1,12 @@
 "use server"
 
-
 import { z } from "zod"
-// import { SignInSchema, SignUpSchema } from "../types"
 import { generateId } from "lucia"
 import { db } from "~/server/db";
 import { hash, verify } from "@node-rs/argon2";
-// import { userTable } from "@/lib/database/schema"
 import { lucia, validateRequest } from "~/lib/auth";
-// import { lucia, validateRequest } from "@/lib/lucia"
 import { cookies } from "next/headers"
-import { error } from "console";
 import { SignInSchema, SignUpSchema } from "~/types";
-// import { eq } from "drizzle-orm"
-// import * as argon2 from "argon2"
 
 export const signUp = async (values: z.infer<typeof SignUpSchema>) => {
   const hashedPassword = await hash(values.password, {
@@ -139,5 +132,10 @@ export const signOut = async () => {
       error: error?.message,
     }
   }
+}
+
+export const useUser = async () => {
+  const { user } = await validateRequest()
+  return user
 }
 

@@ -54,7 +54,7 @@ export const formSchema = z.object({
     message: "Le lieu de naissance  doit contenir au moins 2 caractères.",
   }),
 
-  sex: z.enum(["male", "female"]),
+  sex: z.enum(["masculin", "feminin"]),
 
   description: z.string().min(7, {
     message: "La decription doit contenir au moins 7 caractères.",
@@ -69,7 +69,7 @@ interface MemberFormProps {
   member: {
     birthdate: Date | null;
     placeOfBirth: string | null;
-    sex: "male" | "female"  | null;
+    sex: "masculin" | "feminin"  | null;
     description: string | null;
     treeId: string;
     id: string;
@@ -88,7 +88,7 @@ export function UpdateMemberForm( props : MemberFormProps) {
       firstName: props.member.firstname ?? "",
       lastName: props.member.lastname,
       birthdate: props.member.birthdate as Date,
-      sex: props.member.sex ?? "male",
+      sex: props.member.sex ?? "masculin",
       placeOfBirth: props.member.placeOfBirth ?? "",
       description: props.member.description ?? "",
       treeId: props.treeId,
@@ -127,7 +127,6 @@ export function UpdateMemberForm( props : MemberFormProps) {
      }
    )
   }
-
 
 
   return (
@@ -238,8 +237,8 @@ export function UpdateMemberForm( props : MemberFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="male">Masculin</SelectItem>
-                    <SelectItem value="female">Feminin</SelectItem>
+                    <SelectItem value="masculin">Masculin</SelectItem>
+                    <SelectItem value="feminin">Feminin</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>

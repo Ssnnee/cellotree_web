@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover"
 
-export default function DatePicker() {
+export function DatePicker() {
   const [date, setDate] = React.useState<Date>()
 
   return (
@@ -27,7 +27,7 @@ export default function DatePicker() {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "EEE MMM dd yyyy") : <span>Pick a date</span>}
+          {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
@@ -35,7 +35,7 @@ export default function DatePicker() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          defaultMonth={new Date(2000, 1)}
+          defaultMonth={new Date(2002, 1)}
           initialFocus
         />
       </PopoverContent>

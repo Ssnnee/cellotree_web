@@ -21,6 +21,7 @@ import { api } from "~/trpc/react"
 import { toast } from "~/components/ui/use-toast"
 import { useState } from "react"
 import { MembrHook } from "./MemberHook"
+import { deleteFile, uploadFile } from "~/actions/file.actions"
 
 
 const MAX_FILE_SIZE = 5000000;
@@ -42,7 +43,7 @@ interface MemberFormProps {
   member: {
     birthdate: Date | null;
     placeOfBirth: string | null;
-    sex: "male" | "female"  | null;
+    sex: "masculin" | "feminin"  | null;
     description: string | null;
     treeId: string;
     id: string;
@@ -78,95 +79,72 @@ export function UpdateMemberAvatarForm( props : MemberFormProps) {
     }
     const formData = new FormData();
     formData.append("file", file);
+    formData.append('path', props.member.avatarURL ?? "");
+    const res = await deleteFile(formData)
 
-    try {
-      const response = await fetch(
-        `/api/upload?filename=${file.name}`,
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-      if (response.ok) {
-        console.log("File uploaded successfully");
-        console.log(response);
+    if(res.error) {
+      toast({
+        variant: "destructive",
+        description: "Une erreur s'est produite lors de la suppression du fichier.",
+      })
+    } else {
+      const res = await uploadFile(formData)
+      if(res.error) {
+        toast({
+          variant: "destructive",
+          description: "Une erreur s'est produite lors de l'envoi du fichier.",
+        })
       } else {
-        console.error("Failed to upload file:", response.statusText);
-        console.log(response);
+        updateMember.mutate(
+          {
+            id: props.member.id,
+            avatarURL: `/${file.name}`,
+          },
+          {
+            onSettled: () => {
+              form.reset(),
+              toast({
+                title: "L'avatar d'un membre a été mis à jour:",
+              }),
+              setHidden(true)
+              treeMember.refetch()
+              props.setDialogIsOpen(false)
+            }
+          }
+        )
       }
-    } catch (error) {
-      console.error("Error uploading file:", error);
+
     }
-
-    try {
-      formData.append('path', props.member.avatarURL ?? "");
-
-      const response = await fetch(
-        `/api/upload?filename=${file.name}`,
-      {
-        method: 'DELETE',
-        body: formData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Delection", data);
-      } else {
-        console.error('Failed to delete file:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error deleting file:', error);
-    }
-
-    updateMember.mutate(
-     {
-       id: props.member.id,
-       avatarURL: values.avatar,
-     },
-     {
-       onSettled: () => {
-         form.reset(),
-         toast({
-           title: "L'avatar d'un membre a été mis à jour:",
-         }),
-         setHidden(true)
-         treeMember.refetch()
-         props.setDialogIsOpen(false)
-       }
-     }
-   )
   }
-
-
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="" >
-          <FormField
-            control={form.control}
-            name="avatar"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Avatar</FormLabel>
-                <FormControl>
-                  <Input
-                    type="file"
-                    placeholder=""
-                    onChange={(e) => field.onChange(e.target.files)}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Vous pouvez renseigner ici une description bref de la personne.
-                  Comme son métier, et un petit fait historique si posible.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-            {/*  <Button variant={"outline"} onClick={() => form.reset()}>Annuler</Button> */}
-            <br/>
-            <Button type="submit">Soumettre</Button>
-          <h1 className={iShidden ? "" : "hidden"}>Membre ajouté</h1>
+        <FormField
+          control={form.control}
+          name="avatar"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Avatar</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  placeholder=""
+                  onChange={(e) => field.onChange(e.target.files)}
+                />
+              </FormControl>
+              <FormDescription>
+                Vous pouvez renseigner ici une description bref de la personne.
+                Comme son métier, et un petit fait historique si posible.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/*  <Button variant={"outline"} onClick={() => form.reset()}>Annuler</Button> */}
+        <br/>
+        <Button type="submit">Soumettre</Button>
+        <h1 className={iShidden ? "" : "hidden"}>Membre ajouté</h1>
       </form>
     </Form>
   )

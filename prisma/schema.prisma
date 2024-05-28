@@ -43,9 +43,9 @@ model Session {
 }
 
 enum AccessLevel {
-    admin
-    writer
-    reader
+    ADMIN
+    EDITOR
+    VIEWER
 }
 
 model UserAccess {
@@ -61,8 +61,8 @@ model UserAccess {
 
 
 enum TypeTree {
-    public
-    private
+    PUBLIC
+    PRIVATE
 }
 
 model Tree {
@@ -74,33 +74,29 @@ model Tree {
 }
 
 enum Sex {
-    masculin
-    feminin
+    M
+    F
 }
 
 model Member {
-    id   String @id @default(cuid())
-    firstname String ?
-    lastname  String
-    birthdate  DateTime ?
-    placeOfBirth String ?
-    sex Sex
-    avatarURL String ?
-    description String ?
+  id           String    @id @default(cuid())
+  firstname    String?
+  lastname     String
+  birthdate    DateTime?
+  placeOfBirth String?
+  sex          Sex
+  avatarURL    String?
+  description  String?
 
-    treeId String
-    tree Tree @relation(fields: [treeId], references: [id])
+  treeId String
+  tree   Tree @relation(fields: [treeId], references: [id])
 
-    relation Relation ?
-}
-
-
-model Relation {
-    fatherId String ?
-    motherId String ?
-    spouses String[]
-    children String[]
-
-    memberId String @unique
-    member Member @relation(fields: [memberId], references: [id])
+  father   Member?  @relation(name: "FatherChild", fields: [fatherId], references: [id])
+  fatherId String?
+  mother   Member?  @relation(name: "MotherChild", fields: [motherId], references: [id])
+  motherId String?
+  fatherChildren Member[] @relation(name: "FatherChild")
+  motherChildren Member[] @relation(name: "MotherChild")
+  spouses  Member[] @relation(name: "Spouses")
+  spouseOf Member[] @relation(name: "Spouses")
 }

@@ -39,6 +39,7 @@ import {
   SelectValue
 } from "~/components/ui/select"
 import { MembrHook } from "./MemberHook"
+import { uploadFile } from "~/actions/file.actions"
 
 
 const MAX_FILE_SIZE = 5000000;
@@ -56,16 +57,22 @@ export const formSchema = z.object({
     message: "Le lieu de naissance  doit contenir au moins 2 caractères.",
   }),
 
-  sex: z.enum(["male", "female"]),
-
-  avatar: z.any()
-    .refine((file) => file[0]?.size <= MAX_FILE_SIZE,
-      { message: `Le fichier doit faire moins de 5 Mo.` }
-    )
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file[0]?.type),
-      { message: "Le fichier doit être de type image." },
-    ),
+  sex: z.enum(["masculin", "feminin"]),
+  avatar: z
+  .any()
+  .nullable()
+  .refine
+  ((file) => file !== null,
+   { message: "Vous devez selectionner un fichier" }
+  )
+  .refine(
+    (file) => file === null || file[0]?.size <= MAX_FILE_SIZE,
+      { message: "Le fichier doit faire moins de 5 Mo." }
+  )
+  .refine(
+    (file) => file === null || ACCEPTED_IMAGE_TYPES.includes(file[0]?.type),
+      { message: "Le fichier doit être de type image." }
+  ),
   description: z.string().min(7, {
     message: "La decription doit contenir au moins 7 caractères.",
   }).max(80, {
@@ -87,7 +94,8 @@ export function MemberForm({ treeId }: MemberFormProps) {
       lastName: "",
       description: "",
       placeOfBirth: "",
-      treeId: treeId
+      avatar: null,
+      treeId: treeId,
     },
   })
 
@@ -107,23 +115,12 @@ export function MemberForm({ treeId }: MemberFormProps) {
     const formData = new FormData();
     formData.append("file", file);
 
-    try {
-      const response = await fetch(
-        `/api/upload?filename=${file.name}`,
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-      if (response.ok) {
-        console.log("File uploaded successfully");
-        console.log(response);
-      } else {
-        console.error("Failed to upload file:", response.statusText);
-        console.log(response);
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
+    const res = await uploadFile(formData)
+    if(res.error) {
+      toast({
+        variant: "destructive",
+        description: "Une erreur s'est produite lors de l'envoi du fichier.",
+      })
     }
 
     createMember.mutate(
@@ -151,8 +148,6 @@ export function MemberForm({ treeId }: MemberFormProps) {
    )
     console.log("Form Values:", values);
   }
-
-
 
   return (
     <Form {...form}>
@@ -262,8 +257,8 @@ export function MemberForm({ treeId }: MemberFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="male">Masculin</SelectItem>
-                    <SelectItem value="female">Feminin</SelectItem>
+                    <SelectItem value="masculin">Masculin</SelectItem>
+                    <SelectItem value="feminin">Feminin</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
@@ -316,7 +311,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
               </FormItem>
             )}
           />
-            <Button type="submit">Soumettre</Button>
+          <Button type="submit">Soumettre</Button>
       </form>
     </Form>
   )
