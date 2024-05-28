@@ -75,4 +75,3 @@ interface DatabaseUserAttributes {
 	username: string;
 }
 
-

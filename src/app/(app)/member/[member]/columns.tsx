@@ -57,6 +57,7 @@ import { format } from "date-fns";
 import Image from "next/image";
 import { UpdateMemberForm } from "~/app/_components/Member/UpdateMemberForm";
 import { UpdateMemberAvatarForm } from "~/app/_components/Member/UpdateMemberAvatarForm";
+import { deleteFile } from "~/actions/file.actions";
 
 
 
@@ -65,7 +66,7 @@ const memberSchema = z.object({
   firstname: z.string().nullable(),
   lastname: z.string(),
   birthdate: z.date().nullable(),
-  sex: z.enum(["male", "female"]).nullable(),
+  sex: z.enum(["masculin", "feminin"]).nullable(),
   placeOfBirth: z.string().nullable(),
   avatarURL: z.string().nullable(),
   description: z.string().nullable(),
@@ -120,7 +121,11 @@ export const columns: ColumnDef<Member>[] = [
   },
   {
     accessorKey: "placeOfBirth",
-    header: () => <div className="md:w-[200px]">Lieu de naissance</div>,
+    header: () => <div className="md:w-[180px]">Lieu de naissance</div>,
+    cell: ({ row }) => {
+      const placeOfBirth = row.getValue("placeOfBirth") as string
+      return <div className="text-left">{placeOfBirth}</div>
+    }
   },
   {
     accessorKey: "avatarURL",
@@ -168,12 +173,23 @@ export const columns: ColumnDef<Member>[] = [
       const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
       const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
       const [relationDialogIsOpen, setRelationDialogIsOpen] = useState(false)
+      const [parentDialogIsOpen, setParentDialogIsOpen] = useState(false)
 
       const deleteMember = api.member.delete.useMutation()
 
       const { treeMember } = MembrHook(member.treeId)
 
+      console.log("File path", member.avatarURL)
+
       const handleDelete = async () => {
+        const form = new FormData()
+        form.append("path", member.avatarURL ?? "")
+        const res = await deleteFile(form)
+        if (res.error) {
+          toast({
+            title: "Une erreur s'est produite lors de la suppression de l'avatar",
+          })
+        }
         deleteMember.mutate(
           { id: member.id },
           {
@@ -217,7 +233,7 @@ export const columns: ColumnDef<Member>[] = [
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <AvatarIcon className="mr-2 h-3.5 w-3.5" />
-                <span onClick={() => setEditAvatarDialogIsOpen(true)}>Modifier l&apos;avatar </span>
+                <span onClick={() => setEditAvatarDialogIsOpen(true)}>Changer l&apos;avatar </span>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
@@ -231,12 +247,12 @@ export const columns: ColumnDef<Member>[] = [
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
+          <AlertDialog open={alertDialogIsOpen}>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Etes-vous sûr de vouloir supprimer cet membre? </AlertDialogTitle>
                 <AlertDialogDescription>
-                  Cette action ne pourra pas etre annulé
+                  Cette action ne pourra pas être annulé
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -245,7 +261,7 @@ export const columns: ColumnDef<Member>[] = [
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Dialog open={relationDialogIsOpen} onOpenChange={setRelationDialogIsOpen}>
+          <Dialog>
             <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>Ajout d&apos;un d'un parent pour {member.firstname + " " + member.lastname}</DialogTitle>

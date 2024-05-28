@@ -96,8 +96,6 @@ export function DataTable<TData, TValue>({
     },
   })
 
-
-
   return (
     <div>
       <div className="flex items-center py-4">
@@ -111,10 +109,11 @@ export function DataTable<TData, TValue>({
             className="max-w-sm"
           />
           <Select onValueChange={setSelectedFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="">
               <SelectValue
-                placeholder="Selectionner un filtre"
+                placeholder="Filtres"
                 defaultValue={selectedFilter}
+                className="hidden md:block"
               />
             </SelectTrigger>
             <SelectContent>
@@ -132,7 +131,7 @@ export function DataTable<TData, TValue>({
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto flex justify-center items-center gap-3">
               <MixerHorizontalIcon />
-              <span> Masquer certaines colonnes </span>
+              <span className="hidden md:block "> Masquer colonnes </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -195,7 +194,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Aucun resultat trouvé.
+                  Aucun membre trouvé.
                 </TableCell>
               </TableRow>
             )}
