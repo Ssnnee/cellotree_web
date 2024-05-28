@@ -47,7 +47,7 @@ export default class TreeViewExample extends Component {
         card_dim: { w: 220, h: 70, text_x: 75, text_y: 15, img_w: 60, img_h: 60, img_x: 5, img_y: 5 },
         card_display: [
           (d: Data) => `${d.data['first name'] || ''} ${d.data['last name'] || ''}`,
-            (d: Data) => `${d.data['birthday'] || ''}`
+          (d: Data) => `${d.data['birthday'] || ''}`
         ],
         mini_tree: true,
         link_break: true
