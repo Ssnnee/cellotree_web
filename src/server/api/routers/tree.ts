@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const treeSchema = z.object({
-  externalId: z.string(),
+  id: z.string(),
   name: z.string(),
   type: z.enum(["public", "private"]),
 })
@@ -38,7 +38,7 @@ export const treeRouter = createTRPCRouter({
         userAccess: {
           create: {
             level: "admin",
-            userId: input.externalId,
+            userId: input.id,
           }
         }
       },
@@ -73,6 +73,19 @@ export const treeRouter = createTRPCRouter({
     })
 
     return { success: true, message: "Tree and associated data deleted successfully" };
+  }),
+
+  getAdminOrWriter: publicProcedure
+  .input(idSchema)
+  .query(({ ctx, input }) => {
+    return ctx.db.userAccess.findMany({
+      where: {
+        treeId: input.id,
+        level: {
+          in: ["admin", "writer"]
+        }
+      }
+    })
   }),
 
 
