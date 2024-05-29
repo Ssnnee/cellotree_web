@@ -22,7 +22,7 @@ export default async function Home() {
         <PageHeaderDescription>
           Une plateforme intuitive pour créer, collaborer et partager vos arbres
           généalogiques. Explorez vos racines familiales et connectez-vous avec
-          vos proches, où qu'ils soient dans le monde.
+          vos proches, où qu&apos;ils soient dans le monde.
         </PageHeaderDescription>
         <PageActions>
           <Button>
@@ -33,11 +33,11 @@ export default async function Home() {
       </PageHeader>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Visualisation d'un arbre généalogique </CardTitle>
+          <CardTitle className="text-2xl">Visualisation d&apos;un arbre généalogique </CardTitle>
         </CardHeader>
         <CardContent className="text-center">
           <PageHeaderDescription>
-            Nous vous conseillons d'activer le mode sombre pour une meilleure expérience.
+            Nous vous conseillons d&apos;activer le mode sombre pour une meilleure expérience.
           </PageHeaderDescription>
           <TreeViewExample />
         </CardContent>

@@ -5,13 +5,13 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 const treeSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.enum(["public", "private"]),
+  type: z.enum(["PUBLIC", "PRIVATE"]),
 })
 
 const updateTreeSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.enum(["public", "private"]),
+  type: z.enum(["PUBLIC", "PRIVATE"]),
 })
 
 const idSchema = z.object({ id: z.string() });
@@ -37,7 +37,7 @@ export const treeRouter = createTRPCRouter({
         type: input.type,
         userAccess: {
           create: {
-            level: "admin",
+            level: "ADMIN",
             userId: input.id,
           }
         }
@@ -82,7 +82,7 @@ export const treeRouter = createTRPCRouter({
       where: {
         treeId: input.id,
         level: {
-          in: ["admin", "writer"]
+          in: ["ADMIN", "EDITOR"]
         }
       }
     })

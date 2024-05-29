@@ -27,7 +27,8 @@ import {
 
 export default function  TreePage( { params }: { params: { tree: string } } ) {
   const { treeMember } = MembrHook(params.tree)
-  const member = treeMember.data?.member
+  const member = treeMember.data
+
 
   const getTree = api.tree.getById.useQuery({ id: params.tree })
   const treeName = getTree.data?.name

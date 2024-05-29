@@ -31,7 +31,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Le nom de l'arbre doit contenir au moins 2 caractères.",
   }),
-  treeType: z.enum(["public", "private"]),
+  treeType: z.enum(["PUBLIC", "PRIVATE"]),
 })
 
 interface UpdateTreeFormProps extends TreeActionsProps {
@@ -71,7 +71,6 @@ export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps)
                 values.name + " de type " + values.treeType,
             }),
             form.reset(),
-            handleRefetch(),
             setDialogIsOpen(false)
             }
         }
@@ -113,12 +112,12 @@ export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps)
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="public">Public</SelectItem>
-                    <SelectItem value="private">Prive</SelectItem>
+                    <SelectItem value="PUBLIC">Public</SelectItem>
+                    <SelectItem value="PRIVATE">Prive</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Vous pouvez choisir de laisser votre arbre être public ou privé. Vous pourrez le modifier plus tard.
+                  Vous pouvez choisir de laisser votre arbre être PUBLIC ou privé. Vous pourrez le modifier plus tard.
                 </FormDescription>
               <FormMessage />
             </FormItem>

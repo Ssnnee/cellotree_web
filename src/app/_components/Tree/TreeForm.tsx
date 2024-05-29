@@ -32,7 +32,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Le nom de l&apos;arbre doit contenir au moins 2 caractères.",
   }),
-  treeType: z.enum(["public", "private"]),
+  treeType: z.enum(["PUBLIC", "PRIVATE"]),
 })
 
 interface TreeFormProps {
@@ -51,8 +51,6 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
 
   const createTree = api.tree.create.useMutation()
 
-  const { handleRefetch } = TreeRefetchHook()
-
   function onSubmit(values: z.infer<typeof formSchema>) {
 
     if (isSignedIn && user) {
@@ -70,7 +68,6 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
                 values.name + " de type " + values.treeType,
             }),
             form.reset(),
-            handleRefetch()
             setDialogIsOpen(false)
           }
         }
@@ -110,12 +107,12 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="public">Public</SelectItem>
-                  <SelectItem value="private">Privé</SelectItem>
+                  <SelectItem value="PUBLIC">Public</SelectItem>
+                  <SelectItem value="PRIVATE">Privé</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
-                Vous pouvez choisir de laisser votre arbre être public ou privé. Vous pourrez le modifier plus tard.
+                Vous pouvez choisir de laisser votre arbre être PUBLIC ou privé. Vous pourrez le modifier plus tard.
               </FormDescription>
               <FormMessage />
             </FormItem>

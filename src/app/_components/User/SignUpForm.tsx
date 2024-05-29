@@ -16,9 +16,11 @@ import { Input } from "~/components/ui/input"
 import { toast } from "~/components/ui/use-toast"
 import { signUp } from "../../../actions/auth.actions"
 import { SignUpSchema } from "~/types"
+import { useRouter } from "next/navigation"
 
 
 export function SignUpForm() {
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -43,6 +45,7 @@ export function SignUpForm() {
         description: "Compter créer avec succès",
       })
       form.reset()
+      router.push("/")
     }
 
   }
@@ -56,7 +59,7 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel></FormLabel>
               <FormControl>
-                <Input placeholder="Nom d'utilisateur" {...field} />
+                <Input placeholder="Nom d&apos;utilisateur" {...field} />
               </FormControl>
               <FormDescription>
                 Ceci sera le nom avec lequel vous vous connecterez.

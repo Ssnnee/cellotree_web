@@ -1,7 +1,7 @@
 "use client"
 
 import {
-    AvatarIcon,
+  AvatarIcon,
   CaretSortIcon,
   DotsHorizontalIcon,
   EyeOpenIcon,
@@ -50,28 +50,32 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import { MembrHook } from "~/app/_components/Member/MemberHook";
 
-import { FatherForm } from "~/app/_components/Member/FatherForm"
-import { MotherForm } from "~/app/_components/Member/MotherForm"
 import { toast } from "~/components/ui/use-toast";
 import { format } from "date-fns";
 import Image from "next/image";
 import { UpdateMemberForm } from "~/app/_components/Member/UpdateMemberForm";
 import { UpdateMemberAvatarForm } from "~/app/_components/Member/UpdateMemberAvatarForm";
 import { deleteFile } from "~/actions/file.actions";
-import { ParentForm } from "~/app/_components/Member/RelationForm";
 
 
 
-const memberSchema = z.object({
+const member = z.object({
   id: z.string(),
   firstname: z.string().nullable(),
   lastname: z.string(),
   birthdate: z.date().nullable(),
-  sex: z.enum(["masculin", "feminin"]).nullable(),
+  sex: z.enum(["M", "F"]).nullable(),
   placeOfBirth: z.string().nullable(),
   avatarURL: z.string().nullable(),
   description: z.string().nullable(),
   treeId: z.string(),
+  fatherId: z.string().nullable(),
+  motherId: z.string().nullable(),
+})
+
+const memberSchema = member.extend({
+  father: member.nullable(),
+  mother: member.nullable(),
 })
 
 export type Member = z.infer<typeof memberSchema>;
@@ -82,15 +86,19 @@ export const columns: ColumnDef<Member>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="px-3"
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nom
-          <CaretSortIcon className="ml-2 h-4 w-4" />
+        Nom
+        <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
+
+    cell: ({ row }) => {
+      const lastname = row.getValue("lastname") as string
+      return <div className="text-left ml-4">{lastname}</div>
+    }
   },
   {
     accessorKey: "firstname",
@@ -99,7 +107,6 @@ export const columns: ColumnDef<Member>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="mx-3"
         >
           Prénom
           <CaretSortIcon className="ml-2 h-4 w-4" />
@@ -108,7 +115,7 @@ export const columns: ColumnDef<Member>[] = [
     },
     cell: ({ row }) => {
       const firstname = row.getValue("firstname") as string
-      return <div className="">{firstname}</div>
+      return <div className="text-left ml-4">{firstname}</div>
     }
   },
   {
@@ -122,7 +129,7 @@ export const columns: ColumnDef<Member>[] = [
   },
   {
     accessorKey: "sex",
-    header: () => <div className="text-center md:w-[200px]">Genre</div>,
+    header: () => <div className="text-center md:w-max ">Genre</div>,
   },
   {
     accessorKey: "placeOfBirth",
@@ -165,39 +172,32 @@ export const columns: ColumnDef<Member>[] = [
     }
   },
   {
-    accessorKey: "pere",
+    accessorKey: "father",
     header: () => <div className="text-center md:w-[200px]">Père</div>,
     cell: ({ row }) => {
       const member = row.original
 
-      const getMember = api.member.getById.useQuery({ id: member.id });
-      const memberWithRelation = getMember.data;
-      const fatherRelation = memberWithRelation?.relation?.find((relation) => relation.type === "pere");
-      const getFather = api.member.getById.useQuery({ id: fatherRelation?.parentId ?? "" });
-      const father = getFather.data;
-
       return (
         <div className="text-center">
-          {father ? father.lastname + " " + father.firstname : "Non renseigné"}
+          {
+            member.father ? member.father.lastname + " " +
+            member.father.firstname ?? "" :  "Non renseigné"
+          }
         </div>
       )
     }
   },
   {
-    accessorKey: "mere",
+    accessorKey: "mother",
     header: () => <div className="text-center md:w-[200px]">Mère</div>,
     cell: ({ row }) => {
       const member = row.original
 
-      const getMember = api.member.getById.useQuery({ id: member.id });
-      const memberWithRelation = getMember.data;
-      const motherRelation = memberWithRelation?.relation?.find((relation) => relation.type === "mere");
-      const getMother = api.member.getById.useQuery({ id: motherRelation?.parentId ?? "" });
-      const mother = getMother.data;
-
       return (
         <div className="text-center">
-          {mother ? mother.lastname + " " + mother.firstname : "Non renseigné"}
+          { member.mother ? member.mother.lastname + " " +
+            member.mother.firstname ?? "" : "Non renseigné"
+          }
         </div>
       )
     }
@@ -219,19 +219,16 @@ export const columns: ColumnDef<Member>[] = [
       const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
       const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
       const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
-      const [parentDialogIsOpen, setParentDialogIsOpen] = useState(false)
 
       const deleteMember = api.member.delete.useMutation()
 
       const { treeMember } = MembrHook(member.treeId)
 
-      console.log("File path", member.avatarURL)
-
       const handleDelete = async () => {
         const form = new FormData()
         form.append("path", member.avatarURL ?? "")
         const res = await deleteFile(form)
-        if (res.error) {
+        if (!res.success) {
           toast({
             title: "Une erreur s'est produite lors de la suppression de l'avatar",
           })
@@ -267,10 +264,6 @@ export const columns: ColumnDef<Member>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(member.id)}>
-                <Link1Icon className="mr-2 h-3.5 w-3.5" />
-                <p className="text-sm" onClick={() => setParentDialogIsOpen(true)}>Ajouter ou voir les parents</p>
-              </DropdownMenuItem>
               <DropdownMenuItem>
                 <EyeOpenIcon className="mr-2 h-3.5 w-3.5" />
                 <p className="text-sm">Visualiser l&apos;arbre</p>
@@ -307,17 +300,6 @@ export const columns: ColumnDef<Member>[] = [
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Dialog open={parentDialogIsOpen} onOpenChange={setParentDialogIsOpen}>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Ajout d&apos;un d&apos;un parent pour {member.firstname + " " + member.lastname}</DialogTitle>
-                <DialogDescription>
-                  Remplissez les champ ci-dessous pour ajouter un père, une mère ou des enfants
-                </DialogDescription>
-              </DialogHeader>
-              <ParentForm memberId={member.id} treeId={member.treeId} />
-            </DialogContent>
-          </Dialog>
           <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
             <DialogContent className="sm:max-w-2xl">
               <DialogHeader>

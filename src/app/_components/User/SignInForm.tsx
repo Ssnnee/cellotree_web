@@ -49,8 +49,8 @@ export function SignInForm() {
       setIsSignedIn(true)
       router.push("/")
     }
-
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -61,7 +61,7 @@ export function SignInForm() {
             <FormItem>
               <FormLabel></FormLabel>
               <FormControl>
-                <Input placeholder="Nom d'utilisateur ou adresse électronique" {...field} />
+                <Input placeholder="Nom d&apos;utilisateur ou adresse électronique" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

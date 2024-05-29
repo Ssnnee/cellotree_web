@@ -41,15 +41,17 @@ export const formSchema = z.object({
 interface MemberFormProps {
   treeId: string,
   member: {
-    birthdate: Date | null;
-    placeOfBirth: string | null;
-    sex: "masculin" | "feminin"  | null;
-    description: string | null;
     treeId: string;
     id: string;
     firstname: string | null;
     lastname: string;
+    birthdate: Date | null;
+    placeOfBirth: string | null;
+    sex: "M" | "F" | null;
     avatarURL: string | null;
+    description: string | null;
+    fatherId: string | null;
+    motherId: string | null;
   }
   setDialogIsOpen: (isOpen: boolean) => void
 }
@@ -82,14 +84,14 @@ export function UpdateMemberAvatarForm( props : MemberFormProps) {
     formData.append('path', props.member.avatarURL ?? "");
     const res = await deleteFile(formData)
 
-    if(res.error) {
+    if(!res.success) {
       toast({
         variant: "destructive",
         description: "Une erreur s'est produite lors de la suppression du fichier.",
       })
     } else {
       const res = await uploadFile(formData)
-      if(res.error) {
+      if(!res.success) {
         toast({
           variant: "destructive",
           description: "Une erreur s'est produite lors de l'envoi du fichier.",

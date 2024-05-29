@@ -44,6 +44,7 @@ import {
   TableRow,
 } from "~/components/ui/table"
 import { ArrowLeftIcon, ArrowRightIcon, MixerHorizontalIcon } from "@radix-ui/react-icons"
+import { DataTablePagination } from "./data-table-pagination"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -74,6 +75,8 @@ export function DataTable<TData, TValue>({
       avatarURL: "image",
       description: "description",
       treeId: "identifiant de l'arbre",
+      father: "père",
+      mother: "mère",
     };
 
     return translations[property] || property;
@@ -123,6 +126,8 @@ export function DataTable<TData, TValue>({
                 <SelectItem value="firstname">Prénom</SelectItem>
                 <SelectItem value="placeOfBirth">Lieu de naissance</SelectItem>
                 <SelectItem value="description">Description</SelectItem>
+                <SelectItem value="father">Père</SelectItem>
+                <SelectItem value="mother">Mère</SelectItem>
               </SelectGroup>
             </SelectContent>
         </Select>
@@ -201,24 +206,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
-      >
-        <ArrowLeftIcon />
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
-      >
-        <ArrowRightIcon />
-      </Button>
-      </div>
+      <DataTablePagination table={table} />
     </div>
   )
 }

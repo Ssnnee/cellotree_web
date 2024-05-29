@@ -57,7 +57,7 @@ export const formSchema = z.object({
     message: "Le lieu de naissance  doit contenir au moins 2 caractères.",
   }),
 
-  sex: z.enum(["masculin", "feminin"]),
+  sex: z.enum(["M", "F"]),
   avatar: z
   .any()
   .nullable()
@@ -78,7 +78,7 @@ export const formSchema = z.object({
   }).max(80, {
     message: "Votre description est trop elle ne doit pas dépasser 80 caractères."
   }),
-  treeId: z.string()
+  treeId: z.string(),
 })
 
 interface MemberFormProps {
@@ -116,7 +116,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
     formData.append("file", file);
 
     const res = await uploadFile(formData)
-    if(res.error) {
+    if(res.success) {
       toast({
         variant: "destructive",
         description: "Une erreur s'est produite lors de l'envoi du fichier.",
@@ -257,13 +257,13 @@ export function MemberForm({ treeId }: MemberFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="masculin">Masculin</SelectItem>
-                    <SelectItem value="feminin">Feminin</SelectItem>
+                    <SelectItem value="M">Masculin</SelectItem>
+                    <SelectItem value="F">Feminin</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Nous ne concevons pas qu'il est d'autres sex ni genre c'est de la bêtises
-                  et nous ne l'encourageons pas.
+                  Nous ne concevons pas qu&apos;il est d&apos;autres sex ni genre c&apos;est de la bêtises
+                  et nous ne l&apos;encourageons pas.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

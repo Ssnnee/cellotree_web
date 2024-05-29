@@ -46,7 +46,7 @@ export interface TreeActionsProps {
   treeInfo: {
     treeId: string
     treeName: string
-    treeType: "private" | "public"
+    treeType: "PRIVATE" | "PUBLIC"
   },
 }
 export default function TreeActions({ treeInfo }: TreeActionsProps) {
@@ -58,7 +58,7 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
   const us = "admin"
   const isAdmin = us === "admin";
 
-  const{ handleRefetch } = TreeRefetchHook()
+  // const{ handleRefetch } = TreeRefetchHook()
 
   const deleteTree = api.tree.delete.useMutation()
 
@@ -72,7 +72,6 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
           toast({
             title: "L'arbre a été supprimé",
           })
-          handleRefetch()
         }
       }
     )
@@ -155,7 +154,7 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
         <Dialog open={dialogIsOpen1} onOpenChange={setDialogIsOpen1}>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle>Partage de l'arbre {treeInfo.treeName } </DialogTitle>
+              <DialogTitle>Partage de l&apos;arbre {treeInfo.treeName } </DialogTitle>
               <DialogDescription>
                 Vous pouvez copiez puis partager le lien dans une plateforme de votre choix
               </DialogDescription>

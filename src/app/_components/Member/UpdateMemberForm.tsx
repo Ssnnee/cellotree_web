@@ -23,6 +23,16 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover"
 
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "~/components/ui/command"
+
 import { Input } from "~/components/ui/input"
 
 import { api } from "~/trpc/react"
@@ -54,14 +64,16 @@ export const formSchema = z.object({
     message: "Le lieu de naissance  doit contenir au moins 2 caractères.",
   }),
 
-  sex: z.enum(["masculin", "feminin"]),
+  sex: z.enum(["M", "F"]),
 
   description: z.string().min(7, {
     message: "La decription doit contenir au moins 7 caractères.",
   }).max(80, {
     message: "Votre description est trop elle ne doit pas dépasser 80 caractères."
   }),
-  treeId: z.string()
+  treeId: z.string(),
+  fatherId: z.string().optional(),
+  motherId: z.string().optional(),
 })
 
 interface MemberFormProps {
@@ -69,18 +81,46 @@ interface MemberFormProps {
   member: {
     birthdate: Date | null;
     placeOfBirth: string | null;
-    sex: "masculin" | "feminin"  | null;
+    sex: "M" | "F"  | null;
     description: string | null;
     treeId: string;
     id: string;
     firstname: string | null;
     lastname: string;
     avatarURL: string | null;
+    fatherId: string | null;
+    motherId: string | null;
   }
   setDialogIsOpen: (isOpen: boolean) => void
 }
 
 export function UpdateMemberForm( props : MemberFormProps) {
+  const [motherPopIsopen, setmotherPopIsopen] = useState(false)
+  const [fatherPopIsopen, setFatherPopIsopen] = useState(false)
+
+  const { treeMember } = MembrHook(props.treeId)
+  const  [iShidden, setHidden] = useState(false)
+
+  const femaleMemberOfTree =  api.member.getFemaleMembersByTreeId.useQuery({id: props.treeId});
+  const femaleMember = femaleMemberOfTree.data?.member
+  const maleMemberOfTree =  api.member.getMaleMembersByTreeId.useQuery({id: props.treeId});
+  const maleMember = maleMemberOfTree.data?.member
+
+  const getMember = api.member.getById.useQuery( {id : props.member.id });
+  const member = getMember.data
+
+  const mother = member?.mother
+  const father = member?.father
+
+  const currentYear = new Date().getFullYear();
+  const memberBirthYear = member?.birthdate ? new Date(member.birthdate).getFullYear() : currentYear;
+
+  const filteredFemaleMembers = femaleMember?.filter(
+    (m) => m.id !== props.member.id && new Date(m.birthdate ?? '').getFullYear() <= memberBirthYear - 10
+  );
+  const filteredMaleMembers = maleMember?.filter(
+    (m) => m.id !== props.member.id && new Date(m.birthdate ?? '').getFullYear() <= memberBirthYear - 10
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,18 +128,14 @@ export function UpdateMemberForm( props : MemberFormProps) {
       firstName: props.member.firstname ?? "",
       lastName: props.member.lastname,
       birthdate: props.member.birthdate as Date,
-      sex: props.member.sex ?? "masculin",
+      sex: props.member.sex ?? "M",
       placeOfBirth: props.member.placeOfBirth ?? "",
       description: props.member.description ?? "",
       treeId: props.treeId,
     },
   })
 
-
   const updateMember = api.member.update.useMutation()
-  const { treeMember } = MembrHook(props.treeId)
-  const  [iShidden, setHidden] = useState(false)
-
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
 
@@ -113,6 +149,8 @@ export function UpdateMemberForm( props : MemberFormProps) {
        placeOfBirth: values.placeOfBirth,
        lastname: values.lastName,
        firstname: values.firstName,
+       fatherId: values.fatherId,
+       motherId: values.motherId,
      },
      {
        onSettled: () => {
@@ -126,8 +164,8 @@ export function UpdateMemberForm( props : MemberFormProps) {
        }
      }
    )
+  console.log("values", values)
   }
-
 
   return (
     <Form {...form}>
@@ -237,13 +275,13 @@ export function UpdateMemberForm( props : MemberFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="masculin">Masculin</SelectItem>
-                    <SelectItem value="feminin">Feminin</SelectItem>
+                    <SelectItem value="M">Masculin</SelectItem>
+                    <SelectItem value="F">Feminin</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Nous ne concevons pas qu'il est d'autres sex ni genre c'est de la bêtises
-                  et nous ne l'encourageons pas.
+                  Nous ne concevons pas qu&apos;il est d&apos;autres sex ni genre c&apos;est de la bêtises
+                  et nous ne l&apos;encourageons pas.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -270,9 +308,139 @@ export function UpdateMemberForm( props : MemberFormProps) {
               </FormItem>
             )}
           />
-            {/*  <Button variant={"outline"} onClick={() => form.reset()}>Annuler</Button> */}
-            <Button type="submit">Soumettre</Button>
-          <h1 className={iShidden ? "" : "hidden"}>Membre ajouté</h1>
+        <FormField
+          control={form.control}
+          name="motherId"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Mère</FormLabel>
+              <Popover open={motherPopIsopen} onOpenChange={setmotherPopIsopen}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {mother && !field.value
+                        ? mother?.lastname + " " + mother?.firstname
+                        : field.value
+                        ? filteredFemaleMembers?.find((m) => m.id === field.value)?.lastname
+                        : "Selectionner la mère"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandInput placeholder="Recherche d&apos;une mère..." />
+                      <CommandEmpty>
+                        Aucun membre susceptible d&apos;être une mère trouvé.
+                        Veuillez en ajouter un d&apos;abord.
+                      </CommandEmpty>
+                      <CommandGroup>
+                        {filteredFemaleMembers?.map((member) => (
+                          <CommandItem
+                            value={member.id}
+                            key={member.id}
+                            onSelect={() => {
+                              form.setValue("motherId", member.id);
+                              setmotherPopIsopen(false);
+                            }}
+                          >
+                            <CheckIcon
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                member.id === field.value ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            {member.lastname + " " + member.firstname}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Le membre sélectionné sera la mère de ce membre. Après avoir
+                appuyé sur soumettre.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="fatherId"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Père</FormLabel>
+              <Popover open={fatherPopIsopen} onOpenChange={setFatherPopIsopen}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {father && !field.value
+                        ? father?.lastname + " " + father?.firstname
+                        : field.value
+                        ? filteredMaleMembers?.find((m) => m.id === field.value)?.lastname
+                        : "Selectionner le père"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandInput placeholder="Recherche d&apos;un père..." />
+                      <CommandEmpty>
+                        Aucun membre susceptible d&apos;être un père trouvé.
+                        Veuillez en ajouter un d&apos;abord.
+                      </CommandEmpty>
+                      <CommandGroup>
+                        {filteredMaleMembers?.map((member) => (
+                          <CommandItem
+                            value={member.id}
+                            key={member.id}
+                            onSelect={() => {
+                              form.setValue("fatherId", member.id);
+                              setFatherPopIsopen(false);
+                            }}
+                          >
+                            <CheckIcon
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                member.id === field.value ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                            {member.lastname + " " + member.firstname}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Le membre sélectionné sera le père de ce membre. Après avoir
+                appuyé sur soumettre.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Soumettre</Button>
       </form>
     </Form>
   )
