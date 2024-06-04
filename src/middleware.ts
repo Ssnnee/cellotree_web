@@ -3,16 +3,12 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const authSession = request.cookies.get('auth_session')
-  if (!authSession && /(\/access|\/trpc)/.test(request.url)) {
+  const isAuthorised = request.cookies.get('isAuthorisedTo')
+
+  if (!authSession && /(\/access|\/trpc|\/tree)/.test(request.url) && !isAuthorised) {
+    console.log('Redirecting to /access')
     return NextResponse.redirect(new URL('/', request.url))
   }
-  //
-  // const siteUrl = process.env.NEXT_PUBLIC_APP_URL
-  //
-  // if (user?.value && request.url === `${siteUrl}/login`) {
-  //   return NextResponse.redirect(new URL('/admin', request.url))
-  // }
-
 }
 
 export const config = {

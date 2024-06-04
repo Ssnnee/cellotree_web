@@ -7,7 +7,8 @@ import {
   EyeOpenIcon,
   Link1Icon,
   Pencil1Icon,
-  TrashIcon
+  TrashIcon,
+  UploadIcon
 } from "@radix-ui/react-icons"
 
 import {
@@ -269,7 +270,7 @@ export const columns: ColumnDef<Member>[] = [
 
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <AvatarIcon className="mr-2 h-3.5 w-3.5" />
+                <UploadIcon className="mr-2 h-3.5 w-3.5" />
                 <span onClick={() => setEditAvatarDialogIsOpen(true)}>Changer l&apos;avatar </span>
               </DropdownMenuItem>
               <DropdownMenuItem>

@@ -22,13 +22,14 @@ export default function Tree({ userId }: TreeProps) {
               "flex justify-between items-center rounded py-1 px-3 mr-2  w-full  hover:bg-accent hover:text-accent-foreground",
               pathname?.startsWith(`/tree/${access.tree.id}`) ||
               pathname?.startsWith(`/view/${access.tree.id}`) ||
+              pathname?.startsWith(`/member/${access.tree.id}`) ||
               pathname?.startsWith(`/access/${access.tree.id}`)
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground"
             )}
           >
             <Link
-              href={`/tree/${access.tree.id}`}
+              href={`/member/${access.tree.id}`}
               className="w-full truncate text-lg"
             >
               <p className="w-full truncate text-lg">{access.tree.name}</p>

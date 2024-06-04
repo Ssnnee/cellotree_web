@@ -1,6 +1,7 @@
 import { useState } from "react"
 import {
   AccessibilityIcon,
+  AvatarIcon,
   CheckIcon,
   ClipboardIcon,
   DotsHorizontalIcon,
@@ -38,7 +39,7 @@ import {
 
 import { UpdateTreeForm } from "./UpdateTreeForm"
 import { api } from "~/trpc/react"
-import {  } from "@radix-ui/react-tooltip"
+import { } from "@radix-ui/react-tooltip"
 import {
   Tooltip,
   TooltipProvider,
@@ -49,6 +50,8 @@ import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { toast } from "~/components/ui/use-toast"
 import Link from "next/link"
+import { setCookie, getCookie, removeCookie } from 'typescript-cookie'
+import { usePathname } from "next/navigation";
 
 export interface TreeActionsProps {
   treeInfo: {
@@ -65,8 +68,19 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
   const [dialogIsOpen1, setDialogIsOpen1] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
 
+  const pathname = usePathname()
   const isAuthorised = accessLevel === "ADMIN" || accessLevel === "EDITOR";
   const isAdmin = accessLevel === "ADMIN";
+  const isAuthCookie = getCookie('isAuthorisedTo')
+
+
+  if (isAuthorised && pathname?.startsWith(`/tree/${treeInfo.treeId}`)) {
+    if (treeInfo.treeId !== isAuthCookie) {
+      removeCookie('isAuthorisedTo')
+      setCookie('isAuthorisedTo', `${treeInfo.treeId}`, { expires: 1 })
+    }
+    setCookie('isAuthorisedTo', `${treeInfo.treeId}`, { expires: 1 })
+  }
 
   const deleteTree = api.tree.delete.useMutation()
 
@@ -80,7 +94,7 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
           toast({
             title: "L'arbre a été supprimé",
           }),
-          refetch()
+            refetch()
         }
       }
     )
@@ -131,6 +145,10 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
                 </DropdownMenuItem>
               }
               <DropdownMenuItem>
+                <AvatarIcon className="mr-2 h-3.5 w-3.5" />
+                <Link href={`/tree/${treeInfo.treeId}`}> Gerer l'arbre </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
                 <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
                 <span onClick={() => setDialogIsOpen(true)}>Modifier l&apos;arbre</span>
               </DropdownMenuItem>
@@ -138,7 +156,7 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
                 <DropdownMenuItem className="text-red-600">
                   <TrashIcon className="mr-2 h-3.5 w-3.5" />
                   <span onClick={() => setAlertDialogIsOpen(true)} >
-                      Supprimer l&apos;arbre
+                    Supprimer l&apos;arbre
                   </span>
                 </DropdownMenuItem>
               }
@@ -160,7 +178,7 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
+      <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Modification de l&apos;arbre</DialogTitle>
@@ -174,23 +192,23 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
             />
           </DialogHeader>
         </DialogContent>
-    </Dialog>
-        <Dialog open={dialogIsOpen1} onOpenChange={setDialogIsOpen1}>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>Partage de l&apos;arbre {treeInfo.treeName } </DialogTitle>
-              <DialogDescription>
-                Vous pouvez copiez puis partager le lien dans une plateforme de votre choix
-              </DialogDescription>
-              <div className="flex items-center justify-center gap-4">
-                <Input className="max-w-sm" value={treeUrl} role="note"  />
-                <Button variant="outline" onClick={handleCopy}>
-                { !isCopied ? <ClipboardIcon /> : <CheckIcon /> }
-                </Button>
-              </div>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+      </Dialog>
+      <Dialog open={dialogIsOpen1} onOpenChange={setDialogIsOpen1}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Partage de l&apos;arbre {treeInfo.treeName} </DialogTitle>
+            <DialogDescription>
+              Vous pouvez copiez puis partager le lien dans une plateforme de votre choix
+            </DialogDescription>
+            <div className="flex items-center justify-center gap-4">
+              <Input className="max-w-sm" value={treeUrl} role="note" />
+              <Button variant="outline" onClick={handleCopy}>
+                {!isCopied ? <ClipboardIcon /> : <CheckIcon />}
+              </Button>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
