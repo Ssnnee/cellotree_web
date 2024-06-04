@@ -59,6 +59,6 @@ Users can add family members, create relationships, and view their family tree.
 - [x] Add verification to the username (check if it is already taken)
 - [x] Make the list of tree to reload on delete
 - [ ] Add a gobal search bar to search for family members and trees
+- [ ] Check access on acces page
 - [ ] Add a way to invite family members to a tree
-- [ ] Add a way to view the tree in a different layout
 
