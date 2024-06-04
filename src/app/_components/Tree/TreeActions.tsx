@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CheckIcon, ClipboardIcon, DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
+import { AccessibilityIcon, CheckIcon, ClipboardIcon, DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,15 +48,16 @@ export interface TreeActionsProps {
     treeType: "PRIVATE" | "PUBLIC"
   },
   refetch: () => void;
+  accessLevel?: string;
 }
-export default function TreeActions({ treeInfo, refetch }: TreeActionsProps) {
+export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActionsProps) {
   const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const [dialogIsOpen1, setDialogIsOpen1] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
 
-  const us = "admin"
-  const isAdmin = us === "admin";
+  const isAuthorised = accessLevel === "ADMIN" || accessLevel === "EDITOR";
+  const isAdmin = accessLevel === "ADMIN";
 
   const deleteTree = api.tree.delete.useMutation()
 
@@ -111,20 +112,28 @@ export default function TreeActions({ treeInfo, refetch }: TreeActionsProps) {
             <Link href={`/view/${treeInfo.treeId}`}> Visualiser l&apos;arbre </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link href={`/access/${treeInfo.treeId}`}> Accorder un accès </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
-            <span onClick={() => setDialogIsOpen(true)}>Modifier l&apos;arbre</span>
-          </DropdownMenuItem>
-           {isAdmin && <DropdownMenuItem className="text-red-600">
-              <TrashIcon className="mr-2 h-3.5 w-3.5" />
-              <span onClick={() => setAlertDialogIsOpen(true)} >
-                  Supprimer l&apos;arbre
-              </span>
-            </DropdownMenuItem>
+          {isAuthorised &&
+            <>
+              <DropdownMenuSeparator />
+              {isAdmin &&
+                <DropdownMenuItem>
+                  <AccessibilityIcon className="mr-2 h-3.5 w-3.5" />
+                  <Link href={`/access/${treeInfo.treeId}`}> Accorder un accès </Link>
+                </DropdownMenuItem>
+              }
+              <DropdownMenuItem>
+                <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
+                <span onClick={() => setDialogIsOpen(true)}>Modifier l&apos;arbre</span>
+              </DropdownMenuItem>
+              {isAdmin &&
+                <DropdownMenuItem className="text-red-600">
+                  <TrashIcon className="mr-2 h-3.5 w-3.5" />
+                  <span onClick={() => setAlertDialogIsOpen(true)} >
+                      Supprimer l&apos;arbre
+                  </span>
+                </DropdownMenuItem>
+              }
+            </>
           }
         </DropdownMenuContent>
       </DropdownMenu>

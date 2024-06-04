@@ -43,7 +43,6 @@ export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeF
     defaultValues: {
       name: treeInfo.treeName,
       treeType: treeInfo.treeType,
-
     },
   })
 

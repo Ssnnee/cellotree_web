@@ -43,6 +43,7 @@ export default function Tree({ userId }: TreeProps) {
                   treeType: access.tree.type,
                 }}
                 refetch={() => userAccess.refetch()}
+                accessLevel={access.level}
               />
             </div>
           </div>
