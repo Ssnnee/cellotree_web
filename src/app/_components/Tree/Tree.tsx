@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { Separator } from "~/components/ui/separator";
 import TreeActions from "./TreeActions";
-import { TreeRefetchHook } from "./TreeRefetchHook";
 import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
-// import { ScrollArea } from "~/components/ui/scroll-area";
+import { api } from "~/trpc/react";
 
-export default function Tree() {
-  const { userAccess } = TreeRefetchHook();
+interface TreeProps {
+    userId: string;
+}
+
+export default function Tree({ userId }: TreeProps) {
+  const userAccess = api.access.getByUserId.useQuery({ id: userId });
   const pathname = usePathname()
 
   return (
@@ -17,7 +20,9 @@ export default function Tree() {
           <div
             className={cn(
               "flex justify-between items-center rounded py-1 px-3 mr-2  w-full  hover:bg-accent hover:text-accent-foreground",
-              pathname?.startsWith(`/tree/${access.tree.id}`)
+              pathname?.startsWith(`/tree/${access.tree.id}`) ||
+              pathname?.startsWith(`/view/${access.tree.id}`) ||
+              pathname?.startsWith(`/access/${access.tree.id}`)
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground"
             )}
@@ -37,6 +42,7 @@ export default function Tree() {
                   treeName: access.tree.name,
                   treeType: access.tree.type,
                 }}
+                refetch={() => userAccess.refetch()}
               />
             </div>
           </div>

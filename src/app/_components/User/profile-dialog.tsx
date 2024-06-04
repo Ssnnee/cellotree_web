@@ -8,20 +8,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { signOut } from "~/actions/auth.actions";
 import { useRouter } from "next/navigation"
-import { useUser } from "../auth-provider";
 
 interface ProfileDialogProps {
-  username: string | undefined
+  username: string | null;
 }
 
 export function ProfileDialog({username}: ProfileDialogProps) {
   const router = useRouter();
-  const { setIsSignedIn, setUser } = useUser();
 
   async function userSignedOut() {
     signOut()
-    setIsSignedIn(false)
-    setUser(null)
     router.push("/")
   }
 

@@ -47,6 +47,8 @@ export const memberRouter = createTRPCRouter({
         father: true,
         mother: true,
         spouses: true,
+        fatherChildren: true,
+        motherChildren: true,
       }
     })
   }),

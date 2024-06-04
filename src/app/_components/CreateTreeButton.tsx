@@ -9,14 +9,16 @@ import {
 } from "~/components/ui/dialog"
 
 import { TreeForm } from "./Tree/TreeForm";
-import { useState } from "react";
 
+interface CreateTreeButtonProps {
+  userId: string,
+  setOpened: (value: boolean) => void;
+}
 
-export function CreateTreeButton() {
-  const [dialogIsOpen, setDialogIsOpen] = useState(false)
+export function CreateTreeButton({ userId, setOpened }: CreateTreeButtonProps) {
 
   return (
-    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
+    <Dialog>
       <DialogTrigger >
         <div className="flex flex-col justify-center items-center h-8 rounded-md px-3 text-xs hover:bg-accent hover:text-accent-foregroundborder-solid border-2 ">
           <PlusIcon className="" />
@@ -28,7 +30,7 @@ export function CreateTreeButton() {
             <DialogDescription>
               Remplissez les champ ci-dessous pour creer un nouvel arbre
             </DialogDescription>
-            <TreeForm setDialogIsOpen={setDialogIsOpen} />
+            <TreeForm userId={userId} setOpened={setOpened} />
           </DialogHeader>
         </DialogContent>
     </Dialog>

@@ -16,7 +16,7 @@ model User {
     email String
     hashedPassword String
 
-    profile Profile?
+    // profile Profile?
     sessions Session[]
 
     access UserAccess[]
@@ -25,15 +25,15 @@ model User {
     updatedAt DateTime @updatedAt
 }
 
-model Profile {
-    id    String @id @default(cuid())
-    firstname String
-    lastname String
-    avatarURL String ?
-
-    userId String @unique
-    user User @relation(fields: [userId], references: [id])
-}
+// model Profile {
+//     id    String @id @default(cuid())
+//     firstname String
+//     lastname String
+//     avatarURL String ?
+//
+//     userId String @unique
+//     user User @relation(fields: [userId], references: [id])
+// }
 
 model Session {
   id        String   @id

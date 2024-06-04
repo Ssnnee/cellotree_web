@@ -23,7 +23,6 @@ import {
 
 import { api } from "~/trpc/react"
 import type { TreeActionsProps } from "./TreeActions"
-import { TreeRefetchHook } from "./TreeRefetchHook"
 import { toast } from "~/components/ui/use-toast"
 
 
@@ -38,7 +37,7 @@ interface UpdateTreeFormProps extends TreeActionsProps {
   setDialogIsOpen: (isOpen: boolean) => void
 }
 
-export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps) {
+export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,35 +46,31 @@ export function UpdateTreeForm({treeInfo, setDialogIsOpen}: UpdateTreeFormProps)
 
     },
   })
-  // const { isSignedIn } = useUser()
-  const isSignedIn = true
 
   const updateTree = api.tree.update.useMutation()
 
-  const { handleRefetch } = TreeRefetchHook()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    if (isSignedIn) {
-      updateTree.mutate(
-        {
-          name: values.name,
-          type: values.treeType,
-          id: treeInfo.treeId,
-        },
-        {
-          onSettled: () => {
-            toast({
-              title: "L'arbre a été mis à jour",
-              description: "L'arbre devient : " +
-                values.name + " de type " + values.treeType,
-            }),
-            form.reset(),
-            setDialogIsOpen(false)
-            }
-        }
-      )
-    }
+    updateTree.mutate(
+      {
+        name: values.name,
+        type: values.treeType,
+        id: treeInfo.treeId,
+      },
+      {
+        onSettled: () => {
+          toast({
+            title: "L'arbre a été mis à jour",
+            description: "L'arbre devient : " +
+              values.name + " de type " + values.treeType,
+          }),
+          form.reset(),
+          setDialogIsOpen(false)
+          refetch()
+          }
+      }
+    )
   }
 
   return (

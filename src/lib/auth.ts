@@ -75,3 +75,8 @@ interface DatabaseUserAttributes {
 	username: string;
 }
 
+// src/lib/lucia.ts
+export interface SessionData {
+  user: User | null
+  session: Session | null
+}

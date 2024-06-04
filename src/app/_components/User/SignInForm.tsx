@@ -16,12 +16,10 @@ import { Input } from "~/components/ui/input"
 import { toast } from "~/components/ui/use-toast"
 import { signIn } from "~/actions/auth.actions"
 import { SignInSchema } from "~/types"
-import { useUser } from "../auth-provider"
 import { useRouter } from "next/navigation"
 
 
 export function SignInForm() {
-  const { setIsSignedIn } = useUser();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -46,7 +44,6 @@ export function SignInForm() {
       })
 
       form.reset()
-      setIsSignedIn(true)
       router.push("/")
     }
   }

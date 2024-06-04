@@ -1,5 +1,3 @@
-"use client"
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -23,10 +21,8 @@ import {
 } from "~/components/ui/select"
 
 import { api } from "~/trpc/react"
-import { TreeRefetchHook } from "./TreeRefetchHook"
 import { toast } from "~/components/ui/use-toast"
-import { useUser } from "../auth-provider"
-
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -36,10 +32,13 @@ const formSchema = z.object({
 })
 
 interface TreeFormProps {
-  setDialogIsOpen: (isOpen: boolean) => void
+  userId: string,
+  setOpened: (isOpen: boolean) => void
 }
 
-export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
+export function TreeForm({ userId, setOpened }: TreeFormProps) {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,32 +46,28 @@ export function TreeForm({ setDialogIsOpen }: TreeFormProps) {
     },
   })
 
-  const { isSignedIn, user } = useUser()
-
   const createTree = api.tree.create.useMutation()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-
-    if (isSignedIn && user) {
-      createTree.mutate(
-        {
-          name: values.name,
-          type: values.treeType,
-          id: user.id,
-        },
-        {
-          onSettled: () => {
-            toast({
-              title: "L'arbre a été ajouté",
-              description: "L'arbre ayant été ajouté est : " +
-                values.name + " de type " + values.treeType,
-            }),
-            form.reset(),
-            setDialogIsOpen(false)
-          }
+    createTree.mutate(
+      {
+        name: values.name,
+        type: values.treeType,
+        id: userId,
+      },
+      {
+        onSettled: () => {
+          toast({
+            title: "L'arbre a été créé.",
+            description: "L'arbre ayant été créé est : " +
+              values.name + " de type " + values.treeType,
+          }),
+          form.reset(),
+          setOpened(false),
+          router.push("/")
         }
-      )
-    }
+      }
+    )
   }
 
   return (

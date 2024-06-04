@@ -12,7 +12,15 @@ export const userRouter = createTRPCRouter({
           access: true
         }
       })
-    })
+    }),
 
+  getAll: publicProcedure
+    .query((ctx) => {
+      return ctx.ctx.db.user.findMany({
+        include: {
+          access: true
+        }
+      })
+    }),
 });
 

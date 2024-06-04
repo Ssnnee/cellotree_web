@@ -12,7 +12,34 @@ export const accessRouter = createTRPCRouter({
           tree: true
         }
       })
-    })
+    }),
+
+  getAccessByTreeId: publicProcedure
+   .input(z.object({ id: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.userAccess.findMany({
+        where: { treeId: input.id },
+        include: {
+          user: true
+        }
+      })
+    }),
+
+  create: publicProcedure
+    .input(z.object({
+      userId: z.string(),
+      treeId: z.string(),
+      accessType: z.enum(["ADMIN", "EDITOR", "VIEWER"]),
+    }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.userAccess.create({
+        data: {
+          userId: input.userId,
+          treeId: input.treeId,
+          level: input.accessType
+        }
+      })
+    }),
 
 });
 

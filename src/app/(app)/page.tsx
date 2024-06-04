@@ -1,17 +1,23 @@
 import { Button } from "~/components/ui/button";
-import { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading } from "../_components/page-header";
+import {
+  PageActions,
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading
+} from "../_components/page-header";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import TreeViewExample from "./example/tree-view-example";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "~/components/ui/card"
+import { TreeViewExample } from "./example/tree-view-example";
+import { getUser } from "~/actions/auth.actions";
 
 
 export default async function Home() {
-  // const hello = await api.post.hello({ text: "from tRPC" });
+  const user = await getUser();
 
   return (
     <div className="container relative">
@@ -38,6 +44,8 @@ export default async function Home() {
         <CardContent className="text-center">
           <PageHeaderDescription>
             Nous vous conseillons d&apos;activer le mode sombre pour une meilleure expérience.
+              <br />
+            {user ? `Bienvenue ${JSON.stringify(user)}` : "Bienvenue, connectez-vous pour continuer"}
           </PageHeaderDescription>
           <TreeViewExample />
         </CardContent>

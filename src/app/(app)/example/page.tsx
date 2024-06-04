@@ -1,8 +1,8 @@
 import { Button } from "~/components/ui/button";
 import { PageActions, PageHeader, PageHeaderDescription, PageHeaderHeading } from "~/app/_components/page-header";
 import Link from "next/link";
-import TreeViewExample from "./tree-view-example";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { TreeViewExample } from "./tree-view-example";
 
 export default async function PageExample() {
 
@@ -13,7 +13,7 @@ export default async function PageExample() {
           Voici un exemple de comment vous pourriez visualiser votre arbre généalogique.
         </PageHeaderHeading>
         <PageHeaderDescription>
-          Nous vous conseillons d&pos;activer le mode sombre pour une meilleure expérience.
+          Nous vous conseillons d'activer le mode sombre pour une meilleure expérience.
         </PageHeaderDescription>
         <PageActions>
           <Button>
@@ -25,11 +25,11 @@ export default async function PageExample() {
       </PageHeader>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Visualisation d&pos;un arbre généalogique </CardTitle>
+          <CardTitle className="text-2xl">Visualisation d'un arbre généalogique </CardTitle>
         </CardHeader>
         <CardContent className="text-center">
           <PageHeaderDescription>
-            Nous vous conseillons d&pos;activer le mode sombre pour une meilleure expérience.
+            Nous vous conseillons d'activer le mode sombre pour une meilleure expérience.
           </PageHeaderDescription>
           <TreeViewExample />
         </CardContent>

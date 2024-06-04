@@ -1,18 +1,15 @@
-"use client"
-
-// import Link, { LinkProps } from "next/link"
-// import { useRouter } from "next/navigation"
-
-// import { cn } from "~/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet"
 import { Button } from "~/components/ui/button"
-// import { ScrollArea } from "~/components/ui/scroll-area"
 import { useState } from "react"
 import { CreateTreeButton } from "./CreateTreeButton"
 import Tree from "./Tree/Tree"
 import Link from "next/link"
 
-export function SideBar() {
+
+interface SideBarProps {
+    userId: string;
+}
+export function SideBar({ userId }: SideBarProps) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -60,9 +57,9 @@ export function SideBar() {
         </Link>
         <div className="flex text-xl gap-4 items-center py-9">
           <h2> Creer un nouvel arbre </h2>
-          <CreateTreeButton  />
+          <CreateTreeButton userId={userId} setOpened={setOpen}  />
         </div>
-        <Tree />
+        <Tree userId={userId}/>
       </SheetContent>
     </Sheet>
   )

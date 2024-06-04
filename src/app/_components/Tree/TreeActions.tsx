@@ -1,4 +1,3 @@
-"use client"
 import { useState } from "react"
 import { CheckIcon, ClipboardIcon, DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
 import {
@@ -30,7 +29,6 @@ import {
 
 import { UpdateTreeForm } from "./UpdateTreeForm"
 import { api } from "~/trpc/react"
-import { TreeRefetchHook } from "./TreeRefetchHook"
 import {  } from "@radix-ui/react-tooltip"
 import {
   Tooltip,
@@ -41,6 +39,7 @@ import {
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { toast } from "~/components/ui/use-toast"
+import Link from "next/link"
 
 export interface TreeActionsProps {
   treeInfo: {
@@ -48,8 +47,9 @@ export interface TreeActionsProps {
     treeName: string
     treeType: "PRIVATE" | "PUBLIC"
   },
+  refetch: () => void;
 }
-export default function TreeActions({ treeInfo }: TreeActionsProps) {
+export default function TreeActions({ treeInfo, refetch }: TreeActionsProps) {
   const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const [dialogIsOpen1, setDialogIsOpen1] = useState(false)
@@ -57,8 +57,6 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
 
   const us = "admin"
   const isAdmin = us === "admin";
-
-  // const{ handleRefetch } = TreeRefetchHook()
 
   const deleteTree = api.tree.delete.useMutation()
 
@@ -71,7 +69,8 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
         onSettled: () => {
           toast({
             title: "L'arbre a été supprimé",
-          })
+          }),
+          refetch()
         }
       }
     )
@@ -109,10 +108,13 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <EyeOpenIcon className="mr-2 h-3.5 w-3.5" />
-            <p className="text-sm">Visualiser l&apos;arbre</p>
+            <Link href={`/view/${treeInfo.treeId}`}> Visualiser l&apos;arbre </Link>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Link href={`/access/${treeInfo.treeId}`}> Accorder un accès </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
             <span onClick={() => setDialogIsOpen(true)}>Modifier l&apos;arbre</span>
@@ -147,7 +149,11 @@ export default function TreeActions({ treeInfo }: TreeActionsProps) {
             <DialogDescription>
               Remplissez les champ ci-dessous pour modifier cet arbre
             </DialogDescription>
-            <UpdateTreeForm treeInfo={treeInfo}  setDialogIsOpen={setDialogIsOpen} />
+            <UpdateTreeForm
+              treeInfo={treeInfo}
+              refetch={refetch}
+              setDialogIsOpen={setDialogIsOpen}
+            />
           </DialogHeader>
         </DialogContent>
     </Dialog>
