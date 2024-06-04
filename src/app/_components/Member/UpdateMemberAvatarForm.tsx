@@ -20,9 +20,7 @@ import { Input } from "~/components/ui/input"
 import { api } from "~/trpc/react"
 import { toast } from "~/components/ui/use-toast"
 import { useState } from "react"
-import { MembrHook } from "./MemberHook"
 import { deleteFile, uploadFile } from "~/actions/file.actions"
-
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -67,7 +65,7 @@ export function UpdateMemberAvatarForm( props : MemberFormProps) {
 
 
   const updateMember = api.member.updateAvatar.useMutation()
-  const { treeMember } = MembrHook(props.treeId)
+  const treeMember = api.member.getManyByTreeId.useQuery({ id: props.treeId })
   const  [iShidden, setHidden] = useState(false)
 
 

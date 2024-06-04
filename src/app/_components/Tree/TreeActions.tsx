@@ -1,5 +1,14 @@
 import { useState } from "react"
-import { AccessibilityIcon, CheckIcon, ClipboardIcon, DotsHorizontalIcon, EyeOpenIcon, Pencil1Icon, Share1Icon, TrashIcon } from "@radix-ui/react-icons"
+import {
+  AccessibilityIcon,
+  CheckIcon,
+  ClipboardIcon,
+  DotsHorizontalIcon,
+  EyeOpenIcon,
+  Pencil1Icon,
+  Share1Icon,
+  TrashIcon
+} from "@radix-ui/react-icons"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,7 +70,7 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
 
   const deleteTree = api.tree.delete.useMutation()
 
-  const treeUrl = `http://localhost:3000/chart/${treeInfo.treeId}`
+  const treeUrl = `http://localhost:3000/view/${treeInfo.treeId}`
 
   const handleDelete = async () => {
     deleteTree.mutate(

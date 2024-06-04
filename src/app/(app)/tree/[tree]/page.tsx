@@ -1,5 +1,5 @@
 "use client"
-import { MembrHook } from "~/app/_components/Member/MemberHook"
+
 import { Button } from "~/components/ui/button"
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
@@ -26,7 +26,7 @@ import {
 
 
 export default function  TreePage( { params }: { params: { tree: string } } ) {
-  const { treeMember } = MembrHook(params.tree)
+  const treeMember  = api.member.getManyByTreeId.useQuery({ id:params.tree })
   const member = treeMember.data
 
 

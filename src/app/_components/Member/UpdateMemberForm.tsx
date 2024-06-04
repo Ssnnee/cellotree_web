@@ -49,7 +49,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "~/components/ui/select"
-import { MembrHook } from "./MemberHook"
 
 
 export const formSchema = z.object({
@@ -98,7 +97,7 @@ export function UpdateMemberForm( props : MemberFormProps) {
   const [motherPopIsopen, setmotherPopIsopen] = useState(false)
   const [fatherPopIsopen, setFatherPopIsopen] = useState(false)
 
-  const { treeMember } = MembrHook(props.treeId)
+  const treeMember = api.member.getManyByTreeId.useQuery({ id: props.treeId })
   const  [iShidden, setHidden] = useState(false)
 
   const femaleMemberOfTree =  api.member.getFemaleMembersByTreeId.useQuery({id: props.treeId});

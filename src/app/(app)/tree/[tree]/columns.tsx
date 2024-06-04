@@ -48,7 +48,6 @@ import {
 } from "~/components/ui/dialog";
 import { useState } from "react";
 import { api } from "~/trpc/react";
-import { MembrHook } from "~/app/_components/Member/MemberHook";
 
 import { toast } from "~/components/ui/use-toast";
 import { format } from "date-fns";
@@ -221,8 +220,7 @@ export const columns: ColumnDef<Member>[] = [
       const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
 
       const deleteMember = api.member.delete.useMutation()
-
-      const { treeMember } = MembrHook(member.treeId)
+      const  treeMember  = api.member.getManyByTreeId.useQuery({id: member.treeId})
 
       const handleDelete = async () => {
         const form = new FormData()

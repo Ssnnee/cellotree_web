@@ -13,11 +13,9 @@ import {
   CardTitle,
 } from "~/components/ui/card"
 import { TreeViewExample } from "./example/tree-view-example";
-import { getUser } from "~/actions/auth.actions";
 
 
 export default async function Home() {
-  const user = await getUser();
 
   return (
     <div className="container relative">
@@ -45,7 +43,6 @@ export default async function Home() {
           <PageHeaderDescription>
             Nous vous conseillons d&apos;activer le mode sombre pour une meilleure expérience.
               <br />
-            {user ? `Bienvenue ${JSON.stringify(user)}` : "Bienvenue, connectez-vous pour continuer"}
           </PageHeaderDescription>
           <TreeViewExample />
         </CardContent>

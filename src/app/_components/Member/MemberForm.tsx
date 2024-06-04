@@ -38,7 +38,6 @@ import {
   SelectTrigger,
   SelectValue
 } from "~/components/ui/select"
-import { MembrHook } from "./MemberHook"
 import { uploadFile } from "~/actions/file.actions"
 
 
@@ -101,7 +100,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
 
 
   const createMember = api.member.create.useMutation()
-  const { treeMember } = MembrHook(treeId)
+  const treeMember = api.member.getManyByTreeId.useQuery({ id:treeId })
 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
