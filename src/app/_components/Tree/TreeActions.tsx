@@ -69,10 +69,12 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
   const [isCopied, setIsCopied] = useState(false)
 
   const pathname = usePathname()
+
   const isAuthorised = accessLevel === "ADMIN" || accessLevel === "EDITOR";
-  const isAdmin = accessLevel === "ADMIN";
   const isAuthCookie = getCookie('isAuthorisedTo')
 
+  const isAdmin = accessLevel === "ADMIN";
+  const isAdmCookie = getCookie('isAdminOf')
 
   if (isAuthorised && pathname?.startsWith(`/tree/${treeInfo.treeId}`)) {
     if (treeInfo.treeId !== isAuthCookie) {
@@ -82,8 +84,15 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
     setCookie('isAuthorisedTo', `${treeInfo.treeId}`, { expires: 1 })
   }
 
-  const deleteTree = api.tree.delete.useMutation()
+  if (isAdmin && pathname?.startsWith(`/access/${treeInfo.treeId}`)) {
+    if (treeInfo.treeId !== isAdmCookie) {
+      removeCookie('isAdminOf')
+      setCookie('isAdminOf', `${treeInfo.treeId}`, { expires: 1 })
+    }
+    setCookie('isAdminOf', `${treeInfo.treeId}`, { expires: 1 })
+  }
 
+  const deleteTree = api.tree.delete.useMutation()
   const treeUrl = `http://localhost:3000/view/${treeInfo.treeId}`
 
   const handleDelete = async () => {
