@@ -1,7 +1,7 @@
 "use client";
 
 import f3 from "family-chart";
-import { data } from "./data";
+import { dragonBall } from "./data";
 import { useEffect, useRef } from "react";
 
 interface Data {
@@ -28,7 +28,7 @@ export const TreeViewExample: React.FC = () => {
     if (!cont.current) return;
 
     const store = f3.createStore({
-        data: data,
+        data: dragonBall,
         node_separation: 250,
         level_separation: 150
       }),

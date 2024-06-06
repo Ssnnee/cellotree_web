@@ -14,8 +14,7 @@ import {
 } from "~/components/ui/card"
 import { TreeViewExample } from "./example/tree-view-example";
 
-
-export default async function Home() {
+export default function Home() {
 
   return (
     <div className="container relative">

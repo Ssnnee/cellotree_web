@@ -191,3 +191,152 @@ export const data = [
     }
   }
 ]
+
+export const dragonBall = [
+  {
+    "id": "clwq9pfgu0000utjdlpc9urdl",
+    "rels": {
+      "spouses": [
+        "clwq9sv7c0001utjd09dd5cvv"
+      ],
+      "father": "",
+      "mother": "",
+      "children": [
+        "clwq9xc480003utjdaqdrbm5y",
+        "clwq9vxm50002utjd5rfkykde"
+      ]
+    },
+    "data": {
+      "first name": "Goku",
+      "last name": "Son",
+      "birthday": "1960",
+      "avatar": "/goku.jpg",
+      "gender": "M"
+    }
+  },
+  {
+    "id": "clwq9z1fx0004utjducqgn1pu",
+    "rels": {
+      "spouses": [
+        "clwq9vxm50002utjd5rfkykde"
+      ],
+      "father": "",
+      "mother": "",
+      "children": [
+        "clwqa2o7b0005utjdhknoqe36"
+      ]
+    },
+    "data": {
+      "first name": "Satan",
+      "last name": "Videl",
+      "birthday": "1987",
+      "avatar": "/videl.png",
+      "gender": "F"
+    }
+  },
+  {
+    "id": "clwqc8o9j0006utjdkwqrbzyv",
+    "rels": {
+      "spouses": [],
+      "father": "",
+      "mother": "",
+      "children": []
+    },
+    "data": {
+      "first name": "Hercule",
+      "last name": "Satan",
+      "birthday": "1965",
+      "avatar": "/hercule.jpg",
+      "gender": "M"
+    }
+  },
+  {
+    "id": "clwqglxj80000isqsxcna581t",
+    "rels": {
+      "spouses": [],
+      "father": "",
+      "mother": "",
+      "children": []
+    },
+    "data": {
+      "first name": "Ox",
+      "last name": "King",
+      "birthday": "1935",
+      "avatar": "/ox.jpg",
+      "gender": "M"
+    }
+  },
+  {
+    "id": "clwq9xc480003utjdaqdrbm5y",
+    "rels": {
+      "spouses": [],
+      "father": "clwq9pfgu0000utjdlpc9urdl",
+      "mother": "clwq9sv7c0001utjd09dd5cvv",
+      "children": []
+    },
+    "data": {
+      "first name": "Goten",
+      "last name": "Son ",
+      "birthday": "1990",
+      "avatar": "/goten.png",
+      "gender": "M"
+    }
+  },
+  {
+    "id": "clwq9vxm50002utjd5rfkykde",
+    "rels": {
+      "spouses": [
+        "clwq9z1fx0004utjducqgn1pu"
+      ],
+      "father": "clwq9pfgu0000utjdlpc9urdl",
+      "mother": "clwq9sv7c0001utjd09dd5cvv",
+      "children": [
+        "clwqa2o7b0005utjdhknoqe36"
+      ]
+    },
+    "data": {
+      "first name": "Gohan",
+      "last name": "Son",
+      "birthday": "1985",
+      "avatar": "/gohan.jpg",
+      "gender": "M"
+    }
+  },
+  {
+    "id": "clwqa2o7b0005utjdhknoqe36",
+    "rels": {
+      "spouses": [],
+      "father": "clwq9vxm50002utjd5rfkykde",
+      "mother": "clwq9z1fx0004utjducqgn1pu",
+      "children": []
+    },
+    "data": {
+      "first name": "Pan",
+      "last name": "Son",
+      "birthday": "2000",
+      "avatar": "/pan.jpg",
+      "gender": "F"
+    }
+  },
+  {
+    "id": "clwq9sv7c0001utjd09dd5cvv",
+    "rels": {
+      "spouses": [
+        "clwq9pfgu0000utjdlpc9urdl"
+      ],
+      "father": "",
+      "mother": "",
+      "children": [
+        "clwq9xc480003utjdaqdrbm5y",
+        "clwq9vxm50002utjd5rfkykde"
+      ]
+    },
+    "data": {
+      "first name": "Chi",
+      "last name": "Chi",
+      "birthday": "1964",
+      "avatar": "/chichi.png",
+      "gender": "F"
+    }
+  }
+]

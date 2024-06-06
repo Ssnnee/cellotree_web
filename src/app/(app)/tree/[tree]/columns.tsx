@@ -1,11 +1,9 @@
 "use client"
 
 import {
-  AvatarIcon,
   CaretSortIcon,
   DotsHorizontalIcon,
   EyeOpenIcon,
-  Link1Icon,
   Pencil1Icon,
   TrashIcon,
   UploadIcon
