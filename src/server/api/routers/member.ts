@@ -34,6 +34,8 @@ export const memberRouter = createTRPCRouter({
         father: true,
         mother: true,
         spouses: true,
+        fatherChildren: true,
+        motherChildren: true,
       }
     })
   }),
@@ -91,6 +93,49 @@ export const memberRouter = createTRPCRouter({
     });
   }),
 
+  addSpouse: publicProcedure
+  .input(addParentSchema)
+  .mutation(async ({ ctx, input }) => {
+    await ctx.db.member.update({
+      where: { id: input.membreId },
+      data: {
+        spouses: {
+          connect: { id: input.parentId }
+        }
+      }
+    });
+
+    await ctx.db.member.update({
+      where: { id: input.parentId },
+      data: {
+        spouseOf: {
+          connect: { id: input.membreId }
+        }
+      }
+    });
+  }),
+
+  removeSpouse: publicProcedure
+  .input(addParentSchema)
+  .mutation(async ({ ctx, input }) => {
+    await ctx.db.member.update({
+      where: { id: input.membreId },
+      data: {
+        spouses: {
+          disconnect: { id: input.parentId }
+        }
+      }
+    });
+
+    await ctx.db.member.update({
+      where: { id: input.parentId },
+      data: {
+        spouseOf: {
+          disconnect: { id: input.membreId }
+        }
+      }
+    });
+  }),
 
   getMembersByTreeId: publicProcedure
   .input(idSchema)
@@ -98,7 +143,14 @@ export const memberRouter = createTRPCRouter({
     return ctx.db.tree.findFirst({
       where: { id: input.id },
       include: {
-        member: true
+        member: {
+          include: {
+            spouses: true,
+            fatherChildren: true,
+            motherChildren: true,
+            spouseOf: true,
+          }
+        }
       },
     })
   }),
