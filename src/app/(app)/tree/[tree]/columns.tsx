@@ -86,11 +86,11 @@ export const columns: ColumnDef<Member>[] = [
     header: ({ column }) => {
       return (
         <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-        Nom
-        <CaretSortIcon className="ml-2 h-4 w-4" />
+          Nom
+          <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -146,28 +146,28 @@ export const columns: ColumnDef<Member>[] = [
       const url = row.getValue("avatarURL") as string
       const memberName = row.getValue("firstname") as string
       return (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Image
-                src={url}
-                alt={`Avatar de ${memberName}`}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-            </DialogTrigger>
-            <DialogContent className="max-w-sm">
-              <DialogHeader>
-              </DialogHeader>
-                <Image
-                  src={url}
-                  alt={`Avatar de ${memberName}`}
-                  width={400}
-                  height={400}
-                  className="rounded-full"
-                />
-            </DialogContent>
-          </Dialog>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Image
+              src={url}
+              alt={`Avatar de ${memberName}`}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+          </DialogTrigger>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+            </DialogHeader>
+            <Image
+              src={url}
+              alt={`Avatar de ${memberName}`}
+              width={400}
+              height={400}
+              className="rounded-full"
+            />
+          </DialogContent>
+        </Dialog>
       )
     }
   },
@@ -181,7 +181,7 @@ export const columns: ColumnDef<Member>[] = [
         <div className="text-center">
           {
             member.father ? member.father.lastname + " " +
-            member.father.firstname ?? "" :  "Non renseigné"
+              member.father.firstname ?? "" : "Non renseigné"
           }
         </div>
       )
@@ -195,7 +195,7 @@ export const columns: ColumnDef<Member>[] = [
 
       return (
         <div className="text-center">
-          { member.mother ? member.mother.lastname + " " +
+          {member.mother ? member.mother.lastname + " " +
             member.mother.firstname ?? "" : "Non renseigné"
           }
         </div>
@@ -221,7 +221,7 @@ export const columns: ColumnDef<Member>[] = [
       const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
 
       const deleteMember = api.member.delete.useMutation()
-      const  treeMember  = api.member.getManyByTreeId.useQuery({id: member.treeId})
+      const treeMember = api.member.getManyByTreeId.useQuery({ id: member.treeId })
 
       const handleDelete = async () => {
         const form = new FormData()
@@ -235,11 +235,17 @@ export const columns: ColumnDef<Member>[] = [
         deleteMember.mutate(
           { id: member.id },
           {
-            onSettled: () => {
+            onSuccess: () => {
               toast({
                 title: "Le membre a été supprimé de l'arbre",
-          })
+              })
               treeMember.refetch()
+            },
+            onError: (error) => {
+              console.error(error)
+              toast({
+                title: "Une erreur s'est produite lors de la suppression du membre",
+              })
             }
           }
         )
@@ -285,7 +291,7 @@ export const columns: ColumnDef<Member>[] = [
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <AlertDialog open={alertDialogIsOpen}>
+          <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Etes-vous sûr de vouloir supprimer cet membre? </AlertDialogTitle>
@@ -306,12 +312,12 @@ export const columns: ColumnDef<Member>[] = [
                 <DialogDescription>
                   Remplissez les champ ci-dessous pour modifier cet arbre
                 </DialogDescription>
-                <UpdateMemberForm
-                  setDialogIsOpen={setEditDialogIsOpen}
-                  member={member}
-                  treeId={member.treeId}
-                />
               </DialogHeader>
+              <UpdateMemberForm
+                setDialogIsOpen={setEditDialogIsOpen}
+                member={member}
+                treeId={member.treeId}
+              />
             </DialogContent>
           </Dialog>
           <Dialog open={editAvatarDialogIsOpen} onOpenChange={setEditAvatarDialogIsOpen}>

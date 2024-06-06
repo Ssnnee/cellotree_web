@@ -2,6 +2,10 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
+const updateAccessSchema = z.object({
+  id: z.string(),
+  level: z.enum(["ADMIN", "EDITOR", "VIEWER"]),
+});
 export const accessRouter = createTRPCRouter({
   getByUserId: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -48,6 +52,17 @@ export const accessRouter = createTRPCRouter({
         where: { id: input.id }
       })
     }),
+
+  update: publicProcedure
+  .input(updateAccessSchema)
+  .mutation(({ ctx, input }) => {
+    return ctx.db.userAccess.update({
+      where: { id: input.id },
+      data: {
+        level: input.level
+      }
+    })
+  }),
 
 });
 

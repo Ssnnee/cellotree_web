@@ -44,6 +44,7 @@ import {
 import { useState } from "react";
 import { api } from "~/trpc/react";
 import { toast } from "~/components/ui/use-toast";
+import { UpdateAccesForm } from "~/app/_components/Access/UpdateAccessForm";
 
 const userSchema =z.object({
   username: z.string(),
@@ -143,7 +144,7 @@ export const columns: ColumnDef<Access>[] = [
               <DropdownMenuItem className="text-red-600">
                 <TrashIcon className="mr-2 h-3.5 w-3.5" />
                 <span onClick={() => setAlertDialogIsOpen(true)} >
-                  Supprimer l&apos;accès
+                  Révoquer l&apos;accès
                 </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -158,7 +159,7 @@ export const columns: ColumnDef<Access>[] = [
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Annuler</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} >Supprimer</AlertDialogAction>
+                <AlertDialogAction onClick={handleDelete} >Révoquer</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -167,9 +168,10 @@ export const columns: ColumnDef<Access>[] = [
               <DialogHeader>
                 <DialogTitle>Modification de l&apos;acccès de l&apos;utilisateur {user?.username} </DialogTitle>
                 <DialogDescription>
-                  Remplissez les champ ci-dessous pour modifier cet arbre
+                  Remplissez les champ ci-dessous pour modifier cet accès
                 </DialogDescription>
               </DialogHeader>
+              <UpdateAccesForm id={user?.access.id} level={user?.access.level} />
             </DialogContent>
           </Dialog>
         </div>
