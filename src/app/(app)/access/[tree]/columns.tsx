@@ -95,7 +95,6 @@ export const columns: ColumnDef<Access>[] = [
 
       const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
       const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
-
       const deleteAccess = api.access.delete.useMutation()
 
       const handleDelete = async () => {
