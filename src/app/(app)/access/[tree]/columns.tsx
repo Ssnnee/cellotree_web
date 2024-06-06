@@ -1,10 +1,7 @@
 "use client"
 
 import {
-  AvatarIcon,
-  CaretSortIcon,
   DotsHorizontalIcon,
-  EyeOpenIcon,
   Pencil1Icon,
   TrashIcon
 } from "@radix-ui/react-icons"
@@ -45,6 +42,8 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { useState } from "react";
+import { api } from "~/trpc/react";
+import { toast } from "~/components/ui/use-toast";
 
 const userSchema =z.object({
   username: z.string(),
@@ -95,9 +94,27 @@ export const columns: ColumnDef<Access>[] = [
 
       const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
       const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
-      const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
+
+      const deleteAccess = api.access.delete.useMutation()
 
       const handleDelete = async () => {
+        if(!user?.access.id) return
+        deleteAccess.mutate(
+          { id: user?.access.id },
+          {
+            onSuccess: () => {
+              toast({
+                title: "Accès supprimé avec succès",
+              })
+            },
+            onError: () => {
+              toast({
+                title: "Erreur lors de la suppression de l'accès",
+                variant: "destructive"
+              })
+            },
+          }
+        )
       }
 
       return (
@@ -131,7 +148,7 @@ export const columns: ColumnDef<Access>[] = [
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <AlertDialog open={alertDialogIsOpen}>
+          <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Etes-vous sûr de vouloir revoquer  cet accès ? </AlertDialogTitle>

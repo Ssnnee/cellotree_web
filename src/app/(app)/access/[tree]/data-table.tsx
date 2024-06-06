@@ -62,7 +62,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
 
-  const [selectedFilter, setSelectedFilter] = React.useState<string>("lastname");
+  const [selectedFilter, setSelectedFilter] = React.useState<string>("username");
 
   function translateToFrench(property: string): string {
     const translations: { [key: string]: string } = {
@@ -116,7 +116,7 @@ export function DataTable<TData, TValue>({
               <SelectGroup>
                 <SelectLabel>Filtrer par</SelectLabel>
                 <SelectItem value="username">Nom</SelectItem>
-                <SelectItem value="email">Prénom</SelectItem>
+                <SelectItem value="email">Mail</SelectItem>
                 <SelectItem value="access">Role</SelectItem>
               </SelectGroup>
             </SelectContent>
