@@ -41,5 +41,13 @@ export const accessRouter = createTRPCRouter({
       })
     }),
 
+  delete: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.db.userAccess.delete({
+        where: { id: input.id }
+      })
+    }),
+
 });
 
