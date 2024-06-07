@@ -22,6 +22,7 @@ import { toast } from "~/components/ui/use-toast"
 import { useState } from "react"
 import { deleteFile, uploadFile } from "~/actions/file.actions"
 
+
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 export const formSchema = z.object({

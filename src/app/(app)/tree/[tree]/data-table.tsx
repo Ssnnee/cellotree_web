@@ -43,7 +43,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table"
-import { ArrowLeftIcon, ArrowRightIcon, MixerHorizontalIcon } from "@radix-ui/react-icons"
+import { MixerHorizontalIcon } from "@radix-ui/react-icons"
 import { DataTablePagination } from "./data-table-pagination"
 
 interface DataTableProps<TData, TValue> {
@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
   const [selectedFilter, setSelectedFilter] = React.useState<string>("lastname");
 
   function translateToFrench(property: string): string {
-    const translations: { [key: string]: string } = {
+    const translations: Record<string, string> = {
       id: "identifiant",
       firstname: "prénom",
       lastname: "nom de famille",
@@ -79,8 +79,9 @@ export function DataTable<TData, TValue>({
       mother: "mère",
     };
 
-    return translations[property] || property;
+    return translations[property] ?? property;
   }
+
 
   const table = useReactTable({
     data,

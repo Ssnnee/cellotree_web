@@ -12,3 +12,6 @@ export function capitalizeFirstLetters(string: string) {
     .join(' ')
 }
 
+export function isFile(value: unknown): value is File {
+  return value instanceof File;
+}

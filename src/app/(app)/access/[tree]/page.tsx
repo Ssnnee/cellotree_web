@@ -60,13 +60,13 @@ export default function TreePage({ params }: { params: { tree: string } }) {
           Ceci est la liste des utilisateurs ayant des accès sur l&apos;arbre {treeName}.
           Vous pouvez retrouver ici les informations de chaque utilisateur.
           <br />
-          Le droit d'administrer permet à l'utilisateur de modifier les
+          Le droit d&pos;administrer permet à l&pos;utilisateur de modifier les
           droits des autres utilisateurs et de gérer l&apos;arbre.
           <br />
-          Le droit de modifier permet à l'utilisateur de modifier les
-          informations de l'arbre.
+          Le droit de modifier permet à l&pos;utilisateur de modifier les
+          informations de l&pos;rbre.
           <br />
-          Le droit de voir l'arbre permet à l'utilisateur de voir l'arbre.
+          Le droit de voir l&pos;arbre permet à l&pos;utilisateur de voir l&pos;arbre.
           Ce droit est utile lorsque votre arbre est privé.
         </PageHeaderDescription>
         <PageActions>
@@ -76,7 +76,7 @@ export default function TreePage({ params }: { params: { tree: string } }) {
             </DialogTrigger>
             <DialogContent className="sm:max-w-xl overflow-y-scroll max-h-screen">
               <DialogHeader>
-                <DialogTitle>Accorder un accès à l&apos;utilisateur sur l'&apos;arbre {treeName}</DialogTitle>
+                <DialogTitle>Accorder un accès à l&apos;utilisateur sur l&apos;arbre {treeName}</DialogTitle>
                 <DialogDescription>
                   Remplissez les champs ci-dessous pour accoder un accès à un utilisateurs.
                 </DialogDescription>

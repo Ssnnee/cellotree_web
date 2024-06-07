@@ -90,9 +90,9 @@ export function UpdateAccesForm({id, level}: UpdateAccesFormProps) {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="ADMIN">Droit d'administrer</SelectItem>
+                <SelectItem value="ADMIN">Droit d&pos;administrer</SelectItem>
                 <SelectItem value="EDITOR">Droit de modifier</SelectItem>
-                <SelectItem value="VIEWER">Droit de voir l'arbre</SelectItem>
+                <SelectItem value="VIEWER">Droit de voir l&pos;arbre</SelectItem>
               </SelectContent>
             </Select>
             <FormDescription>

@@ -65,14 +65,14 @@ export function DataTable<TData, TValue>({
   const [selectedFilter, setSelectedFilter] = React.useState<string>("username");
 
   function translateToFrench(property: string): string {
-    const translations: { [key: string]: string } = {
+    const translations: Record<string, string> = {
       id: "identifiant",
       username: "nom d'utilisateur",
       email: "addresse electronique",
       access: "role",
     };
 
-    return translations[property] || property;
+    return translations[property] ?? property;
   }
 
   const table = useReactTable({

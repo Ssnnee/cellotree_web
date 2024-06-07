@@ -98,7 +98,6 @@ export function UpdateMemberForm( props : MemberFormProps) {
   const [fatherPopIsopen, setFatherPopIsopen] = useState(false)
 
   const treeMember = api.member.getManyByTreeId.useQuery({ id: props.treeId })
-  const  [iShidden, setHidden] = useState(false)
 
   const femaleMemberOfTree =  api.member.getFemaleMembersByTreeId.useQuery({id: props.treeId});
   const femaleMember = femaleMemberOfTree.data?.member
@@ -126,7 +125,7 @@ export function UpdateMemberForm( props : MemberFormProps) {
     defaultValues: {
       firstName: props.member.firstname ?? "",
       lastName: props.member.lastname,
-      birthdate: props.member.birthdate as Date,
+      birthdate: new Date(props.member.birthdate ?? ""),
       sex: props.member.sex ?? "M",
       placeOfBirth: props.member.placeOfBirth ?? "",
       description: props.member.description ?? "",
@@ -157,7 +156,6 @@ export function UpdateMemberForm( props : MemberFormProps) {
          toast({
            title: "Le membre a été mis à jour:",
          }),
-         setHidden(true)
          treeMember.refetch()
          props.setDialogIsOpen(false)
        }
@@ -327,7 +325,7 @@ export function UpdateMemberForm( props : MemberFormProps) {
                       {mother && !field.value
                         ? mother?.lastname + " " + mother?.firstname
                         : field.value
-                        ? filteredFemaleMembers?.find((m) => m.id === field.value)?.lastname
+                        ? filteredFemaleMembers?.find((m) => m.id === field.value)!.lastname
                         : "Selectionner la mère"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>

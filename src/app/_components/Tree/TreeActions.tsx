@@ -155,7 +155,7 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
               }
               <DropdownMenuItem>
                 <AvatarIcon className="mr-2 h-3.5 w-3.5" />
-                <Link href={`/tree/${treeInfo.treeId}`}> Gerer l'arbre </Link>
+                <Link href={`/tree/${treeInfo.treeId}`}> Gerer l&apos;arbre </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Pencil1Icon className="mr-2 h-3.5 w-3.5" />

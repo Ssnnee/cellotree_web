@@ -13,7 +13,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@clerk/themes": "^1.7.12",
     "@hookform/resolvers": "^3.3.4",
     "@lucia-auth/adapter-prisma": "^4.0.1",
     "@node-rs/argon2": "^1.8.3",

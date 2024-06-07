@@ -1,12 +1,14 @@
 "use server";
 
-import { z, ZodError } from "zod";
+import type { z } from "zod";
+import { ZodError } from "zod";
 import { generateId } from "lucia";
 import { db } from "~/server/db";
 import { hash, verify } from "@node-rs/argon2";
 import { lucia, validateRequest } from "~/lib/auth";
 import { cookies } from "next/headers";
-import { SignInSchema, SignUpSchema } from "~/types";
+import { SignInSchema  } from "~/types";
+import type { SignUpSchema } from "~/types";
 
 export const signUp = async (values: z.infer<typeof SignUpSchema>) => {
   const hashedPassword = await hash(values.password, {

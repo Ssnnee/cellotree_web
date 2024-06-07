@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const authSession = request.cookies.get('auth_session')
-  const isAuthorised = request.cookies.get('isAuthorisedTo')
+  if (typeof window === 'undefined') {
+    const authSession = request.cookies.get('auth_session')
+    const isAuthorised = request.cookies.get('isAuthorisedTo')
 
-  if (!authSession && /(\/access|\/trpc|\/tree)/.test(request.url) && !isAuthorised) {
-    console.log('Redirecting to /access')
-    return NextResponse.redirect(new URL('/', request.url))
+    if (!authSession && /(\/access|\/trpc|\/tree)/.test(request.url) && !isAuthorised) {
+      console.log('Redirecting to /access')
+      return NextResponse.redirect(new URL('/', request.url))
+    }
   }
 }
 

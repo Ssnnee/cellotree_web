@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu"
 
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef, CellContext } from "@tanstack/react-table"
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import {
@@ -46,10 +46,10 @@ import { api } from "~/trpc/react";
 import { toast } from "~/components/ui/use-toast";
 import { UpdateAccesForm } from "~/app/_components/Access/UpdateAccessForm";
 
-const userSchema =z.object({
+const userSchema = z.object({
   username: z.string(),
   email: z.string(),
-  access : z.object({
+  access: z.object({
     id: z.string(),
     level: z.enum(["ADMIN", "EDITOR", "VIEWER"]),
     useId: z.string(),
@@ -59,24 +59,110 @@ const userSchema =z.object({
 
 export type Access = z.infer<typeof userSchema>;
 
+const CellComponent: React.FC<CellContext<Access, unknown>> = ({ row }) => {
+  const user = row.original
+
+  const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
+  const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
+  const deleteAccess = api.access.delete.useMutation()
+
+  const handleDelete = async () => {
+    if (!user?.access.id) return
+    deleteAccess.mutate(
+      { id: user?.access.id },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Accès supprimé avec succès",
+          })
+        },
+        onError: () => {
+          toast({
+            title: "Erreur lors de la suppression de l'accès",
+            variant: "destructive"
+          })
+        },
+      }
+    )
+  }
+
+  return (
+    <div className="">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <DotsHorizontalIcon />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Actions</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
+            <span onClick={() => setEditDialogIsOpen(true)}>Modifier l&apos;accès </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-red-600">
+            <TrashIcon className="mr-2 h-3.5 w-3.5" />
+            <span onClick={() => setAlertDialogIsOpen(true)}>
+              Révoquer l&apos;accès
+            </span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Etes-vous sûr de vouloir révoquer cet accès ? </AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action ne pourra pas être annulée
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Révoquer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Modification de l&apos;accès de l&apos;utilisateur {user?.username} </DialogTitle>
+            <DialogDescription>
+              Remplissez les champs ci-dessous pour modifier cet accès
+            </DialogDescription>
+          </DialogHeader>
+          <UpdateAccesForm id={user?.access.id} level={user?.access.level} />
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
 export const columns: ColumnDef<Access>[] = [
   {
     accessorKey: "username",
     header: () => {
       return (
-        <div className="text-center"> Nom d'utilisateur </div>
+        <div className="text-center"> Nom d&apos;utilisateur </div>
       )
     },
-
   },
   {
     accessorKey: "email",
-    header: () => <div className="text-center"> Addresse électrinique </div>,
+    header: () => <div className="text-center"> Addresse électronique </div>,
   },
   {
     accessorKey: "access",
     header: () => {
-      return ( <div className="text-center"> Role </div> )
+      return (<div className="text-center"> Role </div>)
     },
     cell: ({ row }) => {
       const value = row.original?.access
@@ -90,91 +176,6 @@ export const columns: ColumnDef<Access>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const user = row.original
-
-      const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
-      const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
-      const deleteAccess = api.access.delete.useMutation()
-
-      const handleDelete = async () => {
-        if(!user?.access.id) return
-        deleteAccess.mutate(
-          { id: user?.access.id },
-          {
-            onSuccess: () => {
-              toast({
-                title: "Accès supprimé avec succès",
-              })
-            },
-            onError: () => {
-              toast({
-                title: "Erreur lors de la suppression de l'accès",
-                variant: "destructive"
-              })
-            },
-          }
-        )
-      }
-
-      return (
-        <div className="">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <DotsHorizontalIcon />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Actions</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
-                <span onClick={() => setEditDialogIsOpen(true)}>Modifier l&apos;accès </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-                <TrashIcon className="mr-2 h-3.5 w-3.5" />
-                <span onClick={() => setAlertDialogIsOpen(true)} >
-                  Révoquer l&apos;accès
-                </span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Etes-vous sûr de vouloir revoquer  cet accès ? </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Cette action ne pourra pas être annulé
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Annuler</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} >Révoquer</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
-            <DialogContent className="sm:max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Modification de l&apos;acccès de l&apos;utilisateur {user?.username} </DialogTitle>
-                <DialogDescription>
-                  Remplissez les champ ci-dessous pour modifier cet accès
-                </DialogDescription>
-              </DialogHeader>
-              <UpdateAccesForm id={user?.access.id} level={user?.access.level} />
-            </DialogContent>
-          </Dialog>
-        </div>
-      )
-    },
+    cell: (props) => <CellComponent {...props} />,
   },
 ]

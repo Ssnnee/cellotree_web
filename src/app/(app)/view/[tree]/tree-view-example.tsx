@@ -28,7 +28,7 @@ export const FamilyChart: React.FC<{ data: Data[] }> = ({ data }) => {
       return "Data must be an array.";
     }
     for (const item of data) {
-      if (!item.id || typeof item.id !== "string") {
+      if (!item.id ?? typeof item.id !== "string") {
         return "Each data item must have an 'id' of type string.";
       }
       if (!item.data) {
@@ -66,16 +66,16 @@ export const FamilyChart: React.FC<{ data: Data[] }> = ({ data }) => {
           svg: view.svg,
           card_dim: { w: 220, h: 70, text_x: 75, text_y: 15, img_w: 60, img_h: 60, img_x: 5, img_y: 5 },
           card_display: [
-            (d: Data) => `${d.data["first name"] || ""} ${d.data["last name"] || ""}`,
-            (d: Data) => `${d.data["description"] || ""}`,
-            (d: Data) => `${d.data["birthday"] || ""}`,
+            (d: Data) => `${d.data["first name"] ?? ""} ${d.data["last name"] ?? ""}`,
+            (d: Data) => `${d.data.description ?? ""}`,
+            (d: Data) => `${d.data.birthday ?? ""}`,
           ],
           mini_tree: true,
           link_break: true,
         });
 
       view.setCard(Card);
-      store.setOnUpdate((props: any) => view.update(props || {}));
+      store.setOnUpdate((props: unknown) => view.update(props ?? {}));
       store.update.tree({ initial: true });
     } catch (e) {
       toast({

@@ -216,153 +216,156 @@ export const columns: ColumnDef<Member>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const member = row.original
-
-      const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
-      const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
-      const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
-      const [addSpouseIsOpen, setAddSpouseIsOpen] = useState(false)
-
-      const deleteMember = api.member.delete.useMutation()
-      const treeMember = api.member.getManyByTreeId.useQuery({ id: member.treeId })
-
-      const handleDelete = async () => {
-        const form = new FormData()
-        form.append("path", member.avatarURL ?? "")
-        const res = await deleteFile(form)
-        if (!res.success) {
-          toast({
-            title: "Une erreur s'est produite lors de la suppression de l'avatar",
-          })
-        }
-        deleteMember.mutate(
-          { id: member.id },
-          {
-            onSuccess: () => {
-              toast({
-                title: "Le membre a été supprimé de l'arbre",
-              })
-              treeMember.refetch()
-            },
-            onError: (error) => {
-              console.error(error)
-              toast({
-                title: "Une erreur s'est produite lors de la suppression du membre",
-              })
-            }
-          }
-        )
-      }
-
-      return (
-        <div className="">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <DotsHorizontalIcon />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Actions</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <EyeOpenIcon className="mr-2 h-3.5 w-3.5" />
-                <Link href={`/view/${member.treeId}`}>
-                  Visualiser l&apos;arbre
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-              <Link2Icon className="mr-2 h-3.5 w-3.5" />
-              <span onClick={() => setAddSpouseIsOpen(true)}> Ajouter un conjoint </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <UploadIcon className="mr-2 h-3.5 w-3.5" />
-                <span onClick={() => setEditAvatarDialogIsOpen(true)}>Changer l&apos;avatar </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
-                <span onClick={() => setEditDialogIsOpen(true)}>Modifier les informations </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-                <TrashIcon className="mr-2 h-3.5 w-3.5" />
-                <span onClick={() => setAlertDialogIsOpen(true)} >
-                  Supprimer le membre
-                </span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Etes-vous sûr de vouloir supprimer cet membre? </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Cette action ne pourra pas être annulé
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Annuler</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} >Supprimer</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
-            <DialogContent className="sm:max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Modification du membre {member.firstname + " " + member.lastname}</DialogTitle>
-                <DialogDescription>
-                  Remplissez les champ ci-dessous pour modifier cet arbre
-                </DialogDescription>
-              </DialogHeader>
-              <UpdateMemberForm
-                setDialogIsOpen={setEditDialogIsOpen}
-                member={member}
-                treeId={member.treeId}
-              />
-            </DialogContent>
-          </Dialog>
-          <Dialog open={editAvatarDialogIsOpen} onOpenChange={setEditAvatarDialogIsOpen}>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Modification de l&apos;avatar {member.firstname + " " + member.lastname}</DialogTitle>
-                <DialogDescription>
-                  Veuiller choisir l&apos;image à metrre.
-                </DialogDescription>
-                <UpdateMemberAvatarForm
-                  setDialogIsOpen={setEditAvatarDialogIsOpen}
-                  member={member}
-                  treeId={member.treeId}
-                />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-          <Dialog open={addSpouseIsOpen} onOpenChange={setAddSpouseIsOpen}>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Ajout d&apos;un conjoint au membre {member.firstname + " " + member.lastname}</DialogTitle>
-                <DialogDescription>
-                  Veuiller choisir l&apos;un conjoint.
-                  Les conjoints doivent être déjà existant dans l&apos;arbre.
-                  Les conjoints sont importants pour la génération de la
-                  visualisation de l&apos;arbre.
-                </DialogDescription>
-                  <SpouseForm
-                  id={member.id}
-                  treeId={member.treeId}
-                  sex={member.sex}
-                />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </div>
-      )
+      return <ActionsMenu member={member} />
     },
   },
 ]
+
+const ActionsMenu = ({ member }: { member: Member }) => {
+  const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
+  const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
+  const [editAvatarDialogIsOpen, setEditAvatarDialogIsOpen] = useState(false)
+  const [addSpouseIsOpen, setAddSpouseIsOpen] = useState(false)
+
+  const deleteMember = api.member.delete.useMutation()
+  const treeMember = api.member.getManyByTreeId.useQuery({ id: member.treeId })
+
+  const handleDelete = async () => {
+    const form = new FormData()
+    form.append("path", member.avatarURL ?? "")
+    const res = await deleteFile(form)
+    if (!res.success) {
+      toast({
+        title: "Une erreur s'est produite lors de la suppression de l'avatar",
+      })
+    }
+    deleteMember.mutate(
+      { id: member.id },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Le membre a été supprimé de l'arbre",
+          })
+          treeMember.refetch()
+        },
+        onError: (error) => {
+          console.error(error)
+          toast({
+            title: "Une erreur s'est produite lors de la suppression du membre",
+          })
+        }
+      }
+    )
+  }
+
+  return (
+    <div className="">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-8 w-8 p-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <DotsHorizontalIcon />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Actions</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <EyeOpenIcon className="mr-2 h-3.5 w-3.5" />
+            <Link href={`/view/${member.treeId}`}>
+              Visualiser l&apos;arbre
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+          <Link2Icon className="mr-2 h-3.5 w-3.5" />
+          <span onClick={() => setAddSpouseIsOpen(true)}> Ajouter un conjoint </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <UploadIcon className="mr-2 h-3.5 w-3.5" />
+            <span onClick={() => setEditAvatarDialogIsOpen(true)}>Changer l&apos;avatar </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
+            <span onClick={() => setEditDialogIsOpen(true)}>Modifier les informations </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-red-600">
+            <TrashIcon className="mr-2 h-3.5 w-3.5" />
+            <span onClick={() => setAlertDialogIsOpen(true)} >
+              Supprimer le membre
+            </span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <AlertDialog open={alertDialogIsOpen} onOpenChange={setAlertDialogIsOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Etes-vous sûr de vouloir supprimer cet membre? </AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action ne pourra pas être annulé
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} >Supprimer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog open={editDialogIsOpen} onOpenChange={setEditDialogIsOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Modification du membre {member.firstname + " " + member.lastname}</DialogTitle>
+            <DialogDescription>
+              Remplissez les champ ci-dessous pour modifier cet arbre
+            </DialogDescription>
+          </DialogHeader>
+          <UpdateMemberForm
+            setDialogIsOpen={setEditDialogIsOpen}
+            member={member}
+            treeId={member.treeId}
+          />
+        </DialogContent>
+      </Dialog>
+      <Dialog open={editAvatarDialogIsOpen} onOpenChange={setEditAvatarDialogIsOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Modification de l&apos;avatar {member.firstname + " " + member.lastname}</DialogTitle>
+            <DialogDescription>
+              Veuiller choisir l&apos;image à metrre.
+            </DialogDescription>
+            <UpdateMemberAvatarForm
+              setDialogIsOpen={setEditAvatarDialogIsOpen}
+              member={member}
+              treeId={member.treeId}
+            />
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={addSpouseIsOpen} onOpenChange={setAddSpouseIsOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Ajout d&apos;un conjoint au membre {member.firstname + " " + member.lastname}</DialogTitle>
+            <DialogDescription>
+              Veuiller choisir l&apos;un conjoint.
+              Les conjoints doivent être déjà existant dans l&apos;arbre.
+              Les conjoints sont importants pour la génération de la
+              visualisation de l&apos;arbre.
+            </DialogDescription>
+              <SpouseForm
+              id={member.id}
+              treeId={member.treeId}
+              sex={member.sex}
+            />
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}

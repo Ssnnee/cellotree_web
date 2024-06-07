@@ -70,7 +70,7 @@ export default function ViewPage({ params }: { params: { tree: string } }) {
     <div className="container relative">
       <PageHeader>
         <PageHeaderHeading>
-          Découvrez les membres de la famille {treeName} en visualisant l'arbre généalogique
+          Découvrez les membres de la famille {treeName} en visualisant l&apos;arbre généalogique
         </PageHeaderHeading>
         <PageHeaderDescription>
           Ceci est la liste des membres de la famille {treeName}. Vous pouvez
@@ -80,7 +80,7 @@ export default function ViewPage({ params }: { params: { tree: string } }) {
         <PageActions>
           <Button asChild>
             <Link href={`/member/${params.tree}`}>
-              Voir la liste des membres et plus d'informations.
+              Voir la liste des membres et plus d&apos;informations.
             </Link>
           </Button>
         </PageActions>
