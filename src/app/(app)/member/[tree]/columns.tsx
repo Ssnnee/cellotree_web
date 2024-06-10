@@ -112,7 +112,7 @@ export const columns: ColumnDef<Member>[] = [
                 alt={`Avatar de ${memberName}`}
                 width={32}
                 height={32}
-                className="rounded-full"
+                className="rounded"
               />
             </DialogTrigger>
             <DialogContent className="max-w-sm">
@@ -123,7 +123,7 @@ export const columns: ColumnDef<Member>[] = [
                   alt={`Avatar de ${memberName}`}
                   width={400}
                   height={400}
-                  className="rounded-full"
+                  className="rounded"
                 />
             </DialogContent>
           </Dialog>

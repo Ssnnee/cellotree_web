@@ -13,14 +13,15 @@ import { SignInForm } from "./SignInForm";
 import { SignUpForm } from "./SignUpForm";
 import { Separator } from "~/components/ui/separator";
 
-
 export function SignInDialog() {
   const [showRegisterFormInputs, setShowRegisterFormInputs] = useState(false);
 
   return (
     <Dialog>
       <DialogTrigger asChild >
-        <Button variant="default"> Se connecter </Button>
+        <Button variant="default">
+          <span className=""> Se connecter </span>
+        </Button>
       </DialogTrigger>
         <DialogContent className="max-w-md">
           <DialogHeader>

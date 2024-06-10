@@ -1,11 +1,8 @@
-import { Button } from "~/components/ui/button";
 import {
-  PageActions,
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading
 } from "../_components/page-header";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import {
   Card,
   CardContent,
@@ -27,12 +24,6 @@ export default function Home() {
           généalogiques. Explorez vos racines familiales et connectez-vous avec
           vos proches, où qu&apos;ils soient dans le monde.
         </PageHeaderDescription>
-        <PageActions>
-          <Button>
-            <MagnifyingGlassIcon className="w-6 h-6" />
-            Search
-          </Button>
-        </PageActions>
       </PageHeader>
       <Card>
         <CardHeader className="text-center">
@@ -49,3 +40,4 @@ export default function Home() {
     </div>
   );
 }
+

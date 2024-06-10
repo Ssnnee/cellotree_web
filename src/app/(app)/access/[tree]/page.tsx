@@ -47,6 +47,8 @@ export default function TreePage({ params }: { params: { tree: string } }) {
     },
   }))
 
+
+
   const getTree = api.tree.getById.useQuery({ id: params.tree })
   const treeName = getTree.data?.name
 
@@ -60,13 +62,13 @@ export default function TreePage({ params }: { params: { tree: string } }) {
           Ceci est la liste des utilisateurs ayant des accès sur l&apos;arbre {treeName}.
           Vous pouvez retrouver ici les informations de chaque utilisateur.
           <br />
-          Le droit d&pos;administrer permet à l&pos;utilisateur de modifier les
+          Le droit d&apos;administrer permet à l&apos;utilisateur de modifier les
           droits des autres utilisateurs et de gérer l&apos;arbre.
           <br />
-          Le droit de modifier permet à l&pos;utilisateur de modifier les
-          informations de l&pos;rbre.
+          Le droit de modifier permet à l&apos;utilisateur de modifier les
+          informations de l&apos;rbre.
           <br />
-          Le droit de voir l&pos;arbre permet à l&pos;utilisateur de voir l&pos;arbre.
+          Le droit de voir l&apos;arbre permet à l&apos;utilisateur de voir l&apos;arbre.
           Ce droit est utile lorsque votre arbre est privé.
         </PageHeaderDescription>
         <PageActions>
