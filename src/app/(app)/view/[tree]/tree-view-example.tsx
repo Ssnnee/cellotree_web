@@ -1,3 +1,4 @@
+"use client"
 import f3 from "family-chart";
 import { useEffect, useRef } from "react";
 import { toast } from "~/components/ui/use-toast";

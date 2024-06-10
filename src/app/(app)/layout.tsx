@@ -9,6 +9,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     <>
       <SiteHeader />
       <main className="flex-1">{children}</main>
+      jldsdddddsdsldjsldjlq
     </>
   )
 }

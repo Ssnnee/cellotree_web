@@ -28,6 +28,16 @@ export const treeRouter = createTRPCRouter({
     })
   }),
 
+  getAll: publicProcedure
+  .query(({ ctx }) => {
+    return ctx.db.tree.findMany({
+      where: { type: "PUBLIC" },
+      include: {
+        member: true
+      }
+    })
+  }),
+
   create: publicProcedure
   .input(treeSchema)
   .mutation(async ({ ctx, input }) => {
@@ -87,6 +97,8 @@ export const treeRouter = createTRPCRouter({
       }
     })
   }),
+
+
 
 
 });

@@ -22,5 +22,16 @@ export const userRouter = createTRPCRouter({
         }
       })
     }),
+
+  getUserBySession: publicProcedure
+    .input(z.object({ session: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.session.findFirst({
+        where: { id: input.session },
+        include: {
+          user: true
+        }
+      })
+    }),
 });
 

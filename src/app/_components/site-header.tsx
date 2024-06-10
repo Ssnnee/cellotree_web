@@ -6,6 +6,7 @@ import { SignInDialog } from "./User/SignInDialog"
 import { ProfileDialog } from "./User/profile-dialog"
 import { getUser } from "~/actions/auth.actions"
 import { useState } from "react"
+import { CommandMenu } from "./command-menu"
 
 export function SiteHeader() {
   const [username, setUsername] = useState<string | null>(null);
@@ -33,8 +34,10 @@ export function SiteHeader() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-          </div>
+        <div className="w-full flex-1 md:w-auto md:flex-none">
+          <CommandMenu />
+        </div>
+
           <nav className="flex items-center">
             { !username
                 ? <SignInDialog  />
@@ -47,3 +50,4 @@ export function SiteHeader() {
     </header>
   )
 }
+

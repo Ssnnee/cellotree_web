@@ -7,8 +7,10 @@ export function middleware(request: NextRequest) {
     const isAuthorised = request.cookies.get('isAuthorisedTo')
 
     if (!authSession && /(\/access|\/trpc|\/tree)/.test(request.url) && !isAuthorised) {
-      console.log('Redirecting to /access')
-      return NextResponse.redirect(new URL('/', request.url))
+    // if (!authSession && /(\/access)/.test(request.url) && !isAuthorised) {
+      if (request.url.startsWith('/access')) {
+        return NextResponse.redirect(new URL('/', request.url))
+      }
     }
   }
 }
@@ -20,6 +22,7 @@ export const config = {
     "/((?!.+\\.[\\w]+$|_next).*)",
     // Re-include any files in the api or trpc folders that might have an extension
     "/(api|trpc)(.*)",
+    "/(tree)(.*)",
     "/access:path*",
   ]
 };
