@@ -4,6 +4,7 @@ import TreeActions from "./TreeActions";
 import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
+import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 
 interface TreeProps {
     userId: string;
@@ -12,6 +13,15 @@ interface TreeProps {
 export default function Tree({ userId }: TreeProps) {
   const userAccess = api.access.getByUserId.useQuery({ id: userId });
   const pathname = usePathname()
+  const treeIdFromCookie = getCookie('isEnableToSee')
+
+  function setAccessCookie(treeId: string) {
+    if (treeId !== treeIdFromCookie) {
+      removeCookie('isEnableToSee')
+      setCookie('isEnableToSee', `${treeId}`, { expires: 1 })
+    }
+    setCookie('isEnableToSee', `${treeId}`, { expires: 1 })
+  }
 
   return (
     <div className="">
@@ -19,7 +29,7 @@ export default function Tree({ userId }: TreeProps) {
         <div key={access.id} className="flex flex-col items-center w-72">
           <div
             className={cn(
-              "flex justify-between items-center rounded py-1 px-3 mr-2  w-full  hover:bg-accent hover:text-accent-foreground",
+              "flex justify-between items-center rounded py-1 px-3 mr-2 w-full  hover:bg-accent hover:text-accent-foreground",
               pathname?.startsWith(`/tree/${access.tree.id}`) ||
               pathname?.startsWith(`/view/${access.tree.id}`) ||
               pathname?.startsWith(`/member/${access.tree.id}`) ||
@@ -31,6 +41,7 @@ export default function Tree({ userId }: TreeProps) {
             <Link
               href={`/member/${access.tree.id}`}
               className="w-full truncate text-lg"
+              onClick={() => setAccessCookie(access.tree.id)}
             >
               <p className="w-full truncate text-lg">{access.tree.name}</p>
               {access.tree.type === "PUBLIC" ?
@@ -54,11 +65,3 @@ export default function Tree({ userId }: TreeProps) {
     </div>
   );
 }
-// <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
-//   <div className="flex flex-col space-y-3">
-//
-//   </div>
-//   <div className="flex flex-col space-y-2">
-//
-//   </div>
-// </ScrollArea>

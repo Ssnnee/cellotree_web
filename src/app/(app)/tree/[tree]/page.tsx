@@ -30,8 +30,10 @@ export default function  TreePage( { params }: { params: { tree: string } } ) {
   const router = useRouter()
   const isAuthCookie = getCookie('isAuthorisedTo')
   const isAuthorised = isAuthCookie === params.tree
+
   if (!isAuthorised) {
-    return  router.push("/")
+    router.push("/")
+    return null
   }
 
   const treeMember  = api.member.getManyByTreeId.useQuery({ id:params.tree })

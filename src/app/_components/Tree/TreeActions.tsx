@@ -38,7 +38,7 @@ import {
 } from "~/components/ui/dialog"
 
 import { UpdateTreeForm } from "./UpdateTreeForm"
-import { api } from "~/trpc/react"
+import { api, getBaseUrl } from "~/trpc/react"
 import { } from "@radix-ui/react-tooltip"
 import {
   Tooltip,
@@ -93,7 +93,7 @@ export default function TreeActions({ treeInfo, refetch, accessLevel }: TreeActi
   }
 
   const deleteTree = api.tree.delete.useMutation()
-  const treeUrl = `http://localhost:3000/view/${treeInfo.treeId}`
+  const treeUrl = getBaseUrl() + `/view/${treeInfo.treeId}`
 
   const handleDelete = async () => {
     deleteTree.mutate(

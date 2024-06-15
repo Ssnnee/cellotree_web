@@ -48,20 +48,27 @@ Users can add family members, create relationships, and view their family tree.
     - [tRPC](https://trpc.io/)
 
 
-## Features
+## Main Features
     - Create family members
-    - Create relationships
-    - View family tree
+    - Visualise family tree
     - Share family tree
+    - Grant access to family tree
+    - Collaborate with family members on a tree if they have access
+    - Search for family members and trees
 
 ## Todos
 
 - [x] Add verification to the username (check if it is already taken)
 - [x] Make the list of tree to reload on delete
-- [ ] Add a gobal search bar to search for family members and trees
+- [x] Add a gobal search bar to search for family members and trees
 - [x] Add a update
 - [x] Find a solution for viewing a tree
-- [ ] Add a way to note display a private tree
+- [x] Add a way to note display a private tree
 - [x] Check access on acces page
+- [x] Check if the tree is private or not before displaying it if someone has the link
+- [ ] Add a beautiful loading animations
+- [ ] Hide routes that are not supposed to be accessed
+- [ ] Use the capitalize function to capitalize the first letter of the name
+- [ ] Add a way to remove spouse relationship
 - [ ] May be add an admin dashboard
 
