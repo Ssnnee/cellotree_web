@@ -24,6 +24,7 @@ import {
 import { api } from "~/trpc/react"
 import type { TreeActionsProps } from "./TreeActions"
 import { toast } from "~/components/ui/use-toast"
+import { capitalizeFirstLetters } from "~/lib/utils"
 
 
 const formSchema = z.object({
@@ -53,7 +54,7 @@ export function UpdateTreeForm({treeInfo, refetch, setDialogIsOpen}: UpdateTreeF
 
     updateTree.mutate(
       {
-        name: values.name,
+        name: capitalizeFirstLetters(values.name),
         type: values.treeType,
         id: treeInfo.treeId,
       },

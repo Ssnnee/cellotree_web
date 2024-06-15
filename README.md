@@ -68,7 +68,9 @@ Users can add family members, create relationships, and view their family tree.
 - [x] Check if the tree is private or not before displaying it if someone has the link
 - [ ] Add a beautiful loading animations
 - [ ] Hide routes that are not supposed to be accessed
-- [ ] Use the capitalize function to capitalize the first letter of the name
+- [x] Use the capitalize function to capitalize the first letter of the name
 - [ ] Add a way to remove spouse relationship
+- [ ] Fix errors on checking user authentication on the server from the header
+- [ ] Custome 404 page
 - [ ] May be add an admin dashboard
 

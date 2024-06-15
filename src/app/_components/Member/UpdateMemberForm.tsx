@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "~/components/ui/form"
 
-import { cn } from "~/lib/utils"
+import { capitalizeFirstLetters, cn } from "~/lib/utils"
 
 import {
   Popover,
@@ -144,20 +144,27 @@ export function UpdateMemberForm( props : MemberFormProps) {
        id: props.member.id,
        sex: values.sex,
        birthdate: values.birthdate,
-       placeOfBirth: values.placeOfBirth,
-       lastname: values.lastName,
-       firstname: values.firstName,
+       placeOfBirth: capitalizeFirstLetters(values.placeOfBirth),
+       lastname: capitalizeFirstLetters(values.lastName),
+       firstname: capitalizeFirstLetters(values.firstName),
        fatherId: values.fatherId,
        motherId: values.motherId,
      },
      {
-       onSettled: () => {
+       onSuccess: () => {
          form.reset(),
          toast({
            title: "Le membre a été mis à jour:",
          }),
          treeMember.refetch()
          props.setDialogIsOpen(false)
+       },
+       onError: () => {
+         toast({
+           title: "Erreur",
+           description: "Le membre n'a pas pu être mis à jour",
+           variant: "destructive",
+         })
        }
      }
    )

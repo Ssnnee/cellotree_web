@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { cn } from "~/lib/utils";
+import { capitalizeFirstLetters, cn } from "~/lib/utils";
 import {
   Popover,
   PopoverContent,
@@ -117,11 +117,11 @@ export function MemberForm({ treeId }: MemberFormProps) {
 
     createMember.mutate(
       {
-        firstname: values.firstName,
-        lastname: values.lastName,
+        firstname: capitalizeFirstLetters(values.firstName),
+        lastname: capitalizeFirstLetters(values.lastName),
         birthdate: values.birthdate,
         sex: values.sex,
-        placeOfBirth: values.placeOfBirth,
+        placeOfBirth: capitalizeFirstLetters(values.placeOfBirth),
         avatarURL: `/${file.name}`,
         description: values.description,
         treeId: treeId,

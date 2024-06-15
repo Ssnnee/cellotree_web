@@ -102,7 +102,7 @@ export function UpdateMemberAvatarForm( props : MemberFormProps) {
             avatarURL: `/${file.name}`,
           },
           {
-            onSettled: () => {
+            onSuccess: () => {
               form.reset(),
               toast({
                 title: "L'avatar d'un membre a été mis à jour:",
@@ -110,6 +110,12 @@ export function UpdateMemberAvatarForm( props : MemberFormProps) {
               setHidden(true)
               treeMember.refetch()
               props.setDialogIsOpen(false)
+            },
+            onError: () => {
+              toast({
+                variant: "destructive",
+                description: "Une erreur s'est produite lors de la mise à jour de l'avatar.",
+              })
             }
           }
         )

@@ -23,6 +23,7 @@ import {
 import { api } from "~/trpc/react"
 import { toast } from "~/components/ui/use-toast"
 import { useRouter } from "next/navigation"
+import { capitalizeFirstLetters } from "~/lib/utils"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -51,7 +52,7 @@ export function TreeForm({ userId, setOpened }: TreeFormProps) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     createTree.mutate(
       {
-        name: values.name,
+        name: capitalizeFirstLetters(values.name),
         type: values.treeType,
         id: userId,
       },
