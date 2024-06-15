@@ -47,8 +47,6 @@ export default function TreePage({ params }: { params: { tree: string } }) {
     },
   }))
 
-
-
   const getTree = api.tree.getById.useQuery({ id: params.tree })
   const treeName = getTree.data?.name
 
@@ -83,7 +81,7 @@ export default function TreePage({ params }: { params: { tree: string } }) {
                   Remplissez les champs ci-dessous pour accoder un accès à un utilisateurs.
                 </DialogDescription>
               </DialogHeader>
-              <AccesForm treeId={params.tree} />
+              <AccesForm treeId={params.tree} refetch={getUser.refetch} />
             </DialogContent>
           </Dialog>
         </PageActions>

@@ -1,4 +1,3 @@
-"use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -47,9 +46,10 @@ const formSchema = z.object({
 
 interface MemberFormProps {
   treeId: string
+  refetch: () => void
 }
 
-export function AccesForm({ treeId }: MemberFormProps) {
+export function AccesForm({ treeId, refetch }: MemberFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,12 +78,20 @@ export function AccesForm({ treeId }: MemberFormProps) {
         accessType: values.accessType,
       },
       {
-        onSettled: () => {
+        onSuccess: () => {
+          refetch(),
           toast({
             title: "Le droit à été accordé à l'utilisateur",
             description: "L'utilisateur a reçu le role " + values.accessType,
           }),
           form.reset()
+        },
+        onError: () => {
+          toast({
+            title: "Erreur",
+            description: "Le droit n'a pas pu être accordé",
+            variant: "destructive",
+          })
         },
       }
     )
@@ -168,9 +176,9 @@ export function AccesForm({ treeId }: MemberFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="ADMIN">Droit d&pos;administrer</SelectItem>
+                  <SelectItem value="ADMIN">Droit d&apos;administrer</SelectItem>
                   <SelectItem value="EDITOR">Droit de modifier</SelectItem>
-                  <SelectItem value="VIEWER">Droit de voir l&pos;arbre</SelectItem>
+                  <SelectItem value="VIEWER">Droit de voir l&apos;arbre</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>

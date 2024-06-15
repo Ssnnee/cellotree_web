@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu"
 
@@ -61,6 +60,7 @@ export type Access = z.infer<typeof userSchema>;
 
 const CellComponent: React.FC<CellContext<Access, unknown>> = ({ row }) => {
   const user = row.original
+  const getUser = api.access.getAccessByTreeId.useQuery({ id: user?.access.treeId ?? "" })
 
   const [alertDialogIsOpen, setAlertDialogIsOpen] = useState(false)
   const [editDialogIsOpen, setEditDialogIsOpen] = useState(false)
@@ -72,6 +72,7 @@ const CellComponent: React.FC<CellContext<Access, unknown>> = ({ row }) => {
       { id: user?.access.id },
       {
         onSuccess: () => {
+          getUser.refetch(),
           toast({
             title: "Accès supprimé avec succès",
           })
@@ -104,7 +105,6 @@ const CellComponent: React.FC<CellContext<Access, unknown>> = ({ row }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Pencil1Icon className="mr-2 h-3.5 w-3.5" />
             <span onClick={() => setEditDialogIsOpen(true)}>Modifier l&apos;accès </span>
@@ -139,12 +139,27 @@ const CellComponent: React.FC<CellContext<Access, unknown>> = ({ row }) => {
               Remplissez les champs ci-dessous pour modifier cet accès
             </DialogDescription>
           </DialogHeader>
-          <UpdateAccesForm id={user?.access.id} level={user?.access.level} />
+          <UpdateAccesForm
+            id={user?.access.id}
+            level={user?.access.level}
+            refetch={getUser.refetch}
+          />
         </DialogContent>
       </Dialog>
     </div>
   )
 }
+
+function translateToFrench(property: string): string {
+    const translations: Record<string, string> = {
+      ADMIN: "Administrateur",
+      EDITOR: "Editeur",
+      VIEWER: "Consultant",
+    };
+
+    return translations[property] ?? property;
+  }
+
 
 export const columns: ColumnDef<Access>[] = [
   {
@@ -168,7 +183,7 @@ export const columns: ColumnDef<Access>[] = [
       const value = row.original?.access
       return (
         <div>
-          {value?.level}
+          {translateToFrench(value?.level ?? "")}
         </div>
       )
     },

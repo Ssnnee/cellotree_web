@@ -34,9 +34,10 @@ const formSchema = z.object({
 interface UpdateAccesFormProps {
   id: string | undefined
   level: "ADMIN" | "EDITOR" | "VIEWER" | undefined
+  refetch: () => void
 }
 
-export function UpdateAccesForm({id, level}: UpdateAccesFormProps) {
+export function UpdateAccesForm({id, level, refetch}: UpdateAccesFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,9 +57,10 @@ export function UpdateAccesForm({id, level}: UpdateAccesFormProps) {
       },
       {
         onSuccess: () => {
+          refetch(),
           toast({
             title: "L'accès a été modifié",
-            description: "L'utilisateur a maintenant l'accès" +
+            description: "L'utilisateur a maintenant l'accès" + " " +
               values.level
           }),
           form.reset()
@@ -90,9 +92,9 @@ export function UpdateAccesForm({id, level}: UpdateAccesFormProps) {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="ADMIN">Droit d&pos;administrer</SelectItem>
+                <SelectItem value="ADMIN">Droit d&apos;administrer</SelectItem>
                 <SelectItem value="EDITOR">Droit de modifier</SelectItem>
-                <SelectItem value="VIEWER">Droit de voir l&pos;arbre</SelectItem>
+                <SelectItem value="VIEWER">Droit de voir l&apos;arbre</SelectItem>
               </SelectContent>
             </Select>
             <FormDescription>

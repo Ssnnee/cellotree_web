@@ -2,27 +2,27 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id    String @id @default(uuid())
-    username String @unique
-    email String
-    hashedPassword String
+  id             String @id @default(uuid())
+  username       String @unique
+  email          String
+  hashedPassword String
 
-    // profile Profile?
-    sessions Session[]
+  // profile Profile?
+  sessions Session[]
 
-    access UserAccess[]
+  access UserAccess[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // model Profile {
@@ -43,39 +43,38 @@ model Session {
 }
 
 enum AccessLevel {
-    ADMIN
-    EDITOR
-    VIEWER
+  ADMIN
+  EDITOR
+  VIEWER
 }
 
 model UserAccess {
-    id    String @id @default(cuid())
-    level AccessLevel
+  id    String      @id @default(cuid())
+  level AccessLevel
 
-    userId String
-    user User @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
-    treeId String
-    tree Tree @relation(fields: [treeId], references: [id])
+  treeId String
+  tree   Tree   @relation(fields: [treeId], references: [id])
 }
 
-
 enum TypeTree {
-    PUBLIC
-    PRIVATE
+  PUBLIC
+  PRIVATE
 }
 
 model Tree {
-    id   String @id @default(cuid())
-    name String
-    type TypeTree
-    member Member[]
-    userAccess UserAccess[]
+  id         String       @id @default(cuid())
+  name       String
+  type       TypeTree
+  member     Member[]
+  userAccess UserAccess[]
 }
 
 enum Sex {
-    M
-    F
+  M
+  F
 }
 
 model Member {
@@ -89,14 +88,14 @@ model Member {
   description  String?
 
   treeId String
-  tree   Tree @relation(fields: [treeId], references: [id])
+  tree   Tree   @relation(fields: [treeId], references: [id])
 
-  father   Member?  @relation(name: "FatherChild", fields: [fatherId], references: [id])
-  fatherId String?
-  mother   Member?  @relation(name: "MotherChild", fields: [motherId], references: [id])
-  motherId String?
+  father         Member?  @relation(name: "FatherChild", fields: [fatherId], references: [id])
+  fatherId       String?
+  mother         Member?  @relation(name: "MotherChild", fields: [motherId], references: [id])
+  motherId       String?
   fatherChildren Member[] @relation(name: "FatherChild")
   motherChildren Member[] @relation(name: "MotherChild")
-  spouses  Member[] @relation(name: "Spouses")
-  spouseOf Member[] @relation(name: "Spouses")
+  spouses        Member[] @relation(name: "Spouses")
+  spouseOf       Member[] @relation(name: "Spouses")
 }
