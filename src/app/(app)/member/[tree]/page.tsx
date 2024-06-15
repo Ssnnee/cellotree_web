@@ -22,9 +22,9 @@ export default function TreePage({ params }: { params: { tree: string } }) {
 
   const treeName = treeData?.name;
   const treeType = treeData?.type;
-  const isAuthCookie = getCookie('isAuthorisedTo');
+  const treeIdFromCookie = getCookie('isEnableToSee');
 
-  if (!isLoadingTree && treeType !== "PUBLIC" && isAuthCookie !== params.tree) {
+  if (!isLoadingTree && treeType !== "PUBLIC" && treeIdFromCookie !== params.tree) {
     router.push("/");
     return null;
   }
