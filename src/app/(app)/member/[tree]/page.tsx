@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getCookie } from "typescript-cookie";
+import DataTableSkeleton from "~/app/_components/page_loading_skeleton";
 
 export default function TreePage({ params }: { params: { tree: string } }) {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function TreePage({ params }: { params: { tree: string } }) {
                   <div>Aucun membre trouvé.</div>
                 )
               ) : (
-                <div>Chargement...</div>
+                <DataTableSkeleton />
               )}
             </div>
           </div>

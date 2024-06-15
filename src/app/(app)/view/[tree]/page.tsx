@@ -12,6 +12,7 @@ import {
 } from "~/app/_components/page-header";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import ViewPageSkeleton from "~/app/_components/view_page_loading";
 
 interface Base {
   id: string;
@@ -55,7 +56,7 @@ export default function ViewPage({ params }: { params: { tree: string } }) {
   const treeQuery = api.tree.getById.useQuery({ id: params.tree });
 
   if (treeMemberQuery.isLoading || treeQuery.isLoading) {
-    return <div>Loading...</div>;
+    return <ViewPageSkeleton />;
   }
 
   if (treeMemberQuery.isError || treeQuery.isError || !treeMemberQuery.data || !treeQuery.data) {

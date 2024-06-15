@@ -25,6 +25,7 @@ import {
 } from "~/app/_components/page-header"
 import { getCookie } from "typescript-cookie"
 import { useRouter } from "next/navigation"
+import DataTableSkeleton from "~/app/_components/page_loading_skeleton"
 
 export default function  TreePage( { params }: { params: { tree: string } } ) {
   const router = useRouter()
@@ -83,7 +84,7 @@ export default function  TreePage( { params }: { params: { tree: string } } ) {
                 {member ? (
                   <DataTable columns={columns} data={member} />
                 ) : (
-                  <div>Chargement...</div>
+                  <DataTableSkeleton />
                 )}
               </div>
               </div>

@@ -25,6 +25,7 @@ import {
 import { AccesForm } from "~/app/_components/Access/AccessForm"
 import { useRouter } from "next/navigation"
 import { getCookie } from "typescript-cookie"
+import DataTableSkeleton from "~/app/_components/page_loading_skeleton"
 
 export default function TreePage({ params }: { params: { tree: string } }) {
   const router = useRouter()
@@ -96,7 +97,7 @@ export default function TreePage({ params }: { params: { tree: string } }) {
               {access.length > 0 ? (
                 <DataTable columns={columns} data={data} />
               ) : (
-                <div>Chargement...</div>
+                <DataTableSkeleton />
               )}
             </div>
           </div>

@@ -66,7 +66,7 @@ Users can add family members, create relationships, and view their family tree.
 - [x] Add a way to note display a private tree
 - [x] Check access on acces page
 - [x] Check if the tree is private or not before displaying it if someone has the link
-- [ ] Add a beautiful loading animations
+- [x] Add a beautiful loading animations
 - [ ] Hide routes that are not supposed to be accessed
 - [x] Use the capitalize function to capitalize the first letter of the name
 - [ ] Add a way to remove spouse relationship
