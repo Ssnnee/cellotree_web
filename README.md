@@ -87,3 +87,6 @@ Please try at list the make sure the code is working and is buildable.
 - [ ] Custome 404 page
 - [ ] May be add an admin dashboard
 
+#### From me
+I am still learning and I am open to any suggestion and help.
+If the project help you, please give me a star and share it with your friends
