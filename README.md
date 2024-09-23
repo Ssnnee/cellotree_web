@@ -2,8 +2,7 @@
 An application to create family trees
 
 ## Description
-CelloTree is a web [mobile](https://github.com/Ssnnee/cello_mob) application
-that allows users to create and share family trees.
+CelloTree is a web  application that allows users to create and share family trees.
 Users can add family members, create relationships, and view their family tree.
 
 >! Note:
