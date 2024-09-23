@@ -1,6 +1,6 @@
 # CelloTree
 An application to create family trees. The UI is highly inspired by
-[shadcn/ui](https://ui.shadcn.com/)
+[shadcn/ui](https://ui.shadcn.com/).
 
 ## Description
 CelloTree is a web  application that allows users to create and share family trees.
@@ -86,6 +86,7 @@ Please try at list the make sure the code is working and is buildable.
 - [ ] Fix errors on checking user authentication on the server from the header
 - [ ] Custome 404 page
 - [ ] May be add an admin dashboard
+- [ ] Add a English version of the website
 
 #### From me
 I am still learning and I am open to any suggestion and help.
