@@ -232,7 +232,7 @@ export function MemberForm({ treeId }: MemberFormProps) {
           name="sex"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Sex</FormLabel>
+              <FormLabel>Genre</FormLabel>
               <Select onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>

@@ -7,17 +7,17 @@ that allows users to create and share family trees.
 Users can add family members, create relationships, and view their family tree.
 
 ## Content Table
-    - [How to use](#how-to-use)
+- [How to use](#how-to-use)
     - [Technologies](#technologies)
     - [Features](#features)
-- [Contributors](#contributors)
+- [Contributors](#contributing)
 
 
 
 ## How to use
 
-    1. Create a [Clerk account](https://dashboard.clerk.dev/sign-up)
-    2. Copy `.env.example` and rename to `.env` and add your keys found in the dashboard.
+1. Create a [Clerk account](https://dashboard.clerk.dev/sign-up)
+2. Copy `.env.example` and rename to `.env` and add your keys found in the dashboard.
     ```
     mv .env.example .env
     ```
@@ -40,7 +40,7 @@ Users can add family members, create relationships, and view their family tree.
     ```
 
 ## Technologies
-    - [Next.js](https://nextjs.org/)
+- [Next.js](https://nextjs.org/)
     - [Lucia](https://lucia-auth.com/)
     - [Prisma](https://www.prisma.io/)
     - [PostgreSQL](https://www.postgresql.org/)
@@ -49,12 +49,20 @@ Users can add family members, create relationships, and view their family tree.
 
 
 ## Main Features
-    - Create family members
+- Create family members
     - Visualise family tree
     - Share family tree
     - Grant access to family tree
     - Collaborate with family members on a tree if they have access
     - Search for family members and trees
+
+## Contributing
+
+This project need a lot of improvement for security and features.
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+If you want to contribute, please fork the repository and create a new branch
+with your changes and submit a pull request.
 
 ## Todos
 

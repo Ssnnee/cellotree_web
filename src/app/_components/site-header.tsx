@@ -1,4 +1,5 @@
 "use client"
+
 import Link from "next/link"
 import { SideBar } from "./side-bar"
 import { ModeToggle } from "./ModeToggle"

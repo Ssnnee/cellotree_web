@@ -127,8 +127,6 @@ export function DataTable<TData, TValue>({
                 <SelectItem value="firstname">Prénom</SelectItem>
                 <SelectItem value="placeOfBirth">Lieu de naissance</SelectItem>
                 <SelectItem value="description">Description</SelectItem>
-                <SelectItem value="father">Père</SelectItem>
-                <SelectItem value="mother">Mère</SelectItem>
               </SelectGroup>
             </SelectContent>
         </Select>
