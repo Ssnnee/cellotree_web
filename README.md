@@ -6,6 +6,10 @@ CelloTree is a web [mobile](https://github.com/Ssnnee/cello_mob) application
 that allows users to create and share family trees.
 Users can add family members, create relationships, and view their family tree.
 
+>! Note:
+> This project is still in development and may have some bugs and security issues.
+> And the deployed version do not have any database connected to it.
+
 ## Content Table
 - [How to use](#how-to-use)
     - [Technologies](#technologies)
@@ -63,6 +67,7 @@ Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 If you want to contribute, please fork the repository and create a new branch
 with your changes and submit a pull request.
+Please try at list the make sure the code is working and is buildable.
 
 ## Todos
 
