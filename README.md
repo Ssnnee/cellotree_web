@@ -1,5 +1,6 @@
 # CelloTree
-An application to create family trees
+An application to create family trees. The UI is highly inspired by
+[shadcn/ui](https://ui.shadcn.com/)
 
 ## Description
 CelloTree is a web  application that allows users to create and share family trees.
