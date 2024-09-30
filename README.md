@@ -7,13 +7,13 @@ CelloTree is a web  application that allows users to create and share family tre
 Users can add family members, create relationships, and view their family tree.
 
 >! Note:
-> This project is still in development and may have some bugs and security issues.
+> This project is still in development and may have some bugs.
 > And the deployed version do not have any database connected to it.
 
 ## Content Table
 - [How to use](#how-to-use)
-    - [Technologies](#technologies)
-    - [Features](#features)
+- [Technologies](#technologies)
+- [Features](#features)
 - [Contributors](#contributing)
 
 
@@ -21,44 +21,51 @@ Users can add family members, create relationships, and view their family tree.
 ## How to use
 
 1. Create a [Clerk account](https://dashboard.clerk.dev/sign-up)
+
 2. Copy `.env.example` and rename to `.env` and add your keys found in the dashboard.
-    ```
+
+```
     mv .env.example .env
-    ```
-    3. Run `pnpm install` or `npm install` to install dependencies
-    ```
-    pnpm install
-    ```
-    4. Once installed, ./start-database.sh will start the database
-    --NOTE: You should have docker installed.
-    ```
-    ./start-database.sh
-    ```
-    5. Initialize the prisma database:
-    ```
-    pnpm db:push
-    ```
-    6. Start the server
-    ```
-    pnpm dev
-    ```
+```
+
+3. Run `pnpm install` or `npm install` to install dependencies
+```
+ pnpm install
+```
+
+4. Once installed, ./start-database.sh will start the database
+> !NOTE:
+> You should have docker installed.
+```
+./start-database.sh
+```
+
+5. Initialize the prisma database:
+```
+pnpm db:push
+```
+
+6. Start the server
+```
+pnpm dev
+```
 
 ## Technologies
 - [Next.js](https://nextjs.org/)
-    - [Lucia](https://lucia-auth.com/)
-    - [Prisma](https://www.prisma.io/)
-    - [PostgreSQL](https://www.postgresql.org/)
-    - [Shadcn/ui](https://ui.shadcn.com/)
-    - [tRPC](https://trpc.io/)
+- [Lucia](https://lucia-auth.com/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Shadcn/ui](https://ui.shadcn.com/)
+- [tRPC](https://trpc.io/)
 
 
 ## Main Features
 - Create family members
-    - Visualise family tree
-    - Share family tree
-    - Grant access to family tree
-    - Collaborate with family members on a tree if they have access
-    - Search for family members and trees
+- Visualise family tree
+- Share family tree
+- Grant access to family tree
+- Collaborate with family members on a tree if they have access
+- Search for family members and trees
 
 ## Contributing
 
