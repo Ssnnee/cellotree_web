@@ -6,6 +6,9 @@ An application to create family trees. The UI is highly inspired by
 CelloTree is a web  application that allows users to create and share family trees.
 Users can add family members, create relationships, and view their family tree.
 
+This was my bachelor project and here you can find the [memoire](https://github.com/ssnnee/memoire-gl)
+written in LaTeX for those who can read french.
+
 >! Note:
 > This project is still in development and may have some bugs.
 > And the deployed version do not have any database connected to it.
